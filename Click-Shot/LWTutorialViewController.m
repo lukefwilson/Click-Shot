@@ -91,7 +91,7 @@
 
 - (LWTutorialChildViewController *)viewControllerAtIndex:(NSUInteger)index {
     
-    LWTutorialChildViewController *childViewController = [self.storyboard instantiateViewControllerWithIdentifier:[NSString stringWithFormat:@"tutorialPage%i", index]];
+    LWTutorialChildViewController *childViewController = [self.storyboard instantiateViewControllerWithIdentifier:[NSString stringWithFormat:@"tutorialPage%li", (unsigned long)index]];
     childViewController.view.backgroundColor = [UIColor clearColor];
     childViewController.index = index;
     
@@ -251,7 +251,7 @@
             break;
     }
     self.currentPage = currentViewController.index;
-    NSLog(@"current page %i", self.currentPage);
+    NSLog(@"current page %li", (long)self.currentPage);
 }
 
 -(void)pageViewController:(UIPageViewController *)pageViewController willTransitionToViewControllers:(NSArray *)pendingViewControllers {

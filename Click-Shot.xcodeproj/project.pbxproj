@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2F2B18A5196252BB0073BBC4 /* tutorialArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F2B18A4196252BB0073BBC4 /* tutorialArrow.png */; };
 		2F2B18AA1963E8B60073BBC4 /* skipTutorial.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F2B18A91963E8B60073BBC4 /* skipTutorial.png */; };
 		2F38037F193EF7AF004559C3 /* check.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F38037B193EF7AF004559C3 /* check.png */; };
 		2F380380193EF7AF004559C3 /* check@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F38037C193EF7AF004559C3 /* check@2x.png */; };
@@ -22,6 +21,7 @@
 		2F3803981942C96B004559C3 /* tutorialIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F3803971942C96B004559C3 /* tutorialIcon@2x.png */; };
 		2F38039B1942DA24004559C3 /* LWTutorialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F38039A1942DA24004559C3 /* LWTutorialViewController.m */; };
 		2F38039E1942DC7D004559C3 /* UIImage+ImageFromColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F38039D1942DC7D004559C3 /* UIImage+ImageFromColor.m */; };
+		2F6519D61980BB0D00CBC479 /* ODRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F6519D51980BB0D00CBC479 /* ODRefreshControl.m */; };
 		2F71F2C1193E823E00FA41C2 /* UIApplication+ScreenSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F71F2C0193E823E00FA41C2 /* UIApplication+ScreenSize.m */; };
 		2FDE4EBC195F8D96009E2E12 /* actionSwipeImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FDE4EB6195F8D96009E2E12 /* actionSwipeImage.png */; };
 		2FDE4EBD195F8D96009E2E12 /* actionSwipeImage@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FDE4EB7195F8D96009E2E12 /* actionSwipeImage@2x.png */; };
@@ -190,7 +190,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2F2B18A4196252BB0073BBC4 /* tutorialArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tutorialArrow.png; path = ../../../../Desktop/tutorialArrow.png; sourceTree = "<group>"; };
 		2F2B18A91963E8B60073BBC4 /* skipTutorial.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = skipTutorial.png; path = "../../../../Dropbox/Remote Shot/icons/skipTutorial.png"; sourceTree = "<group>"; };
 		2F38037B193EF7AF004559C3 /* check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check.png; sourceTree = "<group>"; };
 		2F38037C193EF7AF004559C3 /* check@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "check@2x.png"; sourceTree = "<group>"; };
@@ -209,6 +208,8 @@
 		2F38039C1942DC7D004559C3 /* UIImage+ImageFromColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageFromColor.h"; sourceTree = "<group>"; };
 		2F38039D1942DC7D004559C3 /* UIImage+ImageFromColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageFromColor.m"; sourceTree = "<group>"; };
 		2F38039F1942E108004559C3 /* Reveal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reveal.framework; path = "../../../../../Applications/Reveal.app/Contents/SharedSupport/iOS-Libraries/Reveal.framework"; sourceTree = "<group>"; };
+		2F6519D41980BB0D00CBC479 /* ODRefreshControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ODRefreshControl.h; sourceTree = "<group>"; };
+		2F6519D51980BB0D00CBC479 /* ODRefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ODRefreshControl.m; sourceTree = "<group>"; };
 		2F71F2BF193E823E00FA41C2 /* UIApplication+ScreenSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+ScreenSize.h"; sourceTree = "<group>"; };
 		2F71F2C0193E823E00FA41C2 /* UIApplication+ScreenSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+ScreenSize.m"; sourceTree = "<group>"; };
 		2FDE4EB6195F8D96009E2E12 /* actionSwipeImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = actionSwipeImage.png; path = "../../../../Dropbox/Remote Shot/icons/swipe views/actionSwipeImage.png"; sourceTree = "<group>"; };
@@ -463,6 +464,15 @@
 			path = "../../../../Dropbox/Remote Shot/icons/tutorial";
 			sourceTree = "<group>";
 		};
+		2F6519D31980BB0D00CBC479 /* ODRefreshControl */ = {
+			isa = PBXGroup;
+			children = (
+				2F6519D41980BB0D00CBC479 /* ODRefreshControl.h */,
+				2F6519D51980BB0D00CBC479 /* ODRefreshControl.m */,
+			);
+			path = ODRefreshControl;
+			sourceTree = "<group>";
+		};
 		2FDE4EAF195F8CCA009E2E12 /* Swipe views */ = {
 			isa = PBXGroup;
 			children = (
@@ -540,6 +550,7 @@
 				2F71F2C0193E823E00FA41C2 /* UIApplication+ScreenSize.m */,
 				2F38039C1942DC7D004559C3 /* UIImage+ImageFromColor.h */,
 				2F38039D1942DC7D004559C3 /* UIImage+ImageFromColor.m */,
+				2F6519D31980BB0D00CBC479 /* ODRefreshControl */,
 				2FFFE0FE192FD7E500F3370B /* MBProgressHUD */,
 				2FFFE0A9192FD56300F3370B /* SDWebImage */,
 				2FFFE06D192FD52000F3370B /* Custom SARangeSlider */,
@@ -861,7 +872,6 @@
 		2FFFE10E192FD88000F3370B /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				2F2B18A4196252BB0073BBC4 /* tutorialArrow.png */,
 				2F38038D1942C63E004559C3 /* bluetooth */,
 				2F3803901942C63E004559C3 /* tutorial */,
 				2F38038B19403F4E004559C3 /* tableViewDivider@2x.png */,
@@ -1131,7 +1141,6 @@
 				2FFFE04B192FD50300F3370B /* pause@2x.png in Resources */,
 				2FFFE136192FD8A400F3370B /* autoFlashOn.png in Resources */,
 				2FFFE14F192FD8BA00F3370B /* soundOffIcon.png in Resources */,
-				2F2B18A5196252BB0073BBC4 /* tutorialArrow.png in Resources */,
 				2FFFE042192FD50300F3370B /* ic_square.png in Resources */,
 				2FFFE14C192FD8BA00F3370B /* rapidShotOff.png in Resources */,
 				2FFFE053192FD50300F3370B /* sliderPoint.png in Resources */,
@@ -1208,6 +1217,7 @@
 				2FFFE0C7192FD56300F3370B /* SDWebImageDownloader.m in Sources */,
 				2FFFE05E192FD50300F3370B /* MHGalleryController.m in Sources */,
 				2FFFE0C5192FD56300F3370B /* SDWebImageCompat.m in Sources */,
+				2F6519D61980BB0D00CBC479 /* ODRefreshControl.m in Sources */,
 				2FFFE067192FD50300F3370B /* MHTransitionDismissMHGallery.m in Sources */,
 				2FFFE065192FD50300F3370B /* MHShareViewController.m in Sources */,
 				2FFFE06B192FD50300F3370B /* MHTransitionShowShareView.m in Sources */,
@@ -1341,7 +1351,7 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "C21360EF-AC6B-442F-89DA-2F93451B5FB9";
+				PROVISIONING_PROFILE = "0BA6185C-FE15-4B9B-9F6E-6DE080BE3C63";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1380,7 +1390,7 @@
 					"/Users/LukeWilson/Documents/GPUImage/framework/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				PROVISIONING_PROFILE = "8E6D6F58-440B-4889-A57F-A7C27ADE1737";
+				PROVISIONING_PROFILE = "2C6BE366-0E12-4424-BBD6-A341D1AF8BB7";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -1407,7 +1417,7 @@
 					Reveal,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1427,7 +1437,7 @@
 				INFOPLIST_FILE = "Click-Shot/Click-Shot-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

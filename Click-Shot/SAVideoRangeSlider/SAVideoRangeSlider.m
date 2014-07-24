@@ -443,7 +443,7 @@
     }
     [self.imageGenerator generateCGImagesAsynchronouslyForTimes:times completionHandler:^(CMTime requestedTime, CGImageRef image, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error) {
         if (result == AVAssetImageGeneratorSucceeded) {
-            int i = [times indexOfObject:[NSValue valueWithCMTime:requestedTime]];
+            NSUInteger i = [times indexOfObject:[NSValue valueWithCMTime:requestedTime]];
             CFRetain(image);
             dispatch_async(dispatch_get_main_queue(), ^{ // fade in new images on main queue as they load
                 if (i > [self.timelineImageViews count]-1 || i == NSNotFound || !image) {
@@ -451,7 +451,7 @@
                     return;
                 }
                 UIImageView *tmp = [self.timelineImageViews objectAtIndex:i];
-                int totalWidthCovered = (i+1)*PIC_WIDTH;
+                NSInteger totalWidthCovered = (i+1)*PIC_WIDTH;
                 if (totalWidthCovered > _bgView.frame.size.width){
                     CGRect imageViewFrame = tmp.frame;
                     int delta = totalWidthCovered - _bgView.frame.size.width;

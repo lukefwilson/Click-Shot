@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ODRefreshControl.h"
 @import CoreBluetooth;
+
 
 @protocol LWBluetoothButtonDelegate;
 
@@ -19,6 +21,7 @@
 @property (strong, nonatomic) NSMutableArray *discoveredPeripherals;
 @property (strong, nonatomic) NSIndexPath *selectedIndexPath;
 @property (strong, nonatomic) NSTimer *scanTimer;
+@property (strong, nonatomic) ODRefreshControl *betterRefreshControl;
 
 -(void)refreshBluetoothDevices;
 -(void)cleanupBluetooth;

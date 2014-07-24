@@ -31,12 +31,13 @@
 #define kFocusViewTag 1
 #define kExposeViewTag 2
 
+/* not needed anymore
 #define BTTN_SERVICE_UUID           @"fffffff0-00f7-4000-b000-000000000000"
 #define BTTN_DETECTION_CHARACTERISTIC_UUID    @"fffffff2-00f7-4000-b000-000000000000"
 #define BTTN_NOTIFICATION_CHARACTERISTIC_UUID    @"fffffff4-00f7-4000-b000-000000000000"
 #define BTTN_VERIFICATION_CHARACTERISTIC_UUID    @"fffffff5-00f7-4000-b000-000000000000"
 #define BTTN_VERIFICATION_KEY    @"BC:F5:AC:48:40" // old key
-
+*/
 #define kSwipeVelocityUntilGuarenteedSwitch 800
 #define kLargeFontSize 140
 #define kMediumFontSize 120

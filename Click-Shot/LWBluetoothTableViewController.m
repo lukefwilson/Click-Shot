@@ -12,7 +12,7 @@
 #define BTTN_DETECTION_CHARACTERISTIC_UUID    @"fffffff2-00f7-4000-b000-000000000000"
 #define BTTN_NOTIFICATION_CHARACTERISTIC_UUID    @"fffffff4-00f7-4000-b000-000000000000"
 #define BTTN_VERIFICATION_CHARACTERISTIC_UUID    @"fffffff5-00f7-4000-b000-000000000000"
-#define BTTN_VERIFICATION_KEY    @"BC:F5:AC:48:40" // old key
+#define BTTN_VERIFICATION_KEY    @"BC:F5:AC:48:40" // old key (new key hard coded in below)
 
 #define kTableHeaderHeight 100
 #define kRowHeight 60
@@ -59,11 +59,15 @@
     
     self.tableView.tableHeaderView = headerView;
     
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.tintColor = [UIColor whiteColor];
-    [self.refreshControl addTarget:self action:@selector(refreshBluetoothDevices) forControlEvents:UIControlEventValueChanged];
-    UIView *refreshPositionView = [self.refreshControl.subviews objectAtIndex:0];
-    [refreshPositionView setFrame:CGRectMake(0, 10, refreshPositionView.frame.size.width, refreshPositionView.frame.size.height)];
+//    self.refreshControl = [[UIRefreshControl alloc] init];
+//    self.refreshControl.tintColor = [UIColor whiteColor];
+//    [self.refreshControl addTarget:self action:@selector(refreshBluetoothDevices) forControlEvents:UIControlEventValueChanged];
+//    UIView *refreshPositionView = [self.refreshControl.subviews objectAtIndex:0];
+//    [refreshPositionView setFrame:CGRectMake(0, 10, refreshPositionView.frame.size.width, refreshPositionView.frame.size.height)];
+    self.betterRefreshControl = [[ODRefreshControl alloc] initInScrollView:self.tableView];
+    [self.betterRefreshControl addTarget:self action:@selector(refreshBluetoothDevices) forControlEvents:UIControlEventValueChanged];
+    [self.betterRefreshControl setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];
+//    [self.betterRefreshControl.activity setCenter:CGPointMake(0, 20)];
 }
 
 - (void)didReceiveMemoryWarning
@@ -86,7 +90,8 @@
 -(void)timedStopScanning:(NSTimer *)timer {
     NSLog(@"Scanning stopped");
     [self.centralManager stopScan];
-    [self.refreshControl endRefreshing];
+//    [self.refreshControl endRefreshing];
+    [self.betterRefreshControl endRefreshing];
     [timer invalidate];
     [self.tableView reloadData];
 }
