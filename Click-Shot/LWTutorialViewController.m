@@ -181,7 +181,7 @@
 }
 
 -(void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed {
-    NSLog(@"did transition");
+//    NSLog(@"did transition");
     
     if (!completed)  return;
     
@@ -251,11 +251,11 @@
             break;
     }
     self.currentPage = currentViewController.index;
-    NSLog(@"current page %li", (long)self.currentPage);
+//    NSLog(@"current page %li", (long)self.currentPage);
 }
 
 -(void)pageViewController:(UIPageViewController *)pageViewController willTransitionToViewControllers:(NSArray *)pendingViewControllers {
-    NSLog(@"will transition");
+//    NSLog(@"will transition");
 }
 
 

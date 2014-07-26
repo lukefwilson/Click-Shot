@@ -327,9 +327,9 @@
 -(void)switchToCurrentOutputQuality {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,
                                              (unsigned long)NULL), ^(void) {
-    if (![captureSession.sessionPreset isEqualToString:self.outputQuality] && [captureSession canSetSessionPreset:self.outputQuality]) {
-        captureSession.sessionPreset = self.outputQuality;
-    }
+        if (![captureSession.sessionPreset isEqualToString:self.outputQuality] && [captureSession canSetSessionPreset:self.outputQuality]) {
+            captureSession.sessionPreset = self.outputQuality;
+        }
     });
 }
 
@@ -543,6 +543,7 @@
                 if ([self.captureDevice isLowLightBoostSupported]) [self.captureDevice setAutomaticallyEnablesLowLightBoostWhenAvailable: YES];
                 [self.captureDevice unlockForConfiguration];
             }
+            [self.delegate switchedToCameraDevice:device];
             return self.captureDevice;
         }
     
@@ -722,7 +723,6 @@
             self.videoDeviceInput = newVideoDeviceInput;
             [self setFlashMode:[cameraViewController currentAVFlashMode]];
             [self setTorchMode:[cameraViewController currentAVTorchMode]];
-            
             videoConnection = [self.videoDataOutput connectionWithMediaType:AVMediaTypeVideo];
             
         } else {

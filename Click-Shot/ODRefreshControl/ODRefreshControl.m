@@ -12,9 +12,9 @@
 
 #define kTotalViewHeight    400
 #define kOpenedViewHeight   44
-#define kMinTopPadding      9
-#define kMaxTopPadding      5
-#define kMinTopRadius       12.5
+#define kMinTopPadding      38 // 9
+#define kMaxTopPadding      38 // 5
+//#define kMinTopRadius       12.5
 #define kMaxTopRadius       16
 #define kMinBottomRadius    3
 #define kMaxBottomRadius    16
@@ -24,7 +24,10 @@
 #define kMaxArrowSize       3
 #define kMinArrowRadius     5
 #define kMaxArrowRadius     7
-#define kMaxDistance        53
+// #define kMaxDistance        20 //53
+
+#define kActivityPadding    48
+
 
 @interface ODRefreshControl ()
 
@@ -33,6 +36,9 @@
 @property (nonatomic, assign) UIEdgeInsets originalContentInset;
 
 @end
+
+static int kMaxDistance;
+static float kMinTopRadius;
 
 @implementation ODRefreshControl
 
@@ -56,6 +62,14 @@ static inline CGFloat lerp(CGFloat a, CGFloat b, CGFloat p)
     self = [super initWithFrame:CGRectMake(0, -(kTotalViewHeight + scrollView.contentInset.top), scrollView.frame.size.width, kTotalViewHeight)];
     
     if (self) {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            kMaxDistance = 53;
+            kMinTopRadius = 12.5;
+        } else {
+            kMaxDistance = 10;
+            kMinTopRadius = 9.5;
+        }
+        
         self.scrollView = scrollView;
         self.originalContentInset = scrollView.contentInset;
         
@@ -188,8 +202,7 @@ static inline CGFloat lerp(CGFloat a, CGFloat b, CGFloat p)
             _shapeLayer.position = CGPointMake(0, kMaxDistance + offset + kOpenedViewHeight);
             [CATransaction commit];
 
-            _activity.center = CGPointMake(floor(self.frame.size.width / 2), MIN(offset + self.frame.size.height + floor(kOpenedViewHeight / 2), self.frame.size.height - kOpenedViewHeight/ 2));
-
+            _activity.center = CGPointMake(floor(self.frame.size.width / 2), offset + self.frame.size.height + kActivityPadding); //MIN(offset + self.frame.size.height + floor(kOpenedViewHeight / 2), self.frame.size.height - kOpenedViewHeight/ 2)
             _ignoreInset = YES;
             _ignoreOffset = YES;
             

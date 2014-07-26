@@ -40,7 +40,7 @@
 @property (nonatomic) BOOL gestureIsBlocked;
 @property (nonatomic) NSInteger cameraMode;
 @property (nonatomic, strong) NSString *cameraButtonString;
-@property (nonatomic) CGRect photoPreviewRect;
+@property (nonatomic) CGRect tappablePreviewRect; // used in MoveableImageView
 
 @property (nonatomic, weak) IBOutlet UIButton *pictureModeButton;
 @property (nonatomic, weak) IBOutlet UIButton *rapidShotModeButton;

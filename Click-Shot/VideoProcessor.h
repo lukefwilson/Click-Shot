@@ -90,6 +90,7 @@
 - (CGPoint)startFocusMode:(AVCaptureFocusMode)focusMode;
 - (void)exposeAtPoint:(CGPoint)devicePoint;
 - (CGPoint)startExposeMode:(AVCaptureExposureMode)exposureMode;
+- (BOOL)currentDeviceSupportsFlash;
 
 @property(readonly, getter=isRecording) BOOL recording;
 @property(nonatomic) BOOL actionShooting;
@@ -111,5 +112,6 @@
 - (void)actionShotDidStop;
 - (void)willSwitchCamera:(UIImage *)image;
 - (void)readyToSwitchToCurrentOutputQuality:(UIImage *)image;
+- (void)switchedToCameraDevice:(AVCaptureDevice *)device;
 
 @end

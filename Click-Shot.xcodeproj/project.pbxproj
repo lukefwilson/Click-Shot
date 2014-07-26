@@ -1411,11 +1411,7 @@
 				GCC_PREFIX_HEADER = "Click-Shot/Click-Shot-Prefix.pch";
 				INFOPLIST_FILE = "Click-Shot/Click-Shot-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-framework",
-					Reveal,
-				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;

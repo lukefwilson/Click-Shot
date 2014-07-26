@@ -155,7 +155,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
-                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="cTX-Jc-wiT" userLabel="Blurred Image Placeholder">
+                            <imageView alpha="0.0" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="cTX-Jc-wiT" userLabel="Blurred Image Placeholder">
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
@@ -234,6 +234,7 @@
                                         <state key="normal" title="Flash" image="flashOn.png">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <state key="disabled" image="flashOff.png"/>
                                         <connections>
                                             <action selector="pressedFlashButton:" destination="Etn-Zk-kVY" eventType="touchUpInside" id="dN8-qu-f5u"/>
                                         </connections>
@@ -248,6 +249,7 @@
                                         <state key="normal" title="Flash" image="flashOff.png">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <state key="disabled" image="flashOff.png"/>
                                         <connections>
                                             <action selector="pressedFlashButton:" destination="Etn-Zk-kVY" eventType="touchUpInside" id="gOS-Rj-I2i"/>
                                         </connections>
@@ -262,6 +264,7 @@
                                         <state key="normal" title="Flash" image="autoFlashOn.png">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <state key="disabled" image="flashOff.png"/>
                                         <connections>
                                             <action selector="pressedFlashButton:" destination="Etn-Zk-kVY" eventType="touchUpInside" id="sbZ-Ad-VSP"/>
                                         </connections>

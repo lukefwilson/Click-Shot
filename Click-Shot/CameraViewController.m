@@ -46,6 +46,13 @@
 #define kSettingsViewHeight 100
 #define kiPhonePhotoPreviewHeight 426.666
 
+#define kVideoDimension (9.0/16)
+#define kPhotoDimension (3.0/4)
+
+
+#define IPAD (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+#define IPHONE_4 ([UIScreen mainScreen].bounds.size.height == 480)
+#define IPHONE_5 ([UIScreen mainScreen].bounds.size.height == 568)
 
 
 // Interface here for private properties
@@ -118,6 +125,7 @@
 @property (nonatomic) BOOL hasMoved;
 @property (nonatomic) CGFloat velocity;
 @property (nonatomic) CGFloat selectorBarStartCenterX;
+
 @property (nonatomic, strong) UIImage *pictureCameraButtonImage;
 @property (nonatomic, strong) UIImage *rapidCameraButtonImage;
 @property (nonatomic, strong) UIImage *videoCameraButtonImage;
@@ -132,6 +140,7 @@
 
 @property (nonatomic) GPUImageiOSBlurFilter *blurFilter;
 @property (nonatomic) NSMutableArray *galleryItems;
+
 
 @end
 
@@ -208,6 +217,7 @@
     self.videoProcessor.delegate = self;
     self.videoProcessor.previewView = self.previewView;
     [self.videoProcessor setupAndStartCaptureSession];
+    [self.videoProcessor setFlashMode:[self currentAVFlashMode]];
 
     self.cameraRollImage = [[UIImageView alloc] initWithFrame:CGRectMake(3, 3, self.cameraRollButton.frame.size.width-6, self.cameraRollButton.frame.size.height-6)];
     self.cameraRollImage.contentMode = UIViewContentModeScaleAspectFill;
@@ -218,24 +228,67 @@
     self.blurFilter.blurRadiusInPixels = 10.0f;
     self.blurFilter.saturation = 0.6;
     
-    if (self.view.frame.size.height > 480) {
+    self.distanceToCenterPhotoPreview = 0; // only iPhone 5 has non 0 here
+    if (IPHONE_5) {
         self.distanceToCenterPhotoPreview = (self.view.center.y - ((self.view.frame.size.height-self.flashModeOnButton.frame.size.height-self.cameraButton.outerButtonImage.frame.size.height)/2+self.flashModeOnButton.frame.size.height))/2;
-        self.photoPreviewRect = CGRectMake(0, (self.view.frame.size.height-kiPhonePhotoPreviewHeight)/2-self.distanceToCenterPhotoPreview, self.view.frame.size.width, kiPhonePhotoPreviewHeight);
-        self.blurredImageDistanceToTop.constant = -self.distanceToCenterPhotoPreview;
-        self.blurredImageDistanceToBottom.constant = self.distanceToCenterPhotoPreview;
-        self.cameraPreviewViewDistanceToTop.constant = -self.distanceToCenterPhotoPreview;
-        self.cameraPreviewViewDistanceToBottom.constant = self.distanceToCenterPhotoPreview;
-        [self.view setNeedsLayout];
-    } else {
-        self.distanceToCenterPhotoPreview = 0;
-        float distanceFromTop = (self.view.frame.size.height-kiPhonePhotoPreviewHeight)/2;
-        self.photoPreviewRect = CGRectMake(0, distanceFromTop, self.view.frame.size.width, kiPhonePhotoPreviewHeight);
     }
+    [self updateCameraPreviewPosition];
+    [self updateTappablePreviewRectForCameraMode:self.cameraMode];
+
 
     self.pictureSwipeView = [self swipeViewForMode:kCameraModePicture];
     self.rapidShotSwipeView = [self swipeViewForMode:kCameraModeRapidShot];
     self.videoSwipeView = [self swipeViewForMode:kCameraModeVideo];
-    
+}
+
+-(void)updateTappablePreviewRectForCameraMode:(NSInteger)cameraMode {
+    if (IPAD) {
+        if (cameraMode == kCameraModeVideo) {
+            CGFloat previewWidth = self.view.frame.size.height * kVideoDimension;
+            CGFloat leftOffset = (self.view.frame.size.width - previewWidth) / 2;
+            self.tappablePreviewRect = CGRectMake(leftOffset, self.swithCameraButton.frame.size.height, previewWidth, self.view.frame.size.height-self.cameraButton.outerButtonImage.frame.size.height);
+        } else {
+            self.tappablePreviewRect = CGRectMake(0, self.swithCameraButton.frame.size.height, self.view.frame.size.width, self.view.frame.size.height-self.cameraButton.outerButtonImage.frame.size.height);
+        }
+    } else if (IPHONE_5) {
+        if (cameraMode == kCameraModeVideo) {
+            CGFloat previewWidth = self.view.frame.size.height * kVideoDimension;
+            CGFloat leftOffset = (self.view.frame.size.width - previewWidth) / 2;
+            self.tappablePreviewRect = CGRectMake(leftOffset, self.swithCameraButton.frame.size.height, previewWidth, self.view.frame.size.height-self.cameraButton.outerButtonImage.frame.size.height);
+        } else {
+            self.distanceToCenterPhotoPreview = (self.view.center.y - ((self.view.frame.size.height-self.flashModeOnButton.frame.size.height-self.cameraButton.outerButtonImage.frame.size.height)/2+self.flashModeOnButton.frame.size.height))/2;
+            CGFloat previewHeight = self.view.frame.size.height * kPhotoDimension;
+            
+            self.tappablePreviewRect = CGRectMake(0, (self.view.frame.size.height-previewHeight)/2-self.distanceToCenterPhotoPreview, self.view.frame.size.width, previewHeight);
+        }
+    } else {
+        if (cameraMode == kCameraModeVideo) {
+            CGFloat previewWidth = self.view.frame.size.height * kVideoDimension;
+            CGFloat leftOffset = (self.view.frame.size.width - previewWidth) / 2;
+            self.tappablePreviewRect = CGRectMake(leftOffset, self.swithCameraButton.frame.size.height, previewWidth, self.view.frame.size.height-self.cameraButton.outerButtonImage.frame.size.height);
+        } else {
+            self.tappablePreviewRect = CGRectMake(0, self.swithCameraButton.frame.size.height, self.view.frame.size.width, self.view.frame.size.height-self.cameraButton.outerButtonImage.frame.size.height);
+        }
+    }
+    NSLog(@"%@", NSStringFromCGRect(self.tappablePreviewRect));
+}
+
+// used to fix iphone centering picture preview frame
+// brings the cameraPreviewView to zero'd out position with its blurred image view
+-(void)updateCameraPreviewPosition {
+    if (self.cameraMode == kCameraModeVideo) {
+        self.cameraPreviewViewDistanceToTop.constant = 0;
+        self.cameraPreviewViewDistanceToBottom.constant = 0;
+        self.blurredImageDistanceToTop.constant = 0;
+        self.blurredImageDistanceToBottom.constant = 0;
+    } else {
+        self.cameraPreviewViewDistanceToTop.constant = -self.distanceToCenterPhotoPreview;
+        self.cameraPreviewViewDistanceToBottom.constant = self.distanceToCenterPhotoPreview;
+        self.blurredImageDistanceToTop.constant = -self.distanceToCenterPhotoPreview;
+        self.blurredImageDistanceToBottom.constant = self.distanceToCenterPhotoPreview;
+        NSLog(@"%f", self.distanceToCenterPhotoPreview);
+    }
+    [self.view layoutIfNeeded];
 }
 
 -(void)resumeSessions {
@@ -327,7 +380,6 @@
         [self.focusPointView fixIfOffscreen];
         [self.exposePointView fixIfOffscreen];
         [self.videoProcessor focusWithMode:[self currentAVFocusMode] exposeWithMode:[self currentAVExposureMode] atDevicePoint:[self devicePointForScreenPoint:touchPoint] monitorSubjectAreaChange:NO];
-        NSLog(@"%@", NSStringFromCGPoint([self devicePointForScreenPoint:touchPoint]));
         if (!self.autoFocusMode) {
             [UIView animateWithDuration:0.4 animations:^{
                 self.focusPointView.alpha = kDefaultAlpha;
@@ -357,20 +409,31 @@
     }
 }
 
+-(CGPoint)devicePointForScreenPoint:(CGPoint)screenPoint {
+    CGPoint devicePoint = [(AVCaptureVideoPreviewLayer *)[[self previewView] layer] captureDevicePointOfInterestForPoint:screenPoint];
+    return CGPointMake([self clamp:devicePoint.x between:0 and:1], [self clamp:devicePoint.y between:0 and:1]); // keep inside 0 and 1 bounds
+}
+
+// keep a number within bounds
+-(CGFloat)clamp:(CGFloat)number between:(CGFloat)min and:(CGFloat)max {
+    if (number > max) {
+        return max;
+    } else if (number < min) {
+        return min;
+    } else {
+        return number;
+    }
+}
 
 - (IBAction)pressedSettings:(id)sender {
     if (self.settingsMenuIsOpen) {
         [self closeSettingsMenu];
     } else {
-        [self openSettingsMenu];
+            [self openSettingsMenu];
     }
 }
 
 
--(CGPoint)devicePointForScreenPoint:(CGPoint)screenPoint {
-    return [(AVCaptureVideoPreviewLayer *)[[self previewView] layer] captureDevicePointOfInterestForPoint:screenPoint];
-
-}
 
 #pragma mark Settings Menu IBActions
 
@@ -386,6 +449,7 @@
 
 -(IBAction)pressedSounds:(id)sender {
     if (self.soundsMenuIsOpen) {
+        // close sounds menu to settings menu
         [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.cameraPreviewViewDistanceToBottom.constant = kSettingsViewHeight;
             self.cameraPreviewViewDistanceToTop.constant = -kSettingsViewHeight;
@@ -394,6 +458,7 @@
             [self.view layoutIfNeeded];
         } completion:nil];
     } else {
+        // open sounds menu
         float yPosition = kSettingsViewHeight+self.soundPicker.frame.size.height;
         [self.settingsView bringSubviewToFront:self.soundPicker];
         if (self.bluetoothMenuIsOpen) {
@@ -429,6 +494,7 @@
 
 - (IBAction)pressedBluetooth:(id)sender {
     if (self.bluetoothMenuIsOpen) {
+        // close bluetooth  menu to settings menu
         [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.cameraPreviewViewDistanceToBottom.constant = kSettingsViewHeight;
             self.cameraPreviewViewDistanceToTop.constant = -kSettingsViewHeight;
@@ -437,6 +503,7 @@
             [self.view layoutIfNeeded];
         } completion:nil];
     } else {
+        // open bluetooth menu
         float yPosition = kSettingsViewHeight+self.bluetoothMenu.frame.size.height;
         if (self.soundsMenuIsOpen) {
             [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -497,12 +564,10 @@
     self.soundsMenuIsOpen = NO;
     [self.view layoutIfNeeded];
     [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.cameraPreviewViewDistanceToBottom.constant = 0;
-        self.cameraPreviewViewDistanceToTop.constant = 0;
         self.cameraUIDistanceToBottom.constant = 0;
         self.cameraUIDistanceToTop.constant = 0;
-        [self.view layoutIfNeeded];
-    }completion:^(BOOL finished){
+        [self updateCameraPreviewPosition];
+    } completion:^(BOOL finished){
         self.settingsView.hidden = YES;
     }];
 }
@@ -514,6 +579,7 @@
     [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         self.cameraPreviewViewDistanceToBottom.constant = kSettingsViewHeight;
         self.cameraPreviewViewDistanceToTop.constant = -kSettingsViewHeight;
+        // not needed but the blurred image view could also move here
         self.cameraUIDistanceToBottom.constant = kSettingsViewHeight;
         self.cameraUIDistanceToTop.constant = -kSettingsViewHeight;
         [self.view layoutIfNeeded];
@@ -778,14 +844,10 @@
 
 -(void)switchToPhotoOutputQuality {
     [self.videoProcessor beginSwitchingToOutputQuality:AVCaptureSessionPresetPhoto];
-    self.photoPreviewRect = CGRectMake(0, self.photoPreviewRect.origin.y, self.view.frame.size.width, kiPhonePhotoPreviewHeight);
 }
 
 -(void)switchToHighOutputQuality {
     [self.videoProcessor beginSwitchingToOutputQuality:AVCaptureSessionPresetHigh];
-    if (self.view.frame.size.height < 500) {
-        self.photoPreviewRect = CGRectMake(25, self.photoPreviewRect.origin.y, self.view.frame.size.width-50, kiPhonePhotoPreviewHeight);
-    }
 }
 
 
@@ -1064,11 +1126,11 @@
 
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     if (self.pictureModeButton.enabled && !self.gestureIsBlocked && !self.settingsMenuIsOpen && !self.cameraRollIsOpen) { // make sure we can switch modes
-        CGFloat currentXPos = [_primaryTouch locationInView:self.view].x;
+        CGFloat currentXPos = [[touches anyObject] locationInView:self.view].x;
         CGFloat diffFromBeginning = currentXPos - _startXTouch;
         if (diffFromBeginning < 0 ) { //swiping  to rapid shot or video shot
             if (self.modeSelectorBar.frame.origin.x < self.videoModeButton.frame.origin.x) {
-                self.modeSelectorBar.center = CGPointMake(_selectorBarStartCenterX-(diffFromBeginning/(320/55)), self.modeSelectorBar.center.y);
+                self.modeSelectorBar.center = CGPointMake(_selectorBarStartCenterX-(diffFromBeginning/(self.view.frame.size.width/55)), self.modeSelectorBar.center.y);
             }
             if (self.cameraMode == kCameraModePicture) { // swiping to rapid from picture
                 [self swipeView:self.rapidShotSwipeView distance:diffFromBeginning];
@@ -1077,7 +1139,7 @@
             }
         } else  { // swiping  to rapid shot or picture shot
             if (self.modeSelectorBar.frame.origin.x > self.pictureModeButton.frame.origin.x) {
-                self.modeSelectorBar.center = CGPointMake(_selectorBarStartCenterX-(diffFromBeginning/(320/55)), self.modeSelectorBar.center.y);
+                self.modeSelectorBar.center = CGPointMake(_selectorBarStartCenterX-(diffFromBeginning/(self.view.frame.size.width/55)), self.modeSelectorBar.center.y);
             }
             if (self.cameraMode == kCameraModeVideo) { // swiping to rapid from video
                 [self swipeView:self.rapidShotSwipeView distance:diffFromBeginning];
@@ -1383,64 +1445,68 @@
 }
 
 -(void) willSwitchCamera:(UIImage *)image {
+    _settingsButton.enabled = NO;
     [UIView transitionWithView:self.blurredImagePlaceholder duration:0.5 options:UIViewAnimationOptionTransitionFlipFromLeft animations:nil completion:nil];
     [UIView transitionWithView:self.previewView duration:0.5 options:UIViewAnimationOptionTransitionFlipFromLeft animations:nil completion:^(BOOL finished){
         [UIView animateWithDuration:0.5 delay:0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.blurredImagePlaceholder.alpha = 0;
-        } completion:nil];
+            [self updateCameraPreviewPosition];
+            [self updateTappablePreviewRectForCameraMode:self.cameraMode];
+        } completion:^(BOOL finished) {
+            _settingsButton.enabled = YES;
+        }];
     }];
-    if ([self.videoProcessor.outputQuality isEqualToString:AVCaptureSessionPresetPhoto]) {
-        self.cameraPreviewViewDistanceToTop.constant = -self.distanceToCenterPhotoPreview;
-        self.cameraPreviewViewDistanceToBottom.constant = self.distanceToCenterPhotoPreview;
-        self.blurredImageDistanceToTop.constant = -self.distanceToCenterPhotoPreview;
-        self.blurredImageDistanceToBottom.constant = self.distanceToCenterPhotoPreview;
-    } else {
-        self.cameraPreviewViewDistanceToTop.constant = 0;
-        self.cameraPreviewViewDistanceToBottom.constant = 0;
-        self.blurredImageDistanceToTop.constant = 0;
-        self.blurredImageDistanceToBottom.constant = 0;
-    }
-    [self.view layoutIfNeeded];
+    
     UIImage *blurredImage = [self.blurFilter imageByFilteringImage:image];
-    if (self.videoProcessor.captureDevice.position == AVCaptureDevicePositionFront) _blurredImagePlaceholder.transform = CGAffineTransformMakeScale(-1, 1);
-    else _blurredImagePlaceholder.transform = CGAffineTransformMakeScale(1, 1);
+    if (self.videoProcessor.captureDevice.position == AVCaptureDevicePositionFront) {
+        _blurredImagePlaceholder.transform = CGAffineTransformMakeScale(-1, 1);
+    } else {
+        _blurredImagePlaceholder.transform = CGAffineTransformMakeScale(1, 1);
+    }
     self.blurredImagePlaceholder.image = blurredImage;
     self.blurredImagePlaceholder.alpha = 1;
 }
 
 -(void)readyToSwitchToCurrentOutputQuality:(UIImage *)image {
     UIImage *blurredImage = [self.blurFilter imageByFilteringImage:image];
-    if (self.videoProcessor.captureDevice.position == AVCaptureDevicePositionFront)
+    if (self.videoProcessor.captureDevice.position == AVCaptureDevicePositionFront) {
         _blurredImagePlaceholder.transform = CGAffineTransformMakeScale(-1, 1);
-    else
+    } else {
         _blurredImagePlaceholder.transform = CGAffineTransformMakeScale(1, 1);
-    self.blurredImagePlaceholder.image = blurredImage;
-    if ([self.videoProcessor.outputQuality isEqualToString:AVCaptureSessionPresetPhoto]) { // switching from video to photo
-        self.blurredImageDistanceToTop.constant = 0;
-        self.blurredImageDistanceToBottom.constant = 0;
-    } else { // switching from photo to video
-        self.blurredImageDistanceToTop.constant = -self.distanceToCenterPhotoPreview;
-        self.blurredImageDistanceToBottom.constant = self.distanceToCenterPhotoPreview;
     }
-    [self.view layoutIfNeeded];
+    self.blurredImagePlaceholder.image = blurredImage;
+    
+    _settingsButton.enabled = NO;
     [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         self.blurredImagePlaceholder.alpha = 1;
     } completion:^(BOOL finished) {
         self.previewView.alpha = 0;
-        if ([self.videoProcessor.outputQuality isEqualToString:AVCaptureSessionPresetPhoto]) { // switching from video to photo
-            self.cameraPreviewViewDistanceToTop.constant = -self.distanceToCenterPhotoPreview;
-            self.cameraPreviewViewDistanceToBottom.constant = self.distanceToCenterPhotoPreview;
-        } else { // switching from photo to video
-            self.cameraPreviewViewDistanceToTop.constant = 0;
-            self.cameraPreviewViewDistanceToBottom.constant = 0;
-        }
-        [self.view layoutIfNeeded];
+        
+
         [self.videoProcessor switchToCurrentOutputQuality];
         [UIView animateWithDuration:0.4 delay:1 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.blurredImagePlaceholder.alpha = 0;
             self.previewView.alpha = 1;
-        } completion:nil];
+            [self updateCameraPreviewPosition];
+            [self updateTappablePreviewRectForCameraMode:self.cameraMode];
+
+        } completion:^(BOOL finished) {
+            _settingsButton.enabled = YES;
+        }];
     }];
+}
+
+
+- (void)switchedToCameraDevice:(AVCaptureDevice *)device {
+    if([device hasFlash]) {
+        _flashModeOnButton.enabled = YES;
+        _flashModeOffButton.enabled = YES;
+        _flashModeAutoButton.enabled = YES;
+    } else {
+        _flashModeOnButton.enabled = NO;
+        _flashModeOffButton.enabled = NO;
+        _flashModeAutoButton.enabled = NO;
+    }
 }
 
 -(void)updateGalleryItems {

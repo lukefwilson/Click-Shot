@@ -53,15 +53,15 @@
 }
 
 -(void)fixIfOffscreen {
-    if (self.frame.origin.x < self.parentViewController.photoPreviewRect.origin.x) {
-        self.center = CGPointMake(kViewHalfSize+self.parentViewController.photoPreviewRect.origin.x, self.center.y);
-    } else if (self.frame.origin.x+self.frame.size.width > self.parentViewController.photoPreviewRect.origin.x+self.parentViewController.photoPreviewRect.size.width) {
-        self.center = CGPointMake(self.parentViewController.photoPreviewRect.origin.x+self.parentViewController.photoPreviewRect.size.width-kViewHalfSize, self.center.y);
+    if (self.frame.origin.x < self.parentViewController.tappablePreviewRect.origin.x) {
+        self.center = CGPointMake(kViewHalfSize+self.parentViewController.tappablePreviewRect.origin.x, self.center.y);
+    } else if (self.frame.origin.x+self.frame.size.width > self.parentViewController.tappablePreviewRect.origin.x+self.parentViewController.tappablePreviewRect.size.width) {
+        self.center = CGPointMake(self.parentViewController.tappablePreviewRect.origin.x+self.parentViewController.tappablePreviewRect.size.width-kViewHalfSize, self.center.y);
     }
-    if (self.frame.origin.y < self.parentViewController.photoPreviewRect.origin.y) {
-        self.center = CGPointMake(self.center.x, kViewHalfSize+self.parentViewController.photoPreviewRect.origin.y);
-    } else if (self.frame.origin.y+self.frame.size.height > self.parentViewController.photoPreviewRect.origin.y+self.parentViewController.photoPreviewRect.size.height) {
-        self.center = CGPointMake(self.center.x, self.parentViewController.photoPreviewRect.origin.y+self.parentViewController.photoPreviewRect.size.height-kViewHalfSize);
+    if (self.frame.origin.y < self.parentViewController.tappablePreviewRect.origin.y) {
+        self.center = CGPointMake(self.center.x, kViewHalfSize+self.parentViewController.tappablePreviewRect.origin.y);
+    } else if (self.frame.origin.y+self.frame.size.height > self.parentViewController.tappablePreviewRect.origin.y+self.parentViewController.tappablePreviewRect.size.height) {
+        self.center = CGPointMake(self.center.x, self.parentViewController.tappablePreviewRect.origin.y+self.parentViewController.tappablePreviewRect.size.height-kViewHalfSize);
     }
 }
 

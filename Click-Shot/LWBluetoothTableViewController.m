@@ -67,7 +67,7 @@
     self.betterRefreshControl = [[ODRefreshControl alloc] initInScrollView:self.tableView];
     [self.betterRefreshControl addTarget:self action:@selector(refreshBluetoothDevices) forControlEvents:UIControlEventValueChanged];
     [self.betterRefreshControl setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];
-//    [self.betterRefreshControl.activity setCenter:CGPointMake(0, 20)];
+    [self.betterRefreshControl setTintColor:[UIColor colorWithRed:0.651 green:0.929 blue:1.000 alpha:1.000]];
 }
 
 - (void)didReceiveMemoryWarning

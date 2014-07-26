@@ -225,6 +225,7 @@
                                         <state key="normal" title="Flash" image="flashOn.png">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <state key="disabled" image="flashOff.png"/>
                                         <connections>
                                             <action selector="pressedFlashButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="TGl-sv-xO7"/>
                                         </connections>
@@ -239,6 +240,7 @@
                                         <state key="normal" title="Flash" image="flashOff.png">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <state key="disabled" image="flashOff.png"/>
                                         <connections>
                                             <action selector="pressedFlashButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="dS1-3a-ctc"/>
                                         </connections>
@@ -253,6 +255,7 @@
                                         <state key="normal" title="Flash" image="autoFlashOn.png">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <state key="disabled" image="flashOff.png"/>
                                         <connections>
                                             <action selector="pressedFlashButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="glm-RS-4HR"/>
                                         </connections>
