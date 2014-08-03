@@ -207,7 +207,7 @@
             duration = 0.1;
         }
 
-        [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+        [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction  animations:^{
             self.buttonImage.center = self.originalCenterPosition;
         } completion:^(BOOL finished){
             if (finished && ShouldTakePicture(distance)) {
@@ -239,7 +239,12 @@
 
 // Only take touches that are inside the camera button
 -(BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
-    if (self.isAnimatingButton || self.parentViewController.settingsMenuIsOpen) {
+    if (self.parentViewController.settingsMenuIsOpen) {
+        return NO;
+    } else if (self.isAnimatingButton) {
+        if (CGRectContainsPoint(self.buttonImage.frame, point)) {
+            [self cancelAnimation];
+        }
         return NO;
     } else if (CGRectContainsPoint(self.buttonImage.frame, point)) {
         return YES;
@@ -267,6 +272,21 @@
     }
 }
 
+-(void)cancelAnimation {
+    for (int i = 0; i < [self.rings count]; i++) {
+        CAShapeLayer *ring = [self.rings objectAtIndex:i];
+        ring.opacity = 0;
+        [ring removeAllAnimations];
+    }
+    [UIView animateWithDuration:0.05 delay:0 options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction animations:^{
+        self.buttonImage.center = self.originalCenterPosition;
+    } completion:nil];
+    self.isAnimatingButton = NO;
+    self.parentViewController.gestureIsBlocked = NO;
+    self.parentViewController.rapidShotModeButton.enabled = YES;
+    self.parentViewController.videoModeButton.enabled = YES;
+    self.parentViewController.cameraRollButton.enabled = YES;
+}
 
 //- (void)drawRect:(CGRect)rect
 //{

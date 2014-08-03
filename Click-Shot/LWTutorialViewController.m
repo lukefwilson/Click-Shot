@@ -12,8 +12,12 @@
 #define kCloseButtonWidth 100
 #define kCloseButtonHeight 34
 #define kSettingsViewHeight 100
-#define kNumberOfPages 11
-#define kOffscreenRect CGRectMake(-15, -15, 5, 5)
+#define kNumberOfPages 7
+#define kOffscreenRect CGRectMake(self.mainController.pictureModeButton.frame.origin.x, -15, self.mainController.videoModeButton.frame.origin.x+self.mainController.videoModeButton.frame.size.width-self.mainController.pictureModeButton.frame.origin.x, 1)
+#define kSmallGroundOffset 135
+#define kLargeGroundOffset 235
+#define kPage2TextDown 70
+#define kPage2TextUp 33
 
 @implementation LWTutorialViewController
 
@@ -56,6 +60,13 @@
     
     NSArray *viewControllers = [NSArray arrayWithObject:initialViewController];
     
+    self.currentPageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-kSmallGroundOffset, self.view.frame.size.width, 80)];
+    self.currentPageLabel.alpha = 0;
+    self.currentPageLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:17];
+    self.currentPageLabel.textColor = [UIColor whiteColor];
+    self.currentPageLabel.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:self.currentPageLabel];
+    
     [self setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
 }
 
@@ -67,7 +78,7 @@
     _maskRect = maskRect;
 }
 
--(void)animateMaskRect:(CGRect)maskRect withSpeed:(CGFloat)speed {
+-(void)animateMaskRect:(CGRect)maskRect withSpeed:(CGFloat)speed andCompletion:(void (^)(BOOL))completionBlock {
     UIBezierPath *path = [UIBezierPath bezierPathWithRect:maskRect];
     [path appendPath:[UIBezierPath bezierPathWithRect:self.view.frame]];
     
@@ -84,7 +95,8 @@
     
     [UIView animateWithDuration:1/speed animations:^{
         _border.frame = CGRectMake(maskRect.origin.x-10, maskRect.origin.y-10, maskRect.size.width+20, maskRect.size.height+20);
-    }];
+
+    } completion:completionBlock];
     
     _maskRect = maskRect;
 }
@@ -128,43 +140,13 @@
     BOOL touchedHole = CGRectContainsPoint(_maskRect, point);
     if (CGPointEqualToPoint(point, _previousTouchPoint) && touchedHole) {
         switch (_currentPage) {
-            case 1: // pressed flash menu open
-                [self setViewControllers:@[[self viewControllerAtIndex:2]] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
-                self.currentPage = 2;
-                [self animateMaskRect:CGRectMake(0, 0, self.mainController.flashModeAutoButton.frame.size.width, self.mainController.flashModeAutoButton.frame.size.height*3) withSpeed:2];
-                break;
-            case 2: // chose flash mode from menu
-                [self setViewControllers:@[[self viewControllerAtIndex:3]] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
-                self.currentPage = 3;
-                [self animateMaskRect:CGRectMake(self.mainController.pictureModeButton.frame.origin.x, 0, self.mainController.videoModeButton.frame.origin.x+self.mainController.pictureModeButton.frame.size.width-self.mainController.pictureModeButton.frame.origin.x, self.mainController.pictureModeButton.frame.size.height) withSpeed:1.5];
-                break;
-            case 3: // chose camera mode from menu
-                [self setViewControllers:@[[self viewControllerAtIndex:4]] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
-                self.currentPage = 4;
-                [self animateMaskRect:self.mainController.swithCameraButton.frame withSpeed:1];
-                break;
-            case 4: // switched camera
-                [self setViewControllers:@[[self viewControllerAtIndex:5]] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
-                self.currentPage = 5;
-                [self animateMaskRect:self.mainController.settingsButton.frame withSpeed:1];
-                break;
-            case 5: // settings menu opened
-                [self setViewControllers:@[[self viewControllerAtIndex:6]] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
-                self.currentPage = 6;
-//                [self animateMaskRect:CGRectMake(0, self.view.frame.size.height-kSettingsViewHeight, self.view.frame.size.width, kSettingsViewHeight) withSpeed:1];
-                [self animateMaskRect:self.mainController.soundsButton.frame withSpeed:1];
-
-                break;
-            case 6: // can't progress from settings menu, but can play with it
-                break;
-            case 7: // can't progress from settings menu, but can play with it
-                break;
-            case 8: // can't progress from settings menu, but can play with it
-                break;
-            case 9: // don't let them mess with camera roll
+            case 2:
                 return YES;
                 break;
-            case 10:
+            case 4:
+                return YES;
+                break;
+            case 6:
                 [self.mainController closeTutorial];
                 break;
             default:
@@ -185,77 +167,104 @@
     
     if (!completed)  return;
     
-    LWTutorialChildViewController *currentViewController = (LWTutorialChildViewController *)[self.viewControllers lastObject];
-    if (currentViewController.index == _currentPage) return;
-    switch (currentViewController.index) {
+    LWTutorialChildViewController *toViewController = (LWTutorialChildViewController *)[self.viewControllers lastObject];
+    if (toViewController.index == _currentPage) return;
+    switch (toViewController.index) {
         case 0: {
-            [self animateMaskRect:kOffscreenRect withSpeed:2];
+            [self animateMaskRect:kOffscreenRect withSpeed:2 andCompletion:nil];
+            self.currentPageLabel.alpha = 0;
             break;
         }
         case 1: {
-            [self animateMaskRect:self.mainController.flashModeAutoButton.frame withSpeed:2];
-            if (self.currentPage == 2) { // going back from open flash menu
-                [self.mainController closeFlashModeMenu:self.mainController.flashModeAutoButton];
-            }
-            break;
-        }
-        case 2: { // flash menu wasn't chosen, swiped instead
-            [self.mainController openFlashModeMenu];
-            [self animateMaskRect:CGRectMake(0, 0, self.mainController.flashModeAutoButton.frame.size.width, self.mainController.flashModeAutoButton.frame.size.height*3) withSpeed:2];
-            break;
-        }
-        case 3: { // flash mode wasn't chosen from menu, swiped instead
-            [self.mainController closeFlashModeMenu:self.mainController.flashModeAutoButton];
-            [self animateMaskRect:CGRectMake(self.mainController.pictureModeButton.frame.origin.x, 0, self.mainController.videoModeButton.frame.origin.x+self.mainController.pictureModeButton.frame.size.width-self.mainController.pictureModeButton.frame.origin.x, self.mainController.pictureModeButton.frame.size.height) withSpeed:1.5];
-            break;
-        }
-        case 4: { // camera mode wasn't chosen from menu, swiped instead
-            [self animateMaskRect:self.mainController.swithCameraButton.frame withSpeed:1];
-            break;
-        }
-        case 5: { // switch camera  wasn't pressed, swiped instead
-            [self animateMaskRect:self.mainController.settingsButton.frame withSpeed:1];
-            if (self.currentPage == 6) { // coming back from next page
+            [UIView animateWithDuration:0.5 animations:^{
+                self.currentPageLabel.alpha = 1;
+            }];
+            if (self.currentPage == 2) { // coming back from next page
                 [self.mainController closeSettingsMenu];
+                [self moveCurrentPageLabelDown];
+                LWTutorialChildViewController *page2 = [previousViewControllers lastObject];
+                page2.page2TextDistanceFromTop.constant = kPage2TextDown;
+                [page2.view layoutIfNeeded];
+            }
+            [self animateMaskRect:CGRectMake(self.mainController.pictureModeButton.frame.origin.x, 0, self.mainController.videoModeButton.frame.origin.x+self.mainController.pictureModeButton.frame.size.width-self.mainController.pictureModeButton.frame.origin.x, self.mainController.pictureModeButton.frame.size.height) withSpeed:1.5 andCompletion:nil];
+            
+            break;
+        }
+        case 2: { // camera mode wasn't pressed, swiped instead
+            if (self.currentPage == 3) {
+                [self animateMaskRect:self.mainController.soundsButton.frame withSpeed:1 andCompletion:nil];
+            } else {
+                [self animateMaskRect:self.mainController.settingsButton.frame withSpeed:1 andCompletion:^(BOOL finished) {
+                    if (self.currentPage == 2) {
+                        [self.mainController openSettingsMenu];
+                        [self moveCurrentPageLabelUp];
+                        [self animateMaskRect:self.mainController.soundsButton.frame withSpeed:1 andCompletion:nil];
+                        [UIView animateWithDuration:0.5 animations:^{
+                            toViewController.page2TextDistanceFromTop.constant = kPage2TextUp;
+                            [toViewController.view layoutIfNeeded];
+                        }];
+                    }
+                }];
             }
             break;
         }
-        case 6: { // settings menu wasn't pressed, swiped instead
-//            [self animateMaskRect:CGRectMake(0, self.view.frame.size.height-kSettingsViewHeight, self.view.frame.size.width, kSettingsViewHeight) withSpeed:1];
-            [self animateMaskRect:self.mainController.soundsButton.frame withSpeed:1];
+        case 3: { // swiped after sounds
             [self.mainController openSettingsMenu];
+            [self moveCurrentPageLabelUp];
+            [self animateMaskRect:CGRectMake(self.mainController.focusButton.frame.origin.x, self.mainController.focusButton.frame.origin.y, self.mainController.exposureButton.frame.origin.x+self.mainController.exposureButton.frame.size.width-self.mainController.focusButton.frame.origin.x, self.mainController.focusButton.frame.size.height) withSpeed:1 andCompletion:nil];
             break;
         }
-        case 7: { // swiped after sounds
-            [self animateMaskRect:CGRectMake(self.mainController.focusButton.frame.origin.x, self.mainController.focusButton.frame.origin.y, self.mainController.exposureButton.frame.origin.x+self.mainController.exposureButton.frame.size.width-self.mainController.focusButton.frame.origin.x, self.mainController.focusButton.frame.size.height) withSpeed:1];
+        case 4: {
+            [self.mainController openSettingsMenu];
+            [self moveCurrentPageLabelUp];
+            [self animateMaskRect:self.mainController.bluetoothButton.frame withSpeed:1 andCompletion:nil];
             break;
         }
-        case 8: {
-            [self animateMaskRect:self.mainController.bluetoothButton.frame withSpeed:1];
-
-            if (self.currentPage == 9) { // coming back from next page
-                [self.mainController openSettingsMenu];
+        case 5: { // swipe to Camera Roll
+            [self animateMaskRect:self.mainController.cameraRollButton.frame withSpeed:1 andCompletion:nil];
+            [self.mainController closeSettingsMenu];
+            [self moveCurrentPageLabelDown];
+            if (self.currentPageLabel.alpha != 1) {
+                [UIView animateWithDuration:0.5 animations:^{
+                    self.currentPageLabel.alpha = 1;
+                }];
             }
             break;
         }
-        case 9: { // swipe to Camera Roll
-            [self animateMaskRect:self.mainController.cameraRollButton.frame withSpeed:1];
-            [self.mainController closeSettingsMenu];
-            break;
-        }
-        case 10: { // swipe to Main circle
-            [self animateMaskRect:self.mainController.cameraButton.outerButtonImage.frame withSpeed:1];
+        case 6: { // swipe to Main camera button
+            [self animateMaskRect:self.mainController.cameraButton.outerButtonImage.frame withSpeed:1 andCompletion:nil];
+            [UIView animateWithDuration:0.5 animations:^{
+                self.currentPageLabel.alpha = 0;
+            }];
             break;
         }
         default:
             break;
     }
-    self.currentPage = currentViewController.index;
-//    NSLog(@"current page %li", (long)self.currentPage);
+    self.currentPage = toViewController.index;
+    self.currentPageLabel.text = [NSString stringWithFormat:@"%i of %i", self.currentPage, kNumberOfPages-1];
+    NSLog(@"%@", NSStringFromCGSize(toViewController.view.frame.size));
+}
+
+-(void)moveCurrentPageLabelUp {
+    [UIView animateWithDuration:0.5 animations:^{
+        self.currentPageLabel.frame = CGRectMake(0, self.view.frame.size.height-kLargeGroundOffset, self.view.frame.size.width, self.currentPageLabel.frame.size.height);
+    }];
+}
+
+-(void)moveCurrentPageLabelDown {
+    [UIView animateWithDuration:0.5 animations:^{
+        self.currentPageLabel.frame = CGRectMake(0, self.view.frame.size.height-kSmallGroundOffset, self.view.frame.size.width, self.currentPageLabel.frame.size.height);
+    }];
 }
 
 -(void)pageViewController:(UIPageViewController *)pageViewController willTransitionToViewControllers:(NSArray *)pendingViewControllers {
 //    NSLog(@"will transition");
+    LWTutorialChildViewController *toViewController = (LWTutorialChildViewController *)[pendingViewControllers firstObject];
+    if (toViewController.index == 0 || toViewController.index == 6) {
+        self.currentPageLabel.alpha = 0;
+    }
+
 }
 
 
@@ -276,6 +285,7 @@
 @end
 
 @interface LWTutorialChildViewController ()
+
 
 @end
 

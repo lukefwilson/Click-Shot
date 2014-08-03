@@ -15,6 +15,7 @@
 #import "GPUImage.h"
 #import "MHGallery.h"
 #import "LWTutorialViewController.h"
+#import "DragAnimationView.h"
 
 
 
@@ -69,9 +70,12 @@
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *cameraUIDistanceToTop;
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *cameraPreviewViewDistanceToBottom;
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *cameraPreviewViewDistanceToTop;
+@property (nonatomic, weak) IBOutlet NSLayoutConstraint *blackBackgroundDistanceToBottom;
+@property (nonatomic, weak) IBOutlet NSLayoutConstraint *blackBackgroundDistanceToTop;
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *blurredImageDistanceToBottom;
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *blurredImageDistanceToTop;
 @property (nonatomic) CGFloat distanceToCenterPhotoPreview;
+@property (weak, nonatomic) IBOutlet UIView *blackBackground;
 
 @property (nonatomic, weak) IBOutlet UIView *pictureSwipeView;
 @property (nonatomic, weak) IBOutlet UIView *rapidShotSwipeView;
@@ -107,7 +111,6 @@
 - (IBAction)pressedSounds:(id)sender;
 
 // Utilities.
-@property (nonatomic, getter = isDeviceAuthorized) BOOL deviceAuthorized;
 @property (nonatomic) BOOL lockInterfaceRotation;
 @property (nonatomic) id runtimeErrorHandlingObserver;
 @property (nonatomic) NSInteger flashMode;
@@ -141,6 +144,9 @@
 @property (nonatomic) GPUImageiOSBlurFilter *blurFilter;
 @property (nonatomic) NSMutableArray *galleryItems;
 
+@property (nonatomic) BOOL micPermission;
+@property (nonatomic) BOOL assetsPermission;
+
 
 @end
 
@@ -162,7 +168,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     __weak CameraViewController *weakSelf = self;
-    
+
     self.cameraMode = kCameraModePicture;
     [self updateModeButtonsForMode:self.cameraMode];
     self.flashMode = kFlashModeAuto;
@@ -194,7 +200,8 @@
     [self.cameraButton initialize];
 	   
 	// Check for device authorization
-	[self checkDeviceAuthorizationStatus];
+	[self checkMicPermission];
+    [self checkAssetsPremission];
 
 
     self.currentFlashButton.alpha = kDefaultAlpha;
@@ -239,6 +246,57 @@
     self.pictureSwipeView = [self swipeViewForMode:kCameraModePicture];
     self.rapidShotSwipeView = [self swipeViewForMode:kCameraModeRapidShot];
     self.videoSwipeView = [self swipeViewForMode:kCameraModeVideo];
+    
+    
+    CABasicAnimation *moveUpForSettings=[CABasicAnimation animationWithKeyPath:@"position"];
+    moveUpForSettings.duration = 1;
+    moveUpForSettings.autoreverses = NO;
+    moveUpForSettings.fromValue = [NSValue valueWithCGPoint:self.cameraUIView.layer.position];
+    moveUpForSettings.toValue = [NSValue valueWithCGPoint:CGPointMake(self.cameraUIView.layer.position.x, self.cameraUIView.layer.position.y-kSettingsViewHeight)];
+    moveUpForSettings.speed = 0;
+//    settingsMenuAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+    moveUpForSettings.timeOffset = 0;
+    
+    CABasicAnimation *moveUpForSounds = [CABasicAnimation animationWithKeyPath:@"position"];
+    moveUpForSounds.duration = 1;
+    moveUpForSounds.autoreverses = NO;
+    moveUpForSounds.fromValue = [NSValue valueWithCGPoint:CGPointMake(self.cameraUIView.layer.position.x, self.cameraUIView.layer.position.y-kSettingsViewHeight)];
+    moveUpForSounds.toValue = [NSValue valueWithCGPoint:CGPointMake(self.cameraUIView.layer.position.x, self.cameraUIView.layer.position.y-(kSettingsViewHeight+self.soundPicker.frame.size.height))];
+    moveUpForSounds.speed = 0;
+//    soundsMenuAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+
+    moveUpForSounds.timeOffset = 0;
+    
+    CABasicAnimation *moveUpForBluetooth=[CABasicAnimation animationWithKeyPath:@"position"];
+    moveUpForBluetooth.duration = 1;
+    moveUpForBluetooth.autoreverses = NO;
+    moveUpForBluetooth.fromValue = [NSValue valueWithCGPoint:CGPointMake(self.cameraUIView.layer.position.x, self.cameraUIView.layer.position.y-(kSettingsViewHeight+self.soundPicker.frame.size.height))];
+    moveUpForBluetooth.toValue = [NSValue valueWithCGPoint:CGPointMake(self.cameraUIView.layer.position.x, self.cameraUIView.layer.position.y-(kSettingsViewHeight+self.bluetoothMenu.frame.size.height))];
+    moveUpForBluetooth.speed = 0;
+    moveUpForBluetooth.timeOffset = 0;
+
+    self.settingsView.hidden = NO;
+    
+    CABasicAnimation *openSoundsMenuAnim =[CABasicAnimation animationWithKeyPath:@"position"];
+    openSoundsMenuAnim.duration = 1;
+    openSoundsMenuAnim.autoreverses = NO;
+    openSoundsMenuAnim.toValue = [NSValue valueWithCGPoint:self.soundPicker.layer.position];
+    openSoundsMenuAnim.fromValue = [NSValue valueWithCGPoint:CGPointMake(self.cameraUIView.layer.position.x+CGRectGetWidth(self.view.frame), self.soundPicker.layer.position.y)];
+    openSoundsMenuAnim.speed = 0;
+    openSoundsMenuAnim.timeOffset = 0;
+    
+    CABasicAnimation *closeSoundsMenuAnim =[CABasicAnimation animationWithKeyPath:@"position"];
+    closeSoundsMenuAnim.duration = 1;
+    closeSoundsMenuAnim.autoreverses = NO;
+    closeSoundsMenuAnim.toValue = [NSValue valueWithCGPoint:CGPointMake(self.cameraUIView.layer.position.x+CGRectGetWidth(self.view.frame), self.soundPicker.layer.position.y)];
+    closeSoundsMenuAnim.fromValue = [NSValue valueWithCGPoint:self.soundPicker.layer.position];
+    closeSoundsMenuAnim.speed = 0;
+    closeSoundsMenuAnim.timeOffset = 0;
+
+
+    DragAnimationView *drag = [[DragAnimationView alloc] initWithFrame:self.settingsButton.frame animations:@[ @[@[self.cameraUIView, moveUpForSettings], @[self.previewView, moveUpForSettings], @[self.blackBackground, moveUpForSettings]], @[@[self.cameraUIView, moveUpForSounds], @[self.previewView, moveUpForSounds], @[self.blackBackground, moveUpForSounds], @[self.soundPicker, openSoundsMenuAnim]],  @[@[self.cameraUIView, moveUpForBluetooth], @[self.previewView, moveUpForBluetooth], @[self.blackBackground, moveUpForBluetooth], @[self.soundPicker, closeSoundsMenuAnim]] ]];
+    
+    [self.cameraUIView addSubview:drag];
 }
 
 -(void)updateTappablePreviewRectForCameraMode:(NSInteger)cameraMode {
@@ -270,6 +328,8 @@
             self.tappablePreviewRect = CGRectMake(0, self.swithCameraButton.frame.size.height, self.view.frame.size.width, self.view.frame.size.height-self.cameraButton.outerButtonImage.frame.size.height);
         }
     }
+    [self.focusPointView fixIfOffscreen];
+    [self.exposePointView fixIfOffscreen];
     NSLog(@"%@", NSStringFromCGRect(self.tappablePreviewRect));
 }
 
@@ -281,12 +341,15 @@
         self.cameraPreviewViewDistanceToBottom.constant = 0;
         self.blurredImageDistanceToTop.constant = 0;
         self.blurredImageDistanceToBottom.constant = 0;
+        self.blackBackgroundDistanceToBottom.constant = 0;
+        self.blackBackgroundDistanceToTop.constant = 0;
     } else {
         self.cameraPreviewViewDistanceToTop.constant = -self.distanceToCenterPhotoPreview;
         self.cameraPreviewViewDistanceToBottom.constant = self.distanceToCenterPhotoPreview;
         self.blurredImageDistanceToTop.constant = -self.distanceToCenterPhotoPreview;
         self.blurredImageDistanceToBottom.constant = self.distanceToCenterPhotoPreview;
-        NSLog(@"%f", self.distanceToCenterPhotoPreview);
+        self.blackBackgroundDistanceToBottom.constant = 0;
+        self.blackBackgroundDistanceToTop.constant = 0;
     }
     [self.view layoutIfNeeded];
 }
@@ -429,7 +492,7 @@
     if (self.settingsMenuIsOpen) {
         [self closeSettingsMenu];
     } else {
-            [self openSettingsMenu];
+        [self openSettingsMenu];
     }
 }
 
@@ -455,6 +518,8 @@
             self.cameraPreviewViewDistanceToTop.constant = -kSettingsViewHeight;
             self.cameraUIDistanceToBottom.constant = kSettingsViewHeight;
             self.cameraUIDistanceToTop.constant = -kSettingsViewHeight;
+            self.blackBackgroundDistanceToBottom.constant = kSettingsViewHeight;
+            self.blackBackgroundDistanceToTop.constant = -kSettingsViewHeight;
             [self.view layoutIfNeeded];
         } completion:nil];
     } else {
@@ -470,6 +535,8 @@
                 self.cameraPreviewViewDistanceToTop.constant = -yPosition;
                 self.cameraUIDistanceToBottom.constant = yPosition;
                 self.cameraUIDistanceToTop.constant = -yPosition;
+                self.blackBackgroundDistanceToBottom.constant = yPosition;
+                self.blackBackgroundDistanceToTop.constant = -yPosition;
                 self.soundPickerDistsanceFromLeft.constant = 0;
                 self.soundPickerDistsanceFromRight.constant = 0;
                 [self.view layoutIfNeeded];
@@ -483,6 +550,8 @@
                 self.cameraPreviewViewDistanceToTop.constant = -yPosition;
                 self.cameraUIDistanceToBottom.constant = yPosition;
                 self.cameraUIDistanceToTop.constant = -yPosition;
+                self.blackBackgroundDistanceToBottom.constant = yPosition;
+                self.blackBackgroundDistanceToTop.constant = -yPosition;
                 [self.view layoutIfNeeded];
             } completion:nil];
         }
@@ -500,6 +569,8 @@
             self.cameraPreviewViewDistanceToTop.constant = -kSettingsViewHeight;
             self.cameraUIDistanceToBottom.constant = kSettingsViewHeight;
             self.cameraUIDistanceToTop.constant = -kSettingsViewHeight;
+            self.blackBackgroundDistanceToBottom.constant = kSettingsViewHeight;
+            self.blackBackgroundDistanceToTop.constant = -kSettingsViewHeight;
             [self.view layoutIfNeeded];
         } completion:nil];
     } else {
@@ -513,6 +584,8 @@
                 self.cameraUIDistanceToTop.constant = -yPosition;
                 self.soundPickerDistsanceFromLeft.constant = self.view.frame.size.width;
                 self.soundPickerDistsanceFromRight.constant = -self.view.frame.size.width;
+                self.blackBackgroundDistanceToBottom.constant = yPosition;
+                self.blackBackgroundDistanceToTop.constant = -yPosition;
                 [self.view layoutIfNeeded];
             } completion:^(BOOL finished){
                 [self.settingsView bringSubviewToFront:self.bluetoothMenu];
@@ -524,6 +597,8 @@
                 self.cameraPreviewViewDistanceToTop.constant = -yPosition;
                 self.cameraUIDistanceToBottom.constant = yPosition;
                 self.cameraUIDistanceToTop.constant = -yPosition;
+                self.blackBackgroundDistanceToBottom.constant = yPosition;
+                self.blackBackgroundDistanceToTop.constant = -yPosition;
                 [self.view layoutIfNeeded];
             } completion:nil];
         }
@@ -577,11 +652,21 @@
     self.settingsView.hidden = NO;
     [self.view layoutIfNeeded];
     [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.cameraPreviewViewDistanceToBottom.constant = kSettingsViewHeight;
-        self.cameraPreviewViewDistanceToTop.constant = -kSettingsViewHeight;
+        if (self.cameraMode != kCameraModeVideo) {
+            self.cameraPreviewViewDistanceToBottom.constant = kSettingsViewHeight+self.distanceToCenterPhotoPreview;
+            self.cameraPreviewViewDistanceToTop.constant = -kSettingsViewHeight-self.distanceToCenterPhotoPreview;
+        } else {
+            self.cameraPreviewViewDistanceToBottom.constant = kSettingsViewHeight;
+            self.cameraPreviewViewDistanceToTop.constant = -kSettingsViewHeight;
+        }
+        self.blackBackgroundDistanceToBottom.constant = kSettingsViewHeight;
+        self.blackBackgroundDistanceToTop.constant = -kSettingsViewHeight;
         // not needed but the blurred image view could also move here
         self.cameraUIDistanceToBottom.constant = kSettingsViewHeight;
         self.cameraUIDistanceToTop.constant = -kSettingsViewHeight;
+//        self.previewView.transform = CGAffineTransformMakeTranslation(0, -kSettingsViewHeight);
+//        self.cameraUIView.transform = CGAffineTransformMakeTranslation(0, -kSettingsViewHeight);
+//        self.blackBackground.transform = CGAffineTransformMakeTranslation(0, -kSettingsViewHeight);
         [self.view layoutIfNeeded];
     }completion:nil];
 }
@@ -652,24 +737,46 @@
 
 
 - (void)pressedCameraButton {
-    if (self.shouldPlaySound && self.cameraMode != kCameraModeRapidShot && !self.videoProcessor.recording) {
-        [self.soundPlayer play];
-        self.takePictureAfterSound = YES;
-    } else {
-        switch (self.cameraMode) {
-            case kCameraModePicture:
+//    if (self.micPermission && self.assetsPermission && self.videoPermission) {
+        if (self.shouldPlaySound && self.cameraMode != kCameraModeRapidShot && !self.videoProcessor.recording) {
+            [self.soundPlayer play];
+            self.takePictureAfterSound = YES;
+        } else {
+            [self cameraAction];
+        }
+//    } else {
+//        [self checkDeviceAuthorizationStatus];
+//        [self updateGalleryItems];
+//    }
+}
+
+-(void)cameraAction {
+    switch (self.cameraMode) {
+        case kCameraModePicture:
+            if (self.assetsPermission) {
                 [self.videoProcessor snapStillImage];
-                break;
-            case kCameraModeRapidShot:
+            } else {
+                [self checkAssetsPremission];
+            }
+            break;
+        case kCameraModeRapidShot:
+            if (self.assetsPermission) {
                 [self.videoProcessor toggleActionShot];
                 if (!self.videoProcessor.actionShooting)[self setCameraButtonText:@"" withOffset:CGPointZero fontSize:kMediumFontSize];
-                break;
-            case kCameraModeVideo:
+            } else {
+                [self checkAssetsPremission];
+            }
+            break;
+        case kCameraModeVideo:
+            if (self.assetsPermission && self.micPermission) {
                 [self.videoProcessor toggleRecordVideo];
-                break;
-            default:
-                break;
-        }
+            } else {
+                [self checkMicPermission];
+                [self checkAssetsPremission];
+            }
+            break;
+        default:
+            break;
     }
 }
 
@@ -954,29 +1061,45 @@
     });
 }
 
-- (void)checkDeviceAuthorizationStatus
-{
-	NSString *mediaType = AVMediaTypeVideo;
-	
-	[AVCaptureDevice requestAccessForMediaType:mediaType completionHandler:^(BOOL granted) {
-		if (granted)
-		{
+-(void)checkMicPermission {
+    [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio completionHandler:^(BOOL granted) {
+		if (granted) {
+            self.micPermission = YES;
 			//Granted access to mediaType
-			[self setDeviceAuthorized:YES];
-		}
-		else
-		{
+		} else {
 			//Not granted access to mediaType
 			dispatch_async(dispatch_get_main_queue(), ^{
-				[[[UIAlertView alloc] initWithTitle:@"Whoops!"
-											message:@"Click-Shot doesn't have permission to use Camera, please change privacy settings"
+				[[[UIAlertView alloc] initWithTitle:@"Where's the mic?"
+											message:@"Click-Shot doesn't have permission to use the microphone. You need to change this in your Privacy Settings to record a video."
 										   delegate:self
-								  cancelButtonTitle:@"OK"
+								  cancelButtonTitle:@"OK, I'll fix that now"
 								  otherButtonTitles:nil] show];
-				[self setDeviceAuthorized:NO];
 			});
 		}
 	}];
+}
+
+-(void)checkAssetsPremission {
+    self.assetsPermission = YES;
+    ALAssetsLibraryGroupsEnumerationResultsBlock assetGroupEnumerator =
+    ^(ALAssetsGroup *assetGroup, BOOL *stop) {
+        if (assetGroup != nil) {
+            // do nothing
+        }
+    };
+    ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+    [library enumerateGroupsWithTypes:ALAssetsGroupAll usingBlock:assetGroupEnumerator failureBlock:^(NSError *error) {
+        NSLog(@"%@", error);
+        self.assetsPermission = NO;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[[UIAlertView alloc] initWithTitle:@"I can't save!"
+                                        message:@"Click-Shot doesn't have permission to access or save photos. You can change this in your Privacy Settings."
+                                       delegate:self
+                              cancelButtonTitle:@"OK, I'll do that now"
+                              otherButtonTitles:nil] show];
+        });
+    }];
+
 }
 
 -(void) updateMoveableExposureView {
@@ -1126,6 +1249,7 @@
 
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     if (self.pictureModeButton.enabled && !self.gestureIsBlocked && !self.settingsMenuIsOpen && !self.cameraRollIsOpen) { // make sure we can switch modes
+        // Switching camera mode with swipe
         CGFloat currentXPos = [[touches anyObject] locationInView:self.view].x;
         CGFloat diffFromBeginning = currentXPos - _startXTouch;
         if (diffFromBeginning < 0 ) { //swiping  to rapid shot or video shot
@@ -1170,6 +1294,7 @@
 
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     if (self.pictureModeButton.enabled && !self.gestureIsBlocked && !self.settingsMenuIsOpen && !self.cameraRollIsOpen) { // make sure we can switch modes
+        // Switching camera mode with swipe
         CGFloat currentXPos = [_primaryTouch locationInView:self.view].x;
         CGFloat diffFromBeginning = currentXPos - _startXTouch;
         if (_hasMoved) {
@@ -1528,7 +1653,7 @@
             }
         }];
     } failureBlock: ^(NSError *error) {
-        
+
     }];
 }
 
@@ -1624,20 +1749,7 @@
 
 -(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
     if (self.takePictureAfterSound) {
-        switch (self.cameraMode) {
-            case kCameraModePicture:
-                [self.videoProcessor snapStillImage];
-                break;
-            case kCameraModeRapidShot:
-                [self.videoProcessor toggleActionShot];
-                if (!self.videoProcessor.actionShooting)[self setCameraButtonText:@"" withOffset:CGPointZero fontSize:kMediumFontSize];
-                break;
-            case kCameraModeVideo:
-                [self.videoProcessor toggleRecordVideo];
-                break;
-            default:
-                break;
-        }
+        [self cameraAction];
     }
 }
 

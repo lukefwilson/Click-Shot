@@ -23,6 +23,8 @@
 @property (nonatomic)  CameraViewController *mainController;
 @property (nonatomic)  CGPoint previousTouchPoint;
 
+@property (nonatomic)  UILabel *currentPageLabel;
+
 -(void)setMaskRect:(CGRect)maskRect;
 -(void)restartTutorial;
 @end
@@ -32,6 +34,7 @@
 @interface LWTutorialChildViewController : UIViewController
 
 @property (nonatomic)  NSInteger index;
+@property (nonatomic, weak) IBOutlet NSLayoutConstraint *page2TextDistanceFromTop;
 - (IBAction)closeTutorial:(id)sender;
 
 @end

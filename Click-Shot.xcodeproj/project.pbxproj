@@ -23,6 +23,10 @@
 		2F38039E1942DC7D004559C3 /* UIImage+ImageFromColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F38039D1942DC7D004559C3 /* UIImage+ImageFromColor.m */; };
 		2F6519D61980BB0D00CBC479 /* ODRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F6519D51980BB0D00CBC479 /* ODRefreshControl.m */; };
 		2F71F2C1193E823E00FA41C2 /* UIApplication+ScreenSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F71F2C0193E823E00FA41C2 /* UIApplication+ScreenSize.m */; };
+		2F8EA3D01985820100219F3B /* DragAnimationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8EA3CF1985820100219F3B /* DragAnimationView.m */; };
+		2FC9490F198485E400C36D41 /* shortActionMode.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FC9490C198485E400C36D41 /* shortActionMode.png */; };
+		2FC94910198485E400C36D41 /* shortStillMode.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FC9490D198485E400C36D41 /* shortStillMode.png */; };
+		2FC94911198485E400C36D41 /* shortVideoMode.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FC9490E198485E400C36D41 /* shortVideoMode.png */; };
 		2FDE4EBC195F8D96009E2E12 /* actionSwipeImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FDE4EB6195F8D96009E2E12 /* actionSwipeImage.png */; };
 		2FDE4EBD195F8D96009E2E12 /* actionSwipeImage@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FDE4EB7195F8D96009E2E12 /* actionSwipeImage@2x.png */; };
 		2FDE4EBE195F8D96009E2E12 /* stillSwipeImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FDE4EB8195F8D96009E2E12 /* stillSwipeImage.png */; };
@@ -212,6 +216,11 @@
 		2F6519D51980BB0D00CBC479 /* ODRefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ODRefreshControl.m; sourceTree = "<group>"; };
 		2F71F2BF193E823E00FA41C2 /* UIApplication+ScreenSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+ScreenSize.h"; sourceTree = "<group>"; };
 		2F71F2C0193E823E00FA41C2 /* UIApplication+ScreenSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+ScreenSize.m"; sourceTree = "<group>"; };
+		2F8EA3CE1985820100219F3B /* DragAnimationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragAnimationView.h; sourceTree = "<group>"; };
+		2F8EA3CF1985820100219F3B /* DragAnimationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragAnimationView.m; sourceTree = "<group>"; };
+		2FC9490C198485E400C36D41 /* shortActionMode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shortActionMode.png; sourceTree = "<group>"; };
+		2FC9490D198485E400C36D41 /* shortStillMode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shortStillMode.png; sourceTree = "<group>"; };
+		2FC9490E198485E400C36D41 /* shortVideoMode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shortVideoMode.png; sourceTree = "<group>"; };
 		2FDE4EB6195F8D96009E2E12 /* actionSwipeImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = actionSwipeImage.png; path = "../../../../Dropbox/Remote Shot/icons/swipe views/actionSwipeImage.png"; sourceTree = "<group>"; };
 		2FDE4EB7195F8D96009E2E12 /* actionSwipeImage@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "actionSwipeImage@2x.png"; path = "../../../../Dropbox/Remote Shot/icons/swipe views/actionSwipeImage@2x.png"; sourceTree = "<group>"; };
 		2FDE4EB8195F8D96009E2E12 /* stillSwipeImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = stillSwipeImage.png; path = "../../../../Dropbox/Remote Shot/icons/swipe views/stillSwipeImage.png"; sourceTree = "<group>"; };
@@ -473,6 +482,17 @@
 			path = ODRefreshControl;
 			sourceTree = "<group>";
 		};
+		2FC9490B198485E400C36D41 /* shorter camera modes */ = {
+			isa = PBXGroup;
+			children = (
+				2FC9490C198485E400C36D41 /* shortActionMode.png */,
+				2FC9490D198485E400C36D41 /* shortStillMode.png */,
+				2FC9490E198485E400C36D41 /* shortVideoMode.png */,
+			);
+			name = "shorter camera modes";
+			path = "../../../../Dropbox/Remote Shot/icons/shorter camera modes";
+			sourceTree = "<group>";
+		};
 		2FDE4EAF195F8CCA009E2E12 /* Swipe views */ = {
 			isa = PBXGroup;
 			children = (
@@ -534,6 +554,8 @@
 				2FFFDFBE192FD3D900F3370B /* Main_iPad.storyboard */,
 				2FFFE0F1192FD73B00F3370B /* CameraViewController.h */,
 				2FFFE0F2192FD73B00F3370B /* CameraViewController.m */,
+				2F8EA3CE1985820100219F3B /* DragAnimationView.h */,
+				2F8EA3CF1985820100219F3B /* DragAnimationView.m */,
 				2FFFE0EC192FD73B00F3370B /* CameraButton.h */,
 				2FFFE0ED192FD73B00F3370B /* CameraButton.m */,
 				2F380386193F1C93004559C3 /* LWBluetoothTableViewController.h */,
@@ -888,6 +910,7 @@
 				2FFFE144192FD8BA00F3370B /* switch camera */,
 				2FFFE147192FD8BA00F3370B /* video mode */,
 				2FFFE12C192FD8A400F3370B /* cameraRollIcon.png */,
+				2FC9490B198485E400C36D41 /* shorter camera modes */,
 				2FDE4EAF195F8CCA009E2E12 /* Swipe views */,
 				2FFFE12D192FD8A400F3370B /* exposure.png */,
 				2FFFE132192FD8A400F3370B /* focus.png */,
@@ -1100,17 +1123,20 @@
 				2FFFE038192FD50300F3370B /* activityMH.png in Resources */,
 				2FFFE124192FD89100F3370B /* cameraButtons.psd in Resources */,
 				2FFFE04D192FD50300F3370B /* play@2x.png in Resources */,
+				2FC94910198485E400C36D41 /* shortStillMode.png in Resources */,
 				2FFFE052192FD50300F3370B /* saveMH@2x.png in Resources */,
 				2FFFE134192FD8A400F3370B /* cameraRollIcon.png in Resources */,
 				2FFFE126192FD89100F3370B /* innerHighlighted.png in Resources */,
 				2FFFE03D192FD50300F3370B /* EditControlSelected@2x.png in Resources */,
 				2F38038A19403E02004559C3 /* tableViewDivider.png in Resources */,
+				2FC9490F198485E400C36D41 /* shortActionMode.png in Resources */,
 				2FFFE127192FD89100F3370B /* outer.png in Resources */,
 				2FFFDFC0192FD3D900F3370B /* Main_iPad.storyboard in Resources */,
 				2FFFE046192FD50300F3370B /* mailMH.png in Resources */,
 				2F3803931942C63E004559C3 /* bluetoothOff.png in Resources */,
 				2FFFE03F192FD50300F3370B /* error@2x.png in Resources */,
 				2F2B18AA1963E8B60073BBC4 /* skipTutorial.png in Resources */,
+				2FC94911198485E400C36D41 /* shortVideoMode.png in Resources */,
 				2FFFE153192FD8BA00F3370B /* videoModeOff.png in Resources */,
 				2FFFE059192FD50300F3370B /* videoIcon.png in Resources */,
 				2FFFE128192FD89100F3370B /* rapidInner.png in Resources */,
@@ -1230,6 +1256,7 @@
 				2FFFE0CD192FD56300F3370B /* UIImage+MultiFormat.m in Sources */,
 				2FFFE0C8192FD56300F3370B /* SDWebImageDownloaderOperation.m in Sources */,
 				2FFFDFBA192FD3D900F3370B /* AppDelegate.m in Sources */,
+				2F8EA3D01985820100219F3B /* DragAnimationView.m in Sources */,
 				2FFFE069192FD50300F3370B /* MHTransitionShowDetail.m in Sources */,
 				2FFFE079192FD53700F3370B /* SAScrubber.m in Sources */,
 				2F71F2C1193E823E00FA41C2 /* UIApplication+ScreenSize.m in Sources */,
