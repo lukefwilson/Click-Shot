@@ -17,7 +17,7 @@
 @interface CameraViewController : UIViewController <LWBluetoothButtonDelegate>
 
 -(void)pressedCameraButton;
--(void)setCameraButtonText:(NSString *)text withOffset:(CGPoint)offset fontSize:(float)fontSize;
+-(void)setCameraButtonText:(NSString *)text withOffset:(CGPoint)offset fontSize:(float)fontSize; 
 -(UIImage *) currentCameraButtonImage;
 -(UIImage *) currentHighlightedCameraButtonImage;
 -(AVCaptureTorchMode) currentAVTorchMode;
@@ -35,12 +35,18 @@
 -(void)openTutorial;
 -(void)closeTutorial;
 
+- (IBAction)pressedVideoMode:(id)sender;
+- (IBAction)pressedRapidShotMode:(id)sender;
+- (IBAction)pressedPictureMode:(id)sender;
+
 @property (nonatomic) BOOL autoFocusMode;
 @property (nonatomic) BOOL autoExposureMode;
-@property (nonatomic) BOOL gestureIsBlocked;
+@property (nonatomic) BOOL swipeModesGestureIsBlocked;
 @property (nonatomic) NSInteger cameraMode;
 @property (nonatomic, strong) NSString *cameraButtonString;
 @property (nonatomic) CGRect tappablePreviewRect; // used in MoveableImageView
+
+@property (nonatomic) int actionShotSequenceNumber;
 
 @property (nonatomic, weak) IBOutlet UIButton *pictureModeButton;
 @property (nonatomic, weak) IBOutlet UIButton *rapidShotModeButton;

@@ -409,22 +409,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "428729071.011984"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1209"
-            endingLineNumber = "1209"
-            landmarkName = "-prepareForSegue:sender:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Click-Shot/LWBluetoothTableViewController.m"
             timestampString = "427868922.759741"
             startingColumnNumber = "9223372036854775807"
@@ -634,11 +618,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "428729071.011984"
+            timestampString = "429244545.347063"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1601"
-            endingLineNumber = "1601"
+            startingLineNumber = "1906"
+            endingLineNumber = "1906"
             landmarkName = "-readyToSwitchToCurrentOutputQuality:"
             landmarkType = "5">
          </BreakpointContent>
@@ -682,44 +666,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "428729071.011984"
+            timestampString = "429244545.347063"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1595"
-            endingLineNumber = "1595"
+            startingLineNumber = "1900"
+            endingLineNumber = "1900"
             landmarkName = "-readyToSwitchToCurrentOutputQuality:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "428729071.011984"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1377"
-            endingLineNumber = "1377"
-            landmarkName = "-swipeToSelectedButtonCameraMode"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "428729071.011984"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1287"
-            endingLineNumber = "1287"
-            landmarkName = "-swipeView:distance:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -778,11 +730,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/LWTutorialViewController.m"
-            timestampString = "428136820.247851"
+            timestampString = "428756112.520449"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "346"
-            endingLineNumber = "346"
+            startingLineNumber = "380"
+            endingLineNumber = "380"
             landmarkName = "-pointInside:withEvent:"
             landmarkType = "5">
          </BreakpointContent>
@@ -794,11 +746,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/LWTutorialViewController.m"
-            timestampString = "428136820.247851"
+            timestampString = "428756112.520449"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "345"
-            endingLineNumber = "345"
+            startingLineNumber = "379"
+            endingLineNumber = "379"
             landmarkName = "-pointInside:withEvent:"
             landmarkType = "5">
          </BreakpointContent>
@@ -810,11 +762,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/LWTutorialViewController.m"
-            timestampString = "428136820.247851"
+            timestampString = "428756112.520449"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "344"
-            endingLineNumber = "344"
+            startingLineNumber = "378"
+            endingLineNumber = "378"
             landmarkName = "-pointInside:withEvent:"
             landmarkType = "5">
          </BreakpointContent>
@@ -920,11 +872,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/LWTutorialViewController.m"
-            timestampString = "428136820.247851"
+            timestampString = "428756112.520449"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "162"
-            endingLineNumber = "162"
+            startingLineNumber = "168"
+            endingLineNumber = "168"
             landmarkName = "-swallowTouchPoint:"
             landmarkType = "5">
          </BreakpointContent>
@@ -936,7 +888,23 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/LWTutorialViewController.m"
-            timestampString = "428136820.247851"
+            timestampString = "428756112.520449"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "171"
+            endingLineNumber = "171"
+            landmarkName = "-turnOnWarningLabel"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Click-Shot/LWTutorialViewController.m"
+            timestampString = "428756112.520449"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "163"
@@ -952,27 +920,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/LWTutorialViewController.m"
-            timestampString = "428136820.247851"
+            timestampString = "428756112.520449"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "157"
-            endingLineNumber = "157"
-            landmarkName = "-swallowTouchPoint:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Click-Shot/LWTutorialViewController.m"
-            timestampString = "428136820.247851"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "184"
-            endingLineNumber = "184"
+            startingLineNumber = "206"
+            endingLineNumber = "206"
             landmarkName = "-pageViewController:didFinishAnimating:previousViewControllers:transitionCompleted:"
             landmarkType = "5">
          </BreakpointContent>
@@ -984,11 +936,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/LWTutorialViewController.m"
-            timestampString = "428136820.247851"
+            timestampString = "428756112.520449"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185"
+            startingLineNumber = "207"
+            endingLineNumber = "207"
             landmarkName = "-pageViewController:didFinishAnimating:previousViewControllers:transitionCompleted:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1010,44 +962,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/DragAnimationView.m"
-            timestampString = "428728347.499024"
+            timestampString = "428786055.962958"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
+            startingLineNumber = "58"
+            endingLineNumber = "58"
             landmarkName = "-touchesMoved:withEvent:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Click-Shot/DragAnimationView.m"
-            timestampString = "428728347.499024"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
-            landmarkName = "-touchesMoved:withEvent:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Click-Shot/CameraButton.m"
-            timestampString = "428183273.133997"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "277"
-            endingLineNumber = "277"
-            landmarkName = "-cancelAnimation"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1074,11 +994,107 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/DragAnimationView.m"
-            timestampString = "428728347.499024"
+            timestampString = "428786055.962958"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "81"
-            endingLineNumber = "81"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
+            landmarkName = "-touchesEnded:withEvent:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Click-Shot/DragAnimationView.m"
+            timestampString = "428786055.962958"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "194"
+            endingLineNumber = "194"
+            landmarkName = "-determineDirection"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Click-Shot/DragAnimationView.m"
+            timestampString = "428786055.962958"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "192"
+            endingLineNumber = "192"
+            landmarkName = "-determineDirection"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Click-Shot/DragAnimationView.m"
+            timestampString = "428786055.962958"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "196"
+            endingLineNumber = "196"
+            landmarkName = "-determineDirection"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Click-Shot/DragAnimationView.m"
+            timestampString = "428786055.962958"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "189"
+            endingLineNumber = "189"
+            landmarkName = "-determineDirection"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Click-Shot/DragAnimationView.m"
+            timestampString = "428786055.962958"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "55"
+            endingLineNumber = "55"
+            landmarkName = "-touchesMoved:withEvent:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Click-Shot/DragAnimationView.m"
+            timestampString = "428786055.962958"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "152"
+            endingLineNumber = "152"
             landmarkName = "-animationRatioForTouchPoint:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1090,12 +1106,60 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/DragAnimationView.m"
-            timestampString = "428728347.499024"
+            timestampString = "428754412.824415"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "80"
-            endingLineNumber = "80"
-            landmarkName = "-animationRatioForTouchPoint:"
+            startingLineNumber = "34"
+            endingLineNumber = "34"
+            landmarkName = "-touchesBegan:withEvent:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Click-Shot/LWTutorialViewController.m"
+            timestampString = "428756112.520449"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "173"
+            endingLineNumber = "173"
+            landmarkName = "-turnOnWarningLabel"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Click-Shot/LWTutorialViewController.m"
+            timestampString = "428756112.520449"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "172"
+            endingLineNumber = "172"
+            landmarkName = "-turnOnWarningLabel"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Click-Shot/LWTutorialViewController.m"
+            timestampString = "428755996.183948"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "140"
+            endingLineNumber = "140"
+            landmarkName = "-swallowTouchPoint:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1106,12 +1170,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/DragAnimationView.m"
-            timestampString = "428728347.499024"
+            timestampString = "428785397.568984"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "75"
-            endingLineNumber = "75"
-            landmarkName = "-animationRatioForTouchPoint:"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
+            landmarkName = "-touchesMoved:withEvent:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1121,13 +1185,93 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Click-Shot/DragAnimationView.m"
-            timestampString = "428728347.499024"
+            filePath = "Click-Shot/CameraButton.m"
+            timestampString = "429243340.910809"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "72"
-            endingLineNumber = "72"
-            landmarkName = "-animationRatioForTouchPoint:"
+            startingLineNumber = "87"
+            endingLineNumber = "87"
+            landmarkName = "-touchesBegan:withEvent:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Click-Shot/CameraViewController.m"
+            timestampString = "429244545.347063"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1227"
+            endingLineNumber = "1227"
+            landmarkName = "-currentHighlightedCameraButtonImage"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Click-Shot/CameraViewController.m"
+            timestampString = "429244545.347063"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1232"
+            endingLineNumber = "1232"
+            landmarkName = "-currentHighlightedCameraButtonImage"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Click-Shot/CameraButton.m"
+            timestampString = "429243340.910809"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "89"
+            endingLineNumber = "89"
+            landmarkName = "-touchesBegan:withEvent:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Click-Shot/CameraViewController.m"
+            timestampString = "429243698.764239"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "816"
+            endingLineNumber = "816"
+            landmarkName = "-setCameraButtonText:withOffset:fontSize:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Click-Shot/CameraViewController.m"
+            timestampString = "429243718.567597"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "815"
+            endingLineNumber = "815"
+            landmarkName = "-setCameraButtonText:withOffset:fontSize:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

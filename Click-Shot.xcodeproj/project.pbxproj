@@ -24,6 +24,7 @@
 		2F6519D61980BB0D00CBC479 /* ODRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F6519D51980BB0D00CBC479 /* ODRefreshControl.m */; };
 		2F71F2C1193E823E00FA41C2 /* UIApplication+ScreenSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F71F2C0193E823E00FA41C2 /* UIApplication+ScreenSize.m */; };
 		2F8EA3D01985820100219F3B /* DragAnimationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8EA3CF1985820100219F3B /* DragAnimationView.m */; };
+		2FB2EE2619913714000BBE61 /* ImageViewPassTouches.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB2EE2519913714000BBE61 /* ImageViewPassTouches.m */; };
 		2FC9490F198485E400C36D41 /* shortActionMode.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FC9490C198485E400C36D41 /* shortActionMode.png */; };
 		2FC94910198485E400C36D41 /* shortStillMode.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FC9490D198485E400C36D41 /* shortStillMode.png */; };
 		2FC94911198485E400C36D41 /* shortVideoMode.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FC9490E198485E400C36D41 /* shortVideoMode.png */; };
@@ -218,6 +219,8 @@
 		2F71F2C0193E823E00FA41C2 /* UIApplication+ScreenSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+ScreenSize.m"; sourceTree = "<group>"; };
 		2F8EA3CE1985820100219F3B /* DragAnimationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragAnimationView.h; sourceTree = "<group>"; };
 		2F8EA3CF1985820100219F3B /* DragAnimationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragAnimationView.m; sourceTree = "<group>"; };
+		2FB2EE2419913714000BBE61 /* ImageViewPassTouches.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageViewPassTouches.h; sourceTree = "<group>"; };
+		2FB2EE2519913714000BBE61 /* ImageViewPassTouches.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageViewPassTouches.m; sourceTree = "<group>"; };
 		2FC9490C198485E400C36D41 /* shortActionMode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shortActionMode.png; sourceTree = "<group>"; };
 		2FC9490D198485E400C36D41 /* shortStillMode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shortStillMode.png; sourceTree = "<group>"; };
 		2FC9490E198485E400C36D41 /* shortVideoMode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shortVideoMode.png; sourceTree = "<group>"; };
@@ -558,6 +561,8 @@
 				2F8EA3CF1985820100219F3B /* DragAnimationView.m */,
 				2FFFE0EC192FD73B00F3370B /* CameraButton.h */,
 				2FFFE0ED192FD73B00F3370B /* CameraButton.m */,
+				2FB2EE2419913714000BBE61 /* ImageViewPassTouches.h */,
+				2FB2EE2519913714000BBE61 /* ImageViewPassTouches.m */,
 				2F380386193F1C93004559C3 /* LWBluetoothTableViewController.h */,
 				2F380387193F1C93004559C3 /* LWBluetoothTableViewController.m */,
 				2F3803991942DA24004559C3 /* LWTutorialViewController.h */,
@@ -1272,6 +1277,7 @@
 				2FFFE0F8192FD73B00F3370B /* CameraPreviewView.m in Sources */,
 				2FFFE063192FD50300F3370B /* MHMediaPreviewCollectionViewCell.m in Sources */,
 				2FFFE07A192FD53700F3370B /* SAResizibleBubble.m in Sources */,
+				2FB2EE2619913714000BBE61 /* ImageViewPassTouches.m in Sources */,
 				2FFFE060192FD50300F3370B /* MHGalleryItem.m in Sources */,
 				2FFFE0FB192FD73B00F3370B /* MoveableImageView.m in Sources */,
 				2F38039E1942DC7D004559C3 /* UIImage+ImageFromColor.m in Sources */,

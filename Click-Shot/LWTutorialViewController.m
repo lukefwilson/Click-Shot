@@ -18,10 +18,10 @@
 #define kLargeGroundOffset 235
 #define kPage2TextDown 70
 #define kPage2TextUp 33
+#define kWarningLabelTag 3
+
 
 @implementation LWTutorialViewController
-
-
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -141,10 +141,16 @@
     if (CGPointEqualToPoint(point, _previousTouchPoint) && touchedHole) {
         switch (_currentPage) {
             case 2:
+                [self turnOnWarningLabel];
                 return YES;
                 break;
+            case 3:
+                break;
             case 4:
+                [self turnOnWarningLabel];
                 return YES;
+                break;
+            case 5:
                 break;
             case 6:
                 [self.mainController closeTutorial];
@@ -160,6 +166,22 @@
     }
     _previousTouchPoint = point;
     return YES;
+}
+
+-(void)turnOnWarningLabel {
+    LWTutorialChildViewController *currentPage = [self.viewControllers lastObject];
+    UILabel *label = (UILabel *)[currentPage.view viewWithTag:kWarningLabelTag];
+    [UIView animateWithDuration:0.25 animations:^{
+        label.alpha = 1;
+    }];
+}
+
+-(void)turnOffWarningLabel {
+    LWTutorialChildViewController *currentPage = [self.viewControllers lastObject];
+    UILabel *label = (UILabel *)[currentPage.view viewWithTag:kWarningLabelTag];
+    [UIView animateWithDuration:0.5 animations:^{
+        label.alpha = 0;
+    }];
 }
 
 -(void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed {
@@ -242,7 +264,7 @@
             break;
     }
     self.currentPage = toViewController.index;
-    self.currentPageLabel.text = [NSString stringWithFormat:@"%i of %i", self.currentPage, kNumberOfPages-1];
+    self.currentPageLabel.text = [NSString stringWithFormat:@"%li of %i", (long)self.currentPage, kNumberOfPages-1];
     NSLog(@"%@", NSStringFromCGSize(toViewController.view.frame.size));
 }
 
@@ -264,7 +286,7 @@
     if (toViewController.index == 0 || toViewController.index == 6) {
         self.currentPageLabel.alpha = 0;
     }
-
+    [self turnOffWarningLabel];
 }
 
 
@@ -325,6 +347,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+}
+- (IBAction)pressedStillButton:(id)sender {
+    LWTutorialViewController *mainTutorialViewController = (LWTutorialViewController *)self.parentViewController;
+    [mainTutorialViewController.mainController pressedPictureMode:nil];
+}
+- (IBAction)pressedActionButton:(id)sender {
+    LWTutorialViewController *mainTutorialViewController = (LWTutorialViewController *)self.parentViewController;
+    [mainTutorialViewController.mainController pressedRapidShotMode:nil];
+}
+- (IBAction)pressedVideoButton:(id)sender {
+    LWTutorialViewController *mainTutorialViewController = (LWTutorialViewController *)self.parentViewController;
+    [mainTutorialViewController.mainController pressedVideoMode:nil];
 }
 
 - (IBAction)closeTutorial:(id)sender {

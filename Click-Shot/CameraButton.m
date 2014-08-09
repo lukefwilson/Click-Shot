@@ -12,8 +12,8 @@
 
 #define ButtonDistanceFromFinger 100
 #define ButtonDistancePercentage 0.75
-#define ShouldTakePicture(distance) distance > (100/0.75)
-#define ShouldTakePictureNow(distance) distance < 45
+#define ShouldDoTimedCameraAction(distance) distance > (100/0.75)
+#define ShouldDoCameraActionNow(distance) distance < 45
 #define kCameraModePicture 0
 #define kCameraModeRapidShot 1
 #define kCameraModeVideo 2
@@ -27,7 +27,6 @@
 
 - (void)initialize{
     [self setNeedsLayout];
-    self.enabled = YES;
     self.prevDuration = 0;
     self.isAnimatingButton = NO;
     self.rings = [NSMutableArray array];
@@ -56,10 +55,19 @@
         [self.layer addSublayer:ring];
         [self.rings addObject:ring];
     }
+    self.isDraggable = YES;
 
     self.ringMoveAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
     self.originalCenterPosition = CGPointMake(screenSize.width/2, screenSize.height-26);
+    CGRect buttonFrame = self.buttonImage.frame;
+    
+    [self.buttonImage removeFromSuperview];
+    [self.buttonImage setTranslatesAutoresizingMaskIntoConstraints:YES];
+    [self.buttonImage setFrame:buttonFrame];
+    self.buttonImage.center = self.originalCenterPosition;
+    [self addSubview:self.buttonImage];
+    
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder{
@@ -77,70 +85,78 @@
 }
 
 - (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event {
-    CGPoint touchLocation = [[touches anyObject] locationInView:self.parentViewController.view];
-    if (CGRectContainsPoint(self.buttonImage.frame, touchLocation)) {
-        self.parentViewController.gestureIsBlocked = YES;
-        self.buttonImage.highlightedImage = [self.parentViewController currentHighlightedCameraButtonImage];
+//    NSLog([[_buttonImage.layer presentationLayer] hitTest:touchLocation] ? @"Yes" : @"No");
+    if (self.isAnimatingButton) {
+        CGPoint touchLocation = [[touches anyObject] locationInView:self.cameraController.view];
+        [self cancelAnimation:touchLocation];
+        [self touchesMoved:touches withEvent:event];
+    } else {
+        self.buttonImage.highlightedImage = [self.cameraController currentHighlightedCameraButtonImage];
         self.buttonImage.highlighted = YES;
     }
+    self.cameraController.swipeModesGestureIsBlocked = YES;
+
 }
 
 -(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    CGPoint touchLocation = [[touches anyObject] locationInView:self.parentViewController.view];
+    CGPoint touchLocation = [[touches anyObject] locationInView:self.cameraController.view];
     float distance = [self distanceBetween:self.originalCenterPosition and:touchLocation];
-    if (self.enabled && self.parentViewController.gestureIsBlocked && self.parentViewController.cameraMode == kCameraModePicture) {
+    if (self.isDraggable && self.cameraController.swipeModesGestureIsBlocked/* && self.parentViewController.cameraMode == kCameraModePicture*/) {
         
-        float vec[] = {(self.originalCenterPosition.x-touchLocation.x), (self.originalCenterPosition.y-touchLocation.y)};
-        float magnitude = sqrtf(vec[0]*vec[0]+vec[1]*vec[1]);
-        float normalizedVec[] = {vec[0] / magnitude, vec[1] / magnitude};
-        CGPoint buttonPosition;
-        if (ShouldTakePicture(distance)) {
+        if (ShouldDoTimedCameraAction(distance)) {
             self.buttonImage.highlighted = NO;
 
-            buttonPosition = CGPointMake(touchLocation.x+(ButtonDistanceFromFinger*normalizedVec[0]), touchLocation.y+(ButtonDistanceFromFinger*normalizedVec[1]));
             int duration =[self timerDurationForDistance:distance];
             if (self.prevDuration != duration) {
-                [self.parentViewController setCameraButtonText:[NSString stringWithFormat:@"%i", duration] withOffset:CGPointZero fontSize:kLargeFontSize];
+                if (self.cameraController.cameraMode == kCameraModePicture) {
+                    [self.cameraController setCameraButtonText:[NSString stringWithFormat:@"%i", duration] withOffset:CGPointZero fontSize:kLargeFontSize];
+                } else {
+                    [self.cameraController setCameraButtonText:[NSString stringWithFormat:@"0:%02i", duration] withOffset:CGPointZero fontSize:kSmallFontSize];
+                }
                 self.prevDuration = duration;
             }
 
         } else {
-            if(ShouldTakePictureNow(distance)) {
-                self.buttonImage.highlightedImage = [self.parentViewController currentHighlightedCameraButtonImage];
+            if(ShouldDoCameraActionNow(distance)) {
+                self.buttonImage.highlightedImage = [self.cameraController currentHighlightedCameraButtonImage];
                 self.buttonImage.highlighted = YES;
             } else {
                 self.buttonImage.highlighted = NO;
             }
-            buttonPosition = CGPointMake(touchLocation.x+((distance*ButtonDistancePercentage)*normalizedVec[0]), touchLocation.y+((distance*ButtonDistancePercentage)*normalizedVec[1]));
             if (self.prevDuration != 0) {
-                [self.parentViewController setCameraButtonText:@"" withOffset:CGPointZero fontSize:kLargeFontSize];
+                [self.cameraController setCameraButtonText:@"" withOffset:CGPointZero fontSize:kLargeFontSize];
                 self.prevDuration = 0;
             }
         }
-        self.buttonImage.center = buttonPosition;
+        self.buttonImage.center = [self getButtonPositionForTouchLocation:touchLocation];
         for (CAShapeLayer *ring in self.rings) {
             ring.position = self.buttonImage.center;
         }
         [self setNeedsDisplay];
     } else {
-        if (CGRectContainsPoint(self.buttonImage.frame, touchLocation) ) {
-            self.buttonImage.highlightedImage = [self.parentViewController currentHighlightedCameraButtonImage];
-            self.buttonImage.highlighted = YES;
-        } else {
+        self.buttonImage.highlightedImage = [self.cameraController currentHighlightedCameraButtonImage];
+        self.buttonImage.highlighted = YES;
+        if (!CGPointEqualToPoint(self.buttonImage.center, self.originalCenterPosition)) {
+            self.buttonImage.center = [self getButtonPositionForTouchLocation:touchLocation];
             self.buttonImage.highlighted = NO;
+            
         }
     }
 }
 
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    CGPoint touchLocation = [[touches anyObject] locationInView:self.parentViewController.view];
-    if (self.enabled && self.parentViewController.gestureIsBlocked && self.parentViewController.cameraMode == kCameraModePicture) {
+    CGPoint touchLocation = [[touches anyObject] locationInView:self.cameraController.view];
+    if (self.isDraggable && self.cameraController.swipeModesGestureIsBlocked/* && self.parentViewController.cameraMode == kCameraModePicture*/) {
         float distance = [self distanceBetween:self.originalCenterPosition and:touchLocation];
         float duration;
-        if (ShouldTakePicture(distance)) {
+        if (ShouldDoTimedCameraAction(distance)) {
             duration = [self timerDurationForDistance:distance];
             self.timerDuration = (int)duration;
-            [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(countdown:) userInfo:nil repeats:YES];
+            self.cameraTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(countdown:) userInfo:nil repeats:YES];
+            if (self.cameraController.cameraMode != kCameraModePicture) {
+                [self.cameraController pressedCameraButton];
+            }
+
             
             // start ring animations
             for (int i = 0; i < [self.rings count]; i++) {
@@ -170,6 +186,13 @@
                         group.repeatCount = duration/2;
                         [ring addAnimation:group forKey:nil];
 
+                        
+                        if (self.cameraController.cameraMode == kCameraModeVideo) {
+                            ring.strokeColor = [UIColor whiteColor].CGColor;
+                        } else {
+                            ring.strokeColor = [UIColor colorWithRed:61.0/255.0 green:213.0/255.0 blue:251.0/255.0 alpha:255].CGColor;
+                        }
+                        
                         break;
                     }
                     case 1: {
@@ -195,42 +218,55 @@
                 [ring addAnimation:self.ringMoveAnimation forKey:@"ringMoveAnimation"];
             }
             self.isAnimatingButton = YES;
-//            self.parentViewController.pictureModeButton.enabled = NO;
-            self.parentViewController.rapidShotModeButton.enabled = NO;
-            self.parentViewController.videoModeButton.enabled = NO;
-            self.parentViewController.cameraRollButton.enabled = NO;
+            self.cameraController.pictureModeButton.enabled = NO;
+            self.cameraController.rapidShotModeButton.enabled = NO;
+            self.cameraController.videoModeButton.enabled = NO;
+            self.cameraController.cameraRollButton.enabled = NO;
 
-        } else if (ShouldTakePictureNow(distance)) {
-            [self.parentViewController pressedCameraButton];
+        } else if (ShouldDoCameraActionNow(distance)) {
+            [self.cameraController pressedCameraButton];
             duration = 0.1;
         } else {
             duration = 0.1;
         }
 
-        [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction  animations:^{
+        [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState  animations:^{
             self.buttonImage.center = self.originalCenterPosition;
         } completion:^(BOOL finished){
-            if (finished && ShouldTakePicture(distance)) {
+            if (finished && ShouldDoTimedCameraAction(distance)) {
                 for (CAShapeLayer *ring in self.rings) {
                     ring.opacity = 0;
                 }
-                [self.parentViewController pressedCameraButton];
+                [self.cameraController pressedCameraButton];
                 self.isAnimatingButton = NO;
-                self.parentViewController.gestureIsBlocked = NO;
-//                self.parentViewController.pictureModeButton.enabled = YES;
-                self.parentViewController.rapidShotModeButton.enabled = YES;
-                self.parentViewController.videoModeButton.enabled = YES;
-                self.parentViewController.cameraRollButton.enabled = YES;
+                self.cameraController.swipeModesGestureIsBlocked = NO;
+                self.cameraController.pictureModeButton.enabled = YES;
+                self.cameraController.rapidShotModeButton.enabled = YES;
+                self.cameraController.videoModeButton.enabled = YES;
+                self.cameraController.cameraRollButton.enabled = YES;
 
             }
         }];
     } else {
-        if (CGRectContainsPoint(self.buttonImage.frame, touchLocation) ) {
-            [self.parentViewController pressedCameraButton];
+        if ([[_buttonImage.layer presentationLayer] hitTest:touchLocation]) {
+            [self.cameraController pressedCameraButton];
         }
     }
     self.buttonImage.highlighted = NO;
-    if (!self.isAnimatingButton) self.parentViewController.gestureIsBlocked = NO;
+    if (!self.isAnimatingButton) self.cameraController.swipeModesGestureIsBlocked = NO;
+}
+
+
+-(CGPoint)getButtonPositionForTouchLocation:(CGPoint)touchLocation {
+    float distance = [self distanceBetween:self.originalCenterPosition and:touchLocation];
+    float vec[] = {(self.originalCenterPosition.x-touchLocation.x), (self.originalCenterPosition.y-touchLocation.y)};
+    float magnitude = sqrtf(vec[0]*vec[0]+vec[1]*vec[1]);
+    float normalizedVec[] = {vec[0] / magnitude, vec[1] / magnitude};
+    if (ShouldDoTimedCameraAction(distance)) {
+        return CGPointMake(touchLocation.x+(ButtonDistanceFromFinger*normalizedVec[0]), touchLocation.y+(ButtonDistanceFromFinger*normalizedVec[1]));
+    } else {
+        return CGPointMake(touchLocation.x+((distance*ButtonDistancePercentage)*normalizedVec[0]), touchLocation.y+((distance*ButtonDistancePercentage)*normalizedVec[1]));
+    }
 }
 
 -(void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -239,21 +275,20 @@
 
 // Only take touches that are inside the camera button
 -(BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
-    if (self.parentViewController.settingsMenuIsOpen) {
+    if (self.cameraController.settingsMenuIsOpen) {
         return NO;
-    } else if (self.isAnimatingButton) {
-        if (CGRectContainsPoint(self.buttonImage.frame, point)) {
-            [self cancelAnimation];
-        }
-        return NO;
-    } else if (CGRectContainsPoint(self.buttonImage.frame, point)) {
+    } else if ([[_buttonImage.layer presentationLayer] hitTest:point]) {
         return YES;
     }
     return NO;
 }
 
 -(int)timerDurationForDistance:(float)distance {
-    return distance/50;
+    if (self.cameraController.cameraMode == kCameraModePicture) {
+        return distance/50;
+    } else {
+        return distance/25;
+    }
 }
 
 -(float)distanceBetween:(CGPoint)point1 and:(CGPoint)point2 {
@@ -265,33 +300,105 @@
 -(void)countdown:(NSTimer *)timer {
     self.timerDuration--;
     if (self.timerDuration > 0) {
-        [self.parentViewController setCameraButtonText:[NSString stringWithFormat:@"%i", self.timerDuration] withOffset:CGPointZero fontSize:kLargeFontSize];
+        if (self.cameraController.cameraMode == kCameraModePicture) {
+            [self.cameraController setCameraButtonText:[NSString stringWithFormat:@"%i", self.timerDuration] withOffset:CGPointZero fontSize:kLargeFontSize];
+        } else {
+            [self.cameraController setCameraButtonText:[NSString stringWithFormat:@"0:%02i", self.timerDuration] withOffset:CGPointZero fontSize:kSmallFontSize];
+        }
     } else {
         [timer invalidate];
-        [self.parentViewController setCameraButtonText:@"" withOffset:CGPointZero fontSize:kLargeFontSize];
+        [self.cameraController setCameraButtonText:@"" withOffset:CGPointZero fontSize:kLargeFontSize];
     }
 }
 
--(void)cancelAnimation {
+// called by touchesBegan if isAnimatingButton
+-(void)cancelAnimation:(CGPoint) touchPoint {
     for (int i = 0; i < [self.rings count]; i++) {
         CAShapeLayer *ring = [self.rings objectAtIndex:i];
         ring.opacity = 0;
         [ring removeAllAnimations];
     }
-    [UIView animateWithDuration:0.05 delay:0 options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction animations:^{
-        self.buttonImage.center = self.originalCenterPosition;
+    [_cameraTimer invalidate];
+    [self.cameraController setCameraButtonText:@"" withOffset:CGPointZero fontSize:kLargeFontSize];
+
+    [UIView animateWithDuration:0.05 delay:0 options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState animations:^{
+        self.buttonImage.center = touchPoint;
     } completion:nil];
+    
+    if (self.cameraController.cameraMode != kCameraModePicture) {
+        [self.cameraController pressedCameraButton];
+    }
+    
     self.isAnimatingButton = NO;
-    self.parentViewController.gestureIsBlocked = NO;
-    self.parentViewController.rapidShotModeButton.enabled = YES;
-    self.parentViewController.videoModeButton.enabled = YES;
-    self.parentViewController.cameraRollButton.enabled = YES;
+    self.cameraController.rapidShotModeButton.enabled = YES;
+    self.cameraController.videoModeButton.enabled = YES;
+    self.cameraController.pictureModeButton.enabled = YES;
+
+    self.cameraController.cameraRollButton.enabled = YES;
 }
 
-//- (void)drawRect:(CGRect)rect
-//{
-//    // Drawing code
-//}
+-(void)updateCameraButtonWithText:(NSString *)text {
+    self.cameraButtonString = text;
+    
+    if ([text isEqualToString:@""]) {
+        if (self.buttonImage.isHighlighted) {
+            self.buttonImage.highlightedImage = [self currentHighlightedCameraButtonImage];
+        } else {
+            self.buttonImage.highlightedImage = [self currentCameraButtonImage];
+        }
+    } else {
+        switch (self.cameraMode) {
+            case kCameraModePicture: {
+                
+                break;
+            }
+            case kCameraModeRapidShot: {
+                
+                break;
+            }
+            case kCameraModeVideo: {
+                
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+    }
+}
 
+-(UIImage *)currentCameraButtonImage {
+    switch (self.cameraMode) {
+        case kCameraModePicture:
+            return self.pictureCameraButtonImage;
+            break;
+        case kCameraModeRapidShot:
+            return self.rapidCameraButtonImage;
+        case kCameraModeVideo:
+            return self.videoCameraButtonImage;
+        default:
+            return self.pictureCameraButtonImage;
+            break;
+    }
+}
+
+-(UIImage *)currentHighlightedCameraButtonImage {
+    switch (self.cameraController.cameraMode) {
+        case kCameraModePicture:
+            return self.pictureCameraButtonImageHighlighted;
+            break;
+        case kCameraModeRapidShot:
+            if (self.videoProcessor.actionShooting) {
+                return [self maskImage:self.pictureCameraButtonImageHighlighted withMaskText:self.cameraButtonString offsetFromCenter:CGPointZero fontSize:kMediumFontSize];
+            } else {
+                return self.rapidCameraButtonImageHighlighted;
+            }
+        case kCameraModeVideo:
+            return [self maskImage:self.videoCameraButtonImageHighlighted withMaskText:self.cameraButtonString offsetFromCenter:CGPointZero fontSize:kSmallFontSize];
+        default:
+            return self.pictureCameraButtonImageHighlighted;
+            break;
+    }
+}
 
 @end
