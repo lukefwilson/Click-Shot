@@ -7,6 +7,7 @@
 //
 
 #import "LWBluetoothTableViewController.h"
+#import "TransferService.h"
 
 #define BTTN_SERVICE_UUID           @"fffffff0-00f7-4000-b000-000000000000"
 #define BTTN_DETECTION_CHARACTERISTIC_UUID    @"fffffff2-00f7-4000-b000-000000000000"
@@ -18,6 +19,8 @@
 #define kRowHeight 60
 
 @interface LWBluetoothTableViewController ()
+
+@property (nonatomic) NSInteger failCount;
 
 @end
 
@@ -41,6 +44,8 @@
     self.discoveredPeripherals = [NSMutableArray array];
     if (_centralManager.state == CBCentralManagerStatePoweredOn) [self startScanningForButton];
 
+    _failCount = 0;
+    
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, kTableHeaderHeight)];
     headerView.backgroundColor = [UIColor clearColor];
     
@@ -58,7 +63,7 @@
     [headerView addSubview:label];
     
     self.tableView.tableHeaderView = headerView;
-    
+
 //    self.refreshControl = [[UIRefreshControl alloc] init];
 //    self.refreshControl.tintColor = [UIColor whiteColor];
 //    [self.refreshControl addTarget:self action:@selector(refreshBluetoothDevices) forControlEvents:UIControlEventValueChanged];
@@ -107,6 +112,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
+    NSLog(@"BT table count: %i", [self.discoveredPeripherals count]);
     return [self.discoveredPeripherals count];
 }
 
@@ -132,12 +138,14 @@
     selectedView.backgroundColor = [UIColor colorWithWhite:0.2 alpha:1];
     cell.selectedBackgroundView = selectedView;
     
-    cell.tintColor = [UIColor colorWithWhite:1 alpha:1]; // for the checkmark when selected
+    cell.tintColor = [UIColor whiteColor]; // for the checkmark when selected
     
     if ([peripheral isEqual:_connectedPeripheral]) {
         _selectedIndexPath = indexPath;
         [self setSelectedCell:cell atIndexPath:indexPath isFullyConnected:YES];
         [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+    } else {
+        cell.accessoryType = UITableViewCellAccessoryNone;
     }
     
     return cell;
@@ -150,9 +158,12 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row != _selectedIndexPath.row || !_selectedIndexPath) {
+    if (indexPath.row != _selectedIndexPath.row || !_selectedIndexPath || !_connectedPeripheral) {
         if (_connectedPeripheral) {
             [self.centralManager cancelPeripheralConnection:_connectedPeripheral];
+            UITableViewCell *prevCell = [self.tableView cellForRowAtIndexPath:_selectedIndexPath];
+            [prevCell setSelected:NO animated:YES];
+            prevCell.accessoryType = UITableViewCellAccessoryNone;
             _connectedPeripheral = nil;
         }
         UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
@@ -206,20 +217,28 @@
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI {
     
     NSLog(@"Discovered %@ at %@", peripheral.name, RSSI);
+    NSLog(@"%@", advertisementData);
     
-    if ([self.discoveredPeripherals indexOfObject:peripheral] == NSNotFound) [self.discoveredPeripherals addObject:peripheral];
-    if (!_connectedPeripheral && ([peripheral.name rangeOfString:@"V.BTTN"].location != NSNotFound || [peripheral.name rangeOfString:@"V.ALRT"].location != NSNotFound)) {
-        // Auto connect to first V.ALRT or V.BTTN
-        NSIndexPath *selectedPath = [NSIndexPath indexPathForRow:[self.discoveredPeripherals indexOfObject:peripheral] inSection:0];
-        NSLog(@"Auto Connecting to peripheral %@", peripheral);
-        [self tableView:self.tableView didSelectRowAtIndexPath:selectedPath];
+    NSInteger index = [self.discoveredPeripherals indexOfObject:peripheral];
+    if (index == NSNotFound) {
+        [self.discoveredPeripherals addObject:peripheral];
+    } else {
+        [self.discoveredPeripherals replaceObjectAtIndex:index withObject:peripheral];
     }
     [self.tableView reloadData];
+
+//    if (!_connectedPeripheral && ([peripheral.name rangeOfString:@"V.BTTN"].location != NSNotFound || [peripheral.name rangeOfString:@"V.ALRT"].location != NSNotFound)) {
+//        // Auto connect to first V.ALRT or V.BTTN
+//        NSIndexPath *selectedPath = [NSIndexPath indexPathForRow:[self.discoveredPeripherals indexOfObject:peripheral] inSection:0];
+//        NSLog(@"Auto Connecting to peripheral %@", peripheral);
+//        [self.tableView reloadData];
+//        [self tableView:self.tableView didSelectRowAtIndexPath:selectedPath];
+//    }
 
 }
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
-    NSLog(@"Failed to connect");
+    NSLog(@"Failed to connect to %@", peripheral.name);
     CBPeripheral *selectedPeripheral = [self.discoveredPeripherals objectAtIndex:self.selectedIndexPath.row];
     if ([selectedPeripheral isEqual:peripheral]) {
         UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:_selectedIndexPath];
@@ -227,22 +246,24 @@
         [act stopAnimating];
         cell.accessoryView = nil;
         [cell setSelected:NO];
-        // display HUD with error
+        cell.accessoryType = UITableViewCellAccessoryNone;
+
+        //TODO: display HUD with error
     }
     [self cleanupBluetooth];
 }
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
-    NSLog(@"Connected");
+    NSLog(@"Connected to %@", peripheral.name);
     [_centralManager stopScan];
-    NSLog(@"Scanning stopped");
+    NSLog(@"So now I've stopped scanning");
     
     CBPeripheral *selectedPeripheral = [self.discoveredPeripherals objectAtIndex:self.selectedIndexPath.row];
     if ([selectedPeripheral isEqual:peripheral]) {
         UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:_selectedIndexPath];
         [self setSelectedCell:cell atIndexPath:_selectedIndexPath isFullyConnected:YES];
         peripheral.delegate = self;
-        [peripheral discoverServices:@[[CBUUID UUIDWithString:BTTN_SERVICE_UUID]]];
+        [peripheral discoverServices:@[[CBUUID UUIDWithString:BTTN_SERVICE_UUID],[CBUUID UUIDWithString:REMOTE_APP_TRANSFER_SERVICE_UUID]]];
         _connectedPeripheral = selectedPeripheral;
         [_delegate connectedToBluetoothDevice];
     } else {
@@ -259,7 +280,11 @@
     
     for (CBService *service in peripheral.services) {
         NSLog(@"found service: %@", service);
-        [peripheral discoverCharacteristics:@[[CBUUID UUIDWithString:BTTN_NOTIFICATION_CHARACTERISTIC_UUID], [CBUUID UUIDWithString:BTTN_VERIFICATION_CHARACTERISTIC_UUID], [CBUUID UUIDWithString:BTTN_DETECTION_CHARACTERISTIC_UUID]] forService:service];
+        if ([service.UUID.UUIDString isEqualToString:REMOTE_APP_TRANSFER_SERVICE_UUID]) {
+            [peripheral discoverCharacteristics:@[[CBUUID UUIDWithString:CAMERA_TO_REMOTE_CHARACTERISTIC_UUID], [CBUUID UUIDWithString:REMOTE_TO_CAMERA_CHARACTERISTIC_UUID]] forService:service];
+        } else { // is V.BTTN?
+            [peripheral discoverCharacteristics:@[[CBUUID UUIDWithString:BTTN_NOTIFICATION_CHARACTERISTIC_UUID], [CBUUID UUIDWithString:BTTN_VERIFICATION_CHARACTERISTIC_UUID], [CBUUID UUIDWithString:BTTN_DETECTION_CHARACTERISTIC_UUID]] forService:service];
+        }
     }
 }
 
@@ -268,14 +293,15 @@
         [self cleanupBluetooth];
         return;
     }
-    
+    NSLog(@"Found Characteristics %@ on peripheral %@", service.characteristics, peripheral.name);
+
     // Set up characteristic connections with button
     for (CBCharacteristic *characteristic in service.characteristics) {
         if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:BTTN_NOTIFICATION_CHARACTERISTIC_UUID]]) { // Set up to receive notifications when button is pressed or released
             [peripheral setNotifyValue:YES forCharacteristic:characteristic];
-            NSLog(@"NOTIFY characteristic: %@", characteristic);
+            NSLog(@"NOTIFICATION characteristic: %@", characteristic);
         } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:BTTN_VERIFICATION_CHARACTERISTIC_UUID]]) { // Create long lasting connection
-//            const Byte identifierBytes[5] = { 0xBC, 0xF5, 0xAC, 0x48, 0x40 }; old code
+//            const Byte identifierBytes[5] = { 0xBC, 0xF5, 0xAC, 0x48, 0x40 }; old verification code
             const Byte identifierBytes[5] = { 0x80, 0xBE, 0xF5, 0xAC, 0xFF };
             NSMutableData *data = [[NSMutableData alloc] initWithBytes:identifierBytes length:5];
             [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
@@ -284,24 +310,67 @@
             const Byte identifierByte[1] = { 0x01 };
             NSMutableData *data = [[NSMutableData alloc] initWithBytes:identifierByte length:1];
             [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
+        } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:CAMERA_TO_REMOTE_CHARACTERISTIC_UUID]]) {
+            [self updateRemoteWithCurrentCameraState];
+        } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:REMOTE_TO_CAMERA_CHARACTERISTIC_UUID]]) {
+            [peripheral setNotifyValue:YES forCharacteristic:characteristic];
+            NSLog(@"NOTIFICATION characteristic: %@", characteristic);
+        }
+        
+        
+    }
+}
+
+-(void)updateRemoteWithCurrentCameraState {
+    for (CBService *service in _connectedPeripheral.services) {
+        if ([service.UUID.UUIDString isEqualToString:REMOTE_APP_TRANSFER_SERVICE_UUID]) {
+            for (CBCharacteristic *characteristic in service.characteristics) {
+                if ([characteristic.UUID.UUIDString isEqualToString:CAMERA_TO_REMOTE_CHARACTERISTIC_UUID]) {
+                    NSData *currentStateData = [_delegate currentStateData];
+                    if (currentStateData.length != 1) {
+                        NSLog(@"Sent to remote: %@", currentStateData);
+                        [_connectedPeripheral writeValue:currentStateData forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
+                    }
+                }
+            }
         }
     }
 }
 
+-(void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+    //TODO: used to notify the camera when the remote successfully received the info
+    if (error) {
+        _failCount++;
+        NSLog(@"FAIL: peripheral didn't receive camera message: %@ with error: %@", characteristic.value, error);
+        if (_failCount <= 3) {
+            [self updateRemoteWithCurrentCameraState];
+        } else {
+            NSLog(@"FAILED 3 times in a row, giving up");
+        }
+    } else {
+        _failCount = 0;
+//        NSLog(@"SUCCESS: peripheral did receive camera message: %@", characteristic.value);
+    }
+    
+}
 
+//TODO: info from remote to camera
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     if (error) {
         NSLog(@"Error didUpdateValueForCharacteristic:");
         return;
     }
-    
-    const Byte identifierByte[1] = { 0x01 };
-    NSMutableData *buttonDownData = [[NSMutableData alloc] initWithBytes:identifierByte length:1];
-    if ([characteristic.value isEqualToData:buttonDownData]) {
-        [_delegate bluetoothButtonPressed];
+    if ([characteristic.value length] == 1) { // V.BTTN
+        const Byte identifierByte[1] = { 0x01 };
+        NSMutableData *buttonDownData = [[NSMutableData alloc] initWithBytes:identifierByte length:1];
+        if ([characteristic.value isEqualToData:buttonDownData]) {
+            [_delegate bluetoothButtonPressed];
+        }
+    } else { // Camera Remote App
+        [_delegate receivedMessageFromCameraRemoteApp:characteristic.value];
     }
     
-    NSLog(@"%@", characteristic.value);
+//    NSLog(@"peripheral did update characteristic value: %@", characteristic.value);
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
@@ -317,7 +386,10 @@
 }
 
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
+    NSLog(@"Did disconnect from %@", peripheral.name);
+
     if ([peripheral isEqual:_connectedPeripheral]) {
+
         _connectedPeripheral = nil;
         _selectedIndexPath = nil;
         [_delegate disconnectedFromBluetoothDevice];

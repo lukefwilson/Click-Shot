@@ -92,6 +92,9 @@
 - (CGPoint)startExposeMode:(AVCaptureExposureMode)exposureMode;
 - (BOOL)currentDeviceSupportsFlash;
 
+-(void)startActionShot;
+-(void)stopActionShot;
+
 @property(readonly, getter=isRecording) BOOL recording;
 @property(nonatomic) BOOL actionShooting;
 

@@ -20,7 +20,11 @@
 @property (nonatomic, weak) IBOutlet UIImageView *outerButtonImage;
 @property (nonatomic, weak) IBOutlet UIImageView *buttonImage;
 @property (nonatomic, strong) NSMutableArray *rings;
+@property (nonatomic, strong) CAShapeLayer *soundTimerRing;
 @property (nonatomic) BOOL isDraggable;
+@property (nonatomic) BOOL isDragging;
+@property (nonatomic) BOOL isHighlighted;
+@property (nonatomic) BOOL enabled;
 
 @property (nonatomic, strong) NSTimer *cameraTimer;
 @property (nonatomic, strong) CABasicAnimation *ringMoveAnimation;
@@ -30,8 +34,11 @@
 
 @property (nonatomic, strong) NSString *cameraButtonString;
 
+-(UIImage *)currentPlainCameraButtonImage;
 
+-(void)updateCameraButtonImageForCurrentCameraMode;
 - (void)initialize;
-
+-(void)updateCameraButtonWithText:(NSString *)text;
+-(void)animateSoundRingForDuration:(float)soundDuration;
 
 @end

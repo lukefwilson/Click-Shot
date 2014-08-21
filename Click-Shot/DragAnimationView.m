@@ -53,7 +53,7 @@ static CGFloat const guarenteedRatio = 0.3;
 
 //    _currentAnimationStepDistance = [self.delegate dragAnimationDistanceForView:self animationStep:_currentAnimationStep];
     
-    NSLog(@"velocity: %f step: %li - ratio: %f - distance: %f - first touch: %@", velocity,(long)_currentAnimationStep, _currentAnimationStepRatio, _currentAnimationStepDistance, NSStringFromCGPoint(animationsFirstTouchLocation));
+//    NSLog(@"velocity: %f step: %li - ratio: %f - distance: %f - first touch: %@", velocity,(long)_currentAnimationStep, _currentAnimationStepRatio, _currentAnimationStepDistance, NSStringFromCGPoint(animationsFirstTouchLocation));
     NSArray *animations = [_animationSteps objectAtIndex:_currentAnimationStep];
     for (NSArray *array in animations) {
         UIView *view = [array objectAtIndex:0];
@@ -126,7 +126,7 @@ static CGFloat const guarenteedRatio = 0.3;
         _currentAnimationStepDistance = [self.delegate dragAnimationDistanceForView:self animationStep:_currentAnimationStep];
         _currentAnimationStepRatio = 0;
         
-        NSLog(@"FINISHED WITH step: %i - ratio: %f - distance: %f - first touch: %@", _currentAnimationStep, _currentAnimationStepRatio, _currentAnimationStepDistance, NSStringFromCGPoint(animationsFirstTouchLocation));
+//        NSLog(@"FINISHED WITH step: %i - ratio: %f - distance: %f - first touch: %@", _currentAnimationStep, _currentAnimationStepRatio, _currentAnimationStepDistance, NSStringFromCGPoint(animationsFirstTouchLocation));
     }
     if ([self.delegate respondsToSelector:@selector(dragAnimationViewReleased:)]) {
         [self.delegate dragAnimationViewReleased:self];

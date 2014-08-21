@@ -1084,7 +1084,7 @@
     [self.view.window addSubview:self.hud];
     
     AVMutableComposition *composition = [AVMutableComposition composition];
-    CMTime insertAtTime = CMTimeMake(0, 600);
+    CMTime insertAtTime = kCMTimeZero;
     AVMutableCompositionTrack *videoTrack = [composition addMutableTrackWithMediaType:AVMediaTypeVideo
                                                                      preferredTrackID:kCMPersistentTrackID_Invalid];
     AVMutableCompositionTrack *audioTrack = [composition addMutableTrackWithMediaType:AVMediaTypeAudio
@@ -1095,99 +1095,115 @@
     AVAssetTrack *firstVideoTrackSegment = [[firstAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
     CGAffineTransform firstVideoTransform = firstVideoTrackSegment.preferredTransform;
     CGSize renderSize = firstVideoTrackSegment.naturalSize;
-    UIImageOrientation firstVideoOrientation = [self orientationForTransform:firstVideoTransform andSize:renderSize];
-    BOOL renderInPortrait  = NO;
-    if (firstVideoOrientation == UIImageOrientationLeft || firstVideoOrientation == UIImageOrientationRight) {
-        renderInPortrait = YES;
-        if (renderSize.width > renderSize.height) renderSize = CGSizeMake(fabsf(renderSize.height), fabsf(renderSize.width));
+    BOOL renderInPortrait  = [self shouldRenderInPortrait:firstVideoTransform andSize:renderSize];
+    if (renderInPortrait && renderSize.width > renderSize.height) {
+        renderSize = CGSizeMake(fabsf(renderSize.height), fabsf(renderSize.width));
     }
     
     AVMutableVideoCompositionLayerInstruction *videoTrackInstruction = [AVMutableVideoCompositionLayerInstruction
-                                                                        videoCompositionLayerInstructionWithAssetTrack:videoTrack];
+                                                                        videoCompositionLayerInstructionWithAssetTrack:videoTrack]; // instructions for rotating the video
     
     for (int i = 0; i < [self.selectedRows count]; i++) {
         NSIndexPath *indexPath = [self.selectedRows objectAtIndex:i];
         MHGalleryItem *videoItem = [self itemForIndex:indexPath.row];
-        AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[NSURL URLWithString:videoItem.URLString] options:nil];
+        AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[NSURL URLWithString:videoItem.URLString] options:@{AVURLAssetPreferPreciseDurationAndTimingKey:@YES}];
         AVAssetTrack *videoTrackSegment = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
-        [videoTrack insertTimeRange:CMTimeRangeMake(CMTimeMake(0, 600), asset.duration)
+        [videoTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, videoTrackSegment.timeRange.duration)
                             ofTrack:videoTrackSegment atTime:insertAtTime error:nil];
-        [audioTrack insertTimeRange:CMTimeRangeMake(CMTimeMake(0, 600), asset.duration)
+        [audioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, videoTrackSegment.timeRange.duration)
                             ofTrack:[[asset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0] atTime:insertAtTime error:nil];
         CGAffineTransform trackPreferredTransform = videoTrackSegment.preferredTransform;
         UIImageOrientation trackOrientation = [self orientationForTransform:trackPreferredTransform andSize:videoTrackSegment.naturalSize];
         
-        if (trackOrientation != firstVideoOrientation || !CGSizeEqualToSize(renderSize, videoTrackSegment.naturalSize)) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Whoops!" message:@"At this time Click-Shot can only merge videos of the same orientation." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
-            [alert dismissWithClickedButtonIndex:0 animated:YES];
-            [self.hud hide:YES afterDelay:0];
-            [alert show];
-            return;
-        }
-        
-        if (trackOrientation == UIImageOrientationRight) {  // Normal Portrait - 90 deg CW
+//        if (trackOrientation != firstVideoOrientation || !CGSizeEqualToSize(renderSize, videoTrackSegment.naturalSize)) {
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Whoops!" message:@"At this time Click-Shot can only merge videos of the same orientation." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
+//            [alert dismissWithClickedButtonIndex:0 animated:YES];
+//            [self.hud hide:YES afterDelay:0];
+        //            [alert show];
+        //            return;
+        //        }
+        //
+        CGSize videoSize = videoTrackSegment.naturalSize;
+        // For transforms, the origin is upper left corner. Scale and Rotate effect Translations
+        if (videoSize.height > videoSize.width) {
+            // these cases happen when its a portrait video merged & saved by ClickShot
             if (renderInPortrait) {
-                [videoTrackInstruction setTransform:CGAffineTransformConcat(CGAffineTransformMakeRotation(M_PI_2), CGAffineTransformMakeTranslation(renderSize.width, 0)) atTime:insertAtTime];
+                [videoTrackInstruction setTransform:CGAffineTransformIdentity atTime:insertAtTime];
             } else {
-                //HERE
-                CGSize videoSize = videoTrackSegment.naturalSize;
-                if (videoSize.width > videoSize.height) videoSize = CGSizeMake(videoSize.height, videoSize.width);
                 float scale = renderSize.height/videoSize.height;
-                CGAffineTransform scaleTranslate = CGAffineTransformTranslate(CGAffineTransformMakeScale(scale, scale),2243,0);
-                [videoTrackInstruction setTransform:CGAffineTransformConcat(CGAffineTransformMakeRotation(M_PI_2),scaleTranslate) atTime:insertAtTime];
+                CGAffineTransform transform = CGAffineTransformMakeScale(scale, scale);
+                transform = CGAffineTransformTranslate(transform, renderSize.width/2/scale-videoSize.width/2, 0);
+                [videoTrackInstruction setTransform:transform atTime:insertAtTime];
             }
-        } else if (trackOrientation == UIImageOrientationLeft) { // Upside Down Portrait - 90 deg CCW
-            if (renderInPortrait) {
-                [videoTrackInstruction setTransform:CGAffineTransformConcat(CGAffineTransformMakeRotation(-M_PI_2), CGAffineTransformMakeTranslation(0, renderSize.height)) atTime:insertAtTime];
-            } else {
-                // HERE
-                CGSize videoSize = videoTrackSegment.naturalSize;
-                if (videoSize.width > videoSize.height) videoSize = CGSizeMake(videoSize.height, videoSize.width);
-                float scale = renderSize.height/videoSize.height;
-                CGAffineTransform scaleTranslate = CGAffineTransformTranslate(CGAffineTransformMakeScale(scale, scale),1163,renderSize.width);
-                [videoTrackInstruction setTransform:CGAffineTransformConcat(CGAffineTransformMakeRotation(-M_PI_2),scaleTranslate) atTime:insertAtTime];
-            }
-        } else if (trackOrientation == UIImageOrientationDown) { // upside down landscape - 180 deg rotation
-            if (renderInPortrait) {
-                CGSize videoSize = videoTrackSegment.naturalSize;
-                if (videoSize.width < videoSize.height) videoSize = CGSizeMake(videoSize.height, videoSize.width);
-                float scale = renderSize.width/videoSize.width;
-                CGAffineTransform scaleTranslate = CGAffineTransformTranslate(CGAffineTransformMakeScale(scale, scale),renderSize.height,renderSize.width*2);
-                
-                [videoTrackInstruction setTransform:CGAffineTransformConcat(CGAffineTransformMakeRotation(-M_PI),scaleTranslate) atTime:insertAtTime];
-            } else {
-                //HERE
-                [videoTrackInstruction setTransform:CGAffineTransformConcat(CGAffineTransformMakeRotation(M_PI), CGAffineTransformMakeTranslation(1920, 1080))  atTime:insertAtTime];
-            }
-        } else if (trackOrientation == UIImageOrientationUp) { // landscape - 90 deg CCW from portrait
-            if (renderInPortrait) {
-                CGSize videoSize = videoTrackSegment.naturalSize;
-                if (videoSize.width < videoSize.height) videoSize = CGSizeMake(videoSize.height, videoSize.width);
-                float scale = renderSize.width/videoSize.width;
-                float move = (renderSize.height/2)-((videoSize.height*scale)/2);
-                [videoTrackInstruction setTransform:CGAffineTransformConcat(CGAffineTransformMakeScale(scale, scale), CGAffineTransformMakeTranslation(0, move)) atTime:insertAtTime];
-            } else {
-                if (firstVideoOrientation == UIImageOrientationUp) {
-                    // nothing needed
+        } else {
+            if (trackOrientation == UIImageOrientationRight) {  // Normal Portrait - 90 deg CW
+                if (renderInPortrait) {
+                    CGAffineTransform transform = CGAffineTransformMakeRotation(M_PI_2);
+                    transform = CGAffineTransformTranslate(transform,0,-renderSize.width);
+                    [videoTrackInstruction setTransform:transform atTime:insertAtTime];
                 } else {
-                    [videoTrackInstruction setTransform:videoTrackSegment.preferredTransform atTime:insertAtTime];
+                    if (videoSize.width > videoSize.height) videoSize = CGSizeMake(videoSize.height, videoSize.width);
+                    float scale = renderSize.height/videoSize.height;
+                    CGAffineTransform transform = CGAffineTransformMakeScale(scale, scale);
+                    transform = CGAffineTransformRotate(transform, M_PI_2);
+                    transform = CGAffineTransformTranslate(transform, 0, -renderSize.width/2/scale-videoSize.width/2);
+                    [videoTrackInstruction setTransform:transform atTime:insertAtTime];
                 }
+            } else if (trackOrientation == UIImageOrientationLeft) { // Upside Down Portrait - 90 deg CCW
+                if (renderInPortrait) {
+                    CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
+                    transform = CGAffineTransformTranslate(transform,-renderSize.height,0);
+                    [videoTrackInstruction setTransform:transform atTime:insertAtTime];
+                } else {
+                    if (videoSize.width > videoSize.height) videoSize = CGSizeMake(videoSize.height, videoSize.width);
+                    float scale = renderSize.height/videoSize.height;
+                    CGAffineTransform transform = CGAffineTransformMakeScale(scale, scale);
+                    transform = CGAffineTransformRotate(transform, -M_PI_2);
+                    transform = CGAffineTransformTranslate(transform, -renderSize.height/scale, (renderSize.width/2/scale)-videoSize.width/2);
+                    [videoTrackInstruction setTransform:transform atTime:insertAtTime];
+                }
+            } else if (trackOrientation == UIImageOrientationDown) { // upside down landscape - 180 deg rotation
+                if (renderInPortrait) {
+                    if (videoSize.width < videoSize.height) videoSize = CGSizeMake(videoSize.height, videoSize.width);
+                    float scale = renderSize.width/videoSize.width;
+                    CGAffineTransform transform = CGAffineTransformMakeScale(scale, scale);
+                    transform = CGAffineTransformRotate(transform, M_PI);
+                    transform = CGAffineTransformTranslate(transform, -((renderSize.width)/scale), -((renderSize.height/2)/scale)-(videoSize.height/2));
+                    [videoTrackInstruction setTransform:transform atTime:insertAtTime];
+                } else {
+                    [videoTrackInstruction setTransform:CGAffineTransformConcat(CGAffineTransformMakeRotation(M_PI), CGAffineTransformMakeTranslation(renderSize.width, renderSize.height))  atTime:insertAtTime];
+                }
+            } else if (trackOrientation == UIImageOrientationUp) { // landscape - 90 deg CCW from portrait
+                if (renderInPortrait) {
+                    if (videoSize.width < videoSize.height) videoSize = CGSizeMake(videoSize.height, videoSize.width);
+                    float scale = renderSize.width/videoSize.width;
+                    float move = ((renderSize.height/2)/scale)-(videoSize.height/2);
+                    CGAffineTransform transform = CGAffineTransformMakeScale(scale, scale);
+                    transform = CGAffineTransformTranslate(transform, 0, move);
+                    [videoTrackInstruction setTransform:transform atTime:insertAtTime];
+                } else {
+                    [videoTrackInstruction setTransform:CGAffineTransformIdentity atTime:insertAtTime];
+                }
+            } else {
+                NSLog(@"NONE OF THESE ORIENTATIONS");
             }
         }
         
         NSLog(@"%@ - %@", NSStringFromCGSize(videoTrackSegment.naturalSize), NSStringFromCGAffineTransform(trackPreferredTransform));
-        insertAtTime = CMTimeAdd(insertAtTime, asset.duration);
+        insertAtTime = CMTimeAdd(insertAtTime, videoTrackSegment.timeRange.duration);
     }
     
-    AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+    AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction]; // This takes all the layer instructions (only one in this case) to form the instructions for the video composition
     instruction.layerInstructions = @[videoTrackInstruction];
     instruction.timeRange = videoTrack.timeRange;
-    AVMutableVideoComposition *videoComposition = [AVMutableVideoComposition  videoComposition];
+    AVMutableVideoComposition *videoComposition = [AVMutableVideoComposition  videoComposition]; // This uses the instructions to control the video rotation
     videoComposition.instructions = @[instruction];
     videoComposition.frameDuration = CMTimeMake(1, 30);
     videoComposition.renderScale = 1.0;
     videoComposition.renderSize = renderSize;
     
+
+    /* EXPORT Then SAVE MERGED VIDEO */
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *myPathDocs =  [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"mergeVideo-%d.mov",arc4random() % 1000]];
@@ -1217,11 +1233,11 @@
                 break;
             }
             default: { // success
-                NSLog(@"Triming Completed");
+                NSLog(@"Merging Completed");
                 self.hud.mode = MBProgressHUDModeIndeterminate;
                 self.hud.labelText = @"Saving";
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self exportDidFinish:self.mergeExportSession];
+                    [self saveExportSessionOutputToPhotoLibrary:[self.mergeExportSession outputURL]];
                 });
                 break;
             }
@@ -1230,38 +1246,55 @@
     
 }
 
--(UIImageOrientation)orientationForTransform:(CGAffineTransform)transform andSize:(CGSize)size {
-//    if (size.width > size.height) {
+-(BOOL)shouldRenderInPortrait:(CGAffineTransform)transform andSize:(CGSize)size {
+    if (size.width > size.height) {
         if (transform.a == 0 && transform.b == 1.0 && transform.c == -1.0 && transform.d == 0)  {
-            return UIImageOrientationRight;
+//            NSLog(@"Portrait");
+            return YES;
         } else if (transform.a == 0 && transform.b == -1.0 && transform.c == 1.0 && transform.d == 0)  {
-            return UIImageOrientationLeft;
+//            NSLog(@"Upside Down Portrait");
+            return YES;
         } else if (transform.a == -1.0 && transform.b == 0 && transform.c == 0 && transform.d == -1.0) {
-            return  UIImageOrientationDown;
+//            NSLog(@"Landscape Down");
+            return  NO;
         } else  {
-            return UIImageOrientationUp;
+//            NSLog(@"Landscape Up");
+            return NO;
         }
-//    } else {
-//        if (transform.a == 0 && transform.b == 1.0 && transform.c == -1.0 && transform.d == 0)  {
-//            return UIImageOrientationUp;
-//        } else if (transform.a == 0 && transform.b == -1.0 && transform.c == 1.0 && transform.d == 0)  {
-//            return UIImageOrientationDown;
-//        } else if (transform.a == -1.0 && transform.b == 0 && transform.c == 0 && transform.d == -1.0) {
-//            return  UIImageOrientationLeft;
-//        } else  {
-//            return UIImageOrientationRight;
-//        }
-//    }
+    } else {
+        return YES;
+    }
 }
 
--(void)exportDidFinish:(AVAssetExportSession *)exportSession {
+-(UIImageOrientation)orientationForTransform:(CGAffineTransform)transform andSize:(CGSize)size {
+    if (size.width > size.height) {
+        if (transform.a == 0 && transform.b == 1.0 && transform.c == -1.0 && transform.d == 0)  {
+            NSLog(@"Portrait");
+            return UIImageOrientationRight;
+        } else if (transform.a == 0 && transform.b == -1.0 && transform.c == 1.0 && transform.d == 0)  {
+            NSLog(@"Upside Down Portrait");
+            return UIImageOrientationLeft;
+        } else if (transform.a == -1.0 && transform.b == 0 && transform.c == 0 && transform.d == -1.0) {
+            NSLog(@"Landscape Down");
+            return  UIImageOrientationDown;
+        } else  {
+            NSLog(@"Landscape Up");
+            return UIImageOrientationUp;
+        }
+    } else {
+        return UIImageOrientationRight;
+    }
+}
+
+// Save export output URL to library
+-(void)saveExportSessionOutputToPhotoLibrary:(NSURL *)exportSessionOutput {
     ALAssetsLibrary* library = [ALAssetsLibrary new];
-    [library writeVideoAtPathToSavedPhotosAlbum:[exportSession outputURL]
+    [library writeVideoAtPathToSavedPhotosAlbum:exportSessionOutput
                                 completionBlock:^(NSURL *assetURL, NSError *error){
                                     if (error || !assetURL) {
                                         [self dismissHUDWithError:@"Unable to save merged video"];
                                     }
-                                    [NSFileManager.defaultManager removeItemAtURL:[exportSession outputURL] error:nil];
+                                    [NSFileManager.defaultManager removeItemAtURL:exportSessionOutput error:nil];
                                     [self dismissHUDWithSuccess];
                                     self.transition.mergedVideoURLPath = assetURL.absoluteString;
                                     [self doneMerging];

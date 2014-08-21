@@ -1169,37 +1169,37 @@
         </scene>
     </scenes>
     <resources>
-        <image name="autoExposureOff.png" width="256" height="256"/>
-        <image name="autoExposureOn.png" width="256" height="256"/>
-        <image name="autoFlashOn.png" width="256" height="256"/>
-        <image name="autoFocusOff.png" width="256" height="256"/>
-        <image name="autoFocusOn.png" width="256" height="256"/>
-        <image name="bluetoothOff.png" width="256" height="256"/>
-        <image name="bluetoothOn.png" width="256" height="256"/>
-        <image name="cameraRollIcon.png" width="256" height="256"/>
-        <image name="exposure.png" width="256" height="256"/>
-        <image name="flashOff.png" width="256" height="256"/>
-        <image name="flashOn.png" width="256" height="256"/>
-        <image name="focus.png" width="256" height="256"/>
-        <image name="inner.png" width="256" height="256"/>
-        <image name="innerHighlighted.png" width="256" height="256"/>
-        <image name="outer.png" width="256" height="256"/>
-        <image name="pictureModeOff.png" width="256" height="256"/>
-        <image name="pictureModeOn.png" width="256" height="256"/>
-        <image name="rapidShotOff.png" width="256" height="256"/>
-        <image name="rapidShotOn.png" width="256" height="256"/>
-        <image name="settingsIcon.png" width="256" height="256"/>
-        <image name="shortActionMode.png" width="256" height="206"/>
-        <image name="shortStillMode.png" width="256" height="206"/>
-        <image name="shortVideoMode.png" width="256" height="206"/>
-        <image name="skipTutorial.png" width="400" height="120"/>
-        <image name="soundOffIcon.png" width="256" height="256"/>
-        <image name="soundOnIcon.png" width="256" height="256"/>
-        <image name="switchCameraBack.png" width="256" height="256"/>
-        <image name="switchCameraFront.png" width="256" height="256"/>
+        <image name="autoExposureOff.png" width="128" height="128"/>
+        <image name="autoExposureOn.png" width="128" height="128"/>
+        <image name="autoFlashOn.png" width="128" height="128"/>
+        <image name="autoFocusOff.png" width="128" height="128"/>
+        <image name="autoFocusOn.png" width="128" height="128"/>
+        <image name="bluetoothOff.png" width="128" height="128"/>
+        <image name="bluetoothOn.png" width="128" height="128"/>
+        <image name="cameraRollIcon.png" width="128" height="128"/>
+        <image name="exposure.png" width="128" height="128"/>
+        <image name="flashOff.png" width="128" height="128"/>
+        <image name="flashOn.png" width="128" height="128"/>
+        <image name="focus.png" width="128" height="128"/>
+        <image name="inner.png" width="128" height="128"/>
+        <image name="innerHighlighted.png" width="128" height="128"/>
+        <image name="outer.png" width="128" height="128"/>
+        <image name="pictureModeOff.png" width="128" height="128"/>
+        <image name="pictureModeOn.png" width="128" height="128"/>
+        <image name="rapidShotOff.png" width="128" height="128"/>
+        <image name="rapidShotOn.png" width="128" height="128"/>
+        <image name="settingsIcon.png" width="128" height="128"/>
+        <image name="shortActionMode.png" width="128" height="103"/>
+        <image name="shortStillMode.png" width="128" height="103"/>
+        <image name="shortVideoMode.png" width="128" height="103"/>
+        <image name="skipTutorial.png" width="200" height="60"/>
+        <image name="soundOffIcon.png" width="128" height="128"/>
+        <image name="soundOnIcon.png" width="128" height="128"/>
+        <image name="switchCameraBack.png" width="128" height="128"/>
+        <image name="switchCameraFront.png" width="128" height="128"/>
         <image name="tutorialIcon.png" width="32" height="32"/>
-        <image name="videoModeOff.png" width="256" height="256"/>
-        <image name="videoModeOn.png" width="256" height="256"/>
+        <image name="videoModeOff.png" width="128" height="128"/>
+        <image name="videoModeOn.png" width="128" height="128"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

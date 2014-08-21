@@ -1257,7 +1257,7 @@
     CGSize futureSize = [UIApplication sizeInOrientation:toInterfaceOrientation];
     if (self.item.galleryType == MHGalleryTypeVideo) {
         CGSize screenSize = [UIApplication sizeInOrientation:toInterfaceOrientation];
-        NSLog(@"%@", NSStringFromCGSize(screenSize));
+//        NSLog(@"%@", NSStringFromCGSize(screenSize));
         [self.videoRangeSlider updateFrame:CGRectMake(self.videoRangeSlider.frame.origin.x, self.navigationController.navigationBar.frame.size.height, futureSize.width, self.videoRangeSlider.frame.size.height)];
         self.videoPlayerLayer.frame = CGRectMake(0, 0, futureSize.width, futureSize.height);
         if (self.videoPlayer) {

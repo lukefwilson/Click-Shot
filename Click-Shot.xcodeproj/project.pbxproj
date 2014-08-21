@@ -25,6 +25,43 @@
 		2F71F2C1193E823E00FA41C2 /* UIApplication+ScreenSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F71F2C0193E823E00FA41C2 /* UIApplication+ScreenSize.m */; };
 		2F8EA3D01985820100219F3B /* DragAnimationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8EA3CF1985820100219F3B /* DragAnimationView.m */; };
 		2FB2EE2619913714000BBE61 /* ImageViewPassTouches.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB2EE2519913714000BBE61 /* ImageViewPassTouches.m */; };
+		2FB2EE2B19976456000BBE61 /* innerPlayingSound.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE2A19976456000BBE61 /* innerPlayingSound.png */; };
+		2FB2EE2E1997788F000BBE61 /* autoExposureOff@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE2C1997788F000BBE61 /* autoExposureOff@2x.png */; };
+		2FB2EE2F1997788F000BBE61 /* autoExposureOn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE2D1997788F000BBE61 /* autoExposureOn@2x.png */; };
+		2FB2EE3219977897000BBE61 /* autoFocusOff@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE3019977897000BBE61 /* autoFocusOff@2x.png */; };
+		2FB2EE3319977897000BBE61 /* autoFocusOn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE3119977897000BBE61 /* autoFocusOn@2x.png */; };
+		2FB2EE36199778AD000BBE61 /* bluetoothOff@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE34199778AD000BBE61 /* bluetoothOff@2x.png */; };
+		2FB2EE37199778AD000BBE61 /* bluetoothOn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE35199778AD000BBE61 /* bluetoothOn@2x.png */; };
+		2FB2EE41199778BC000BBE61 /* cameraButtonDarkBG@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE38199778BC000BBE61 /* cameraButtonDarkBG@2x.png */; };
+		2FB2EE42199778BC000BBE61 /* inner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE39199778BC000BBE61 /* inner@2x.png */; };
+		2FB2EE43199778BC000BBE61 /* innerHighlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE3A199778BC000BBE61 /* innerHighlighted@2x.png */; };
+		2FB2EE44199778BC000BBE61 /* innerPlayingSound@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE3B199778BC000BBE61 /* innerPlayingSound@2x.png */; };
+		2FB2EE45199778BC000BBE61 /* outer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE3C199778BC000BBE61 /* outer@2x.png */; };
+		2FB2EE46199778BC000BBE61 /* rapidInner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE3D199778BC000BBE61 /* rapidInner@2x.png */; };
+		2FB2EE47199778BC000BBE61 /* rapidInnerHighlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE3E199778BC000BBE61 /* rapidInnerHighlighted@2x.png */; };
+		2FB2EE48199778BC000BBE61 /* redInner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE3F199778BC000BBE61 /* redInner@2x.png */; };
+		2FB2EE49199778BC000BBE61 /* redInnerHighlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE40199778BC000BBE61 /* redInnerHighlighted@2x.png */; };
+		2FB2EE4D199778D2000BBE61 /* autoFlashOn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE4A199778D2000BBE61 /* autoFlashOn@2x.png */; };
+		2FB2EE4E199778D2000BBE61 /* flashOff@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE4B199778D2000BBE61 /* flashOff@2x.png */; };
+		2FB2EE4F199778D2000BBE61 /* flashOn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE4C199778D2000BBE61 /* flashOn@2x.png */; };
+		2FB2EE52199778DD000BBE61 /* pictureModeOff@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE50199778DD000BBE61 /* pictureModeOff@2x.png */; };
+		2FB2EE53199778DD000BBE61 /* pictureModeOn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE51199778DD000BBE61 /* pictureModeOn@2x.png */; };
+		2FB2EE56199778F3000BBE61 /* rapidShotOff@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE54199778F3000BBE61 /* rapidShotOff@2x.png */; };
+		2FB2EE57199778F3000BBE61 /* rapidShotOn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE55199778F3000BBE61 /* rapidShotOn@2x.png */; };
+		2FB2EE5A19977907000BBE61 /* soundOffIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE5819977907000BBE61 /* soundOffIcon@2x.png */; };
+		2FB2EE5B19977907000BBE61 /* soundOnIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE5919977907000BBE61 /* soundOnIcon@2x.png */; };
+		2FB2EE5E19977915000BBE61 /* switchCameraBack@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE5C19977915000BBE61 /* switchCameraBack@2x.png */; };
+		2FB2EE5F19977915000BBE61 /* switchCameraFront@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE5D19977915000BBE61 /* switchCameraFront@2x.png */; };
+		2FB2EE6219977924000BBE61 /* videoModeOff@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE6019977924000BBE61 /* videoModeOff@2x.png */; };
+		2FB2EE6319977924000BBE61 /* videoModeOn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE6119977924000BBE61 /* videoModeOn@2x.png */; };
+		2FB2EE6719977938000BBE61 /* shortActionMode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE6419977938000BBE61 /* shortActionMode@2x.png */; };
+		2FB2EE6819977938000BBE61 /* shortStillMode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE6519977938000BBE61 /* shortStillMode@2x.png */; };
+		2FB2EE6919977938000BBE61 /* shortVideoMode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE6619977938000BBE61 /* shortVideoMode@2x.png */; };
+		2FB2EE6B1997795B000BBE61 /* settingsIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE6A1997795B000BBE61 /* settingsIcon@2x.png */; };
+		2FB2EE6D19977961000BBE61 /* skipTutorial@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE6C19977961000BBE61 /* skipTutorial@2x.png */; };
+		2FB2EE6F1997796D000BBE61 /* exposure@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE6E1997796D000BBE61 /* exposure@2x.png */; };
+		2FB2EE7119977973000BBE61 /* focus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE7019977973000BBE61 /* focus@2x.png */; };
+		2FB2EE7319977979000BBE61 /* mergeVideos@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE7219977979000BBE61 /* mergeVideos@2x.png */; };
 		2FC9490F198485E400C36D41 /* shortActionMode.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FC9490C198485E400C36D41 /* shortActionMode.png */; };
 		2FC94910198485E400C36D41 /* shortStillMode.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FC9490D198485E400C36D41 /* shortStillMode.png */; };
 		2FC94911198485E400C36D41 /* shortVideoMode.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FC9490E198485E400C36D41 /* shortVideoMode.png */; };
@@ -142,7 +179,6 @@
 		2FFFE121192FD89100F3370B /* autoFocusOff.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FFFE113192FD89100F3370B /* autoFocusOff.png */; };
 		2FFFE122192FD89100F3370B /* autoFocusOn.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FFFE114192FD89100F3370B /* autoFocusOn.png */; };
 		2FFFE123192FD89100F3370B /* cameraButtonDarkBG.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FFFE116192FD89100F3370B /* cameraButtonDarkBG.png */; };
-		2FFFE124192FD89100F3370B /* cameraButtons.psd in Resources */ = {isa = PBXBuildFile; fileRef = 2FFFE117192FD89100F3370B /* cameraButtons.psd */; };
 		2FFFE125192FD89100F3370B /* inner.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FFFE118192FD89100F3370B /* inner.png */; };
 		2FFFE126192FD89100F3370B /* innerHighlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FFFE119192FD89100F3370B /* innerHighlighted.png */; };
 		2FFFE127192FD89100F3370B /* outer.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FFFE11A192FD89100F3370B /* outer.png */; };
@@ -221,6 +257,43 @@
 		2F8EA3CF1985820100219F3B /* DragAnimationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragAnimationView.m; sourceTree = "<group>"; };
 		2FB2EE2419913714000BBE61 /* ImageViewPassTouches.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageViewPassTouches.h; sourceTree = "<group>"; };
 		2FB2EE2519913714000BBE61 /* ImageViewPassTouches.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageViewPassTouches.m; sourceTree = "<group>"; };
+		2FB2EE2A19976456000BBE61 /* innerPlayingSound.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = innerPlayingSound.png; sourceTree = "<group>"; };
+		2FB2EE2C1997788F000BBE61 /* autoExposureOff@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "autoExposureOff@2x.png"; sourceTree = "<group>"; };
+		2FB2EE2D1997788F000BBE61 /* autoExposureOn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "autoExposureOn@2x.png"; sourceTree = "<group>"; };
+		2FB2EE3019977897000BBE61 /* autoFocusOff@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "autoFocusOff@2x.png"; sourceTree = "<group>"; };
+		2FB2EE3119977897000BBE61 /* autoFocusOn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "autoFocusOn@2x.png"; sourceTree = "<group>"; };
+		2FB2EE34199778AD000BBE61 /* bluetoothOff@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bluetoothOff@2x.png"; sourceTree = "<group>"; };
+		2FB2EE35199778AD000BBE61 /* bluetoothOn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bluetoothOn@2x.png"; sourceTree = "<group>"; };
+		2FB2EE38199778BC000BBE61 /* cameraButtonDarkBG@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cameraButtonDarkBG@2x.png"; sourceTree = "<group>"; };
+		2FB2EE39199778BC000BBE61 /* inner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "inner@2x.png"; sourceTree = "<group>"; };
+		2FB2EE3A199778BC000BBE61 /* innerHighlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "innerHighlighted@2x.png"; sourceTree = "<group>"; };
+		2FB2EE3B199778BC000BBE61 /* innerPlayingSound@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "innerPlayingSound@2x.png"; sourceTree = "<group>"; };
+		2FB2EE3C199778BC000BBE61 /* outer@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "outer@2x.png"; sourceTree = "<group>"; };
+		2FB2EE3D199778BC000BBE61 /* rapidInner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rapidInner@2x.png"; sourceTree = "<group>"; };
+		2FB2EE3E199778BC000BBE61 /* rapidInnerHighlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rapidInnerHighlighted@2x.png"; sourceTree = "<group>"; };
+		2FB2EE3F199778BC000BBE61 /* redInner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redInner@2x.png"; sourceTree = "<group>"; };
+		2FB2EE40199778BC000BBE61 /* redInnerHighlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redInnerHighlighted@2x.png"; sourceTree = "<group>"; };
+		2FB2EE4A199778D2000BBE61 /* autoFlashOn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "autoFlashOn@2x.png"; sourceTree = "<group>"; };
+		2FB2EE4B199778D2000BBE61 /* flashOff@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flashOff@2x.png"; sourceTree = "<group>"; };
+		2FB2EE4C199778D2000BBE61 /* flashOn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flashOn@2x.png"; sourceTree = "<group>"; };
+		2FB2EE50199778DD000BBE61 /* pictureModeOff@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pictureModeOff@2x.png"; sourceTree = "<group>"; };
+		2FB2EE51199778DD000BBE61 /* pictureModeOn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pictureModeOn@2x.png"; sourceTree = "<group>"; };
+		2FB2EE54199778F3000BBE61 /* rapidShotOff@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rapidShotOff@2x.png"; sourceTree = "<group>"; };
+		2FB2EE55199778F3000BBE61 /* rapidShotOn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rapidShotOn@2x.png"; sourceTree = "<group>"; };
+		2FB2EE5819977907000BBE61 /* soundOffIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "soundOffIcon@2x.png"; path = "../../../../Dropbox/Remote Shot/icons/soundOffIcon@2x.png"; sourceTree = "<group>"; };
+		2FB2EE5919977907000BBE61 /* soundOnIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "soundOnIcon@2x.png"; path = "../../../../Dropbox/Remote Shot/icons/soundOnIcon@2x.png"; sourceTree = "<group>"; };
+		2FB2EE5C19977915000BBE61 /* switchCameraBack@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "switchCameraBack@2x.png"; sourceTree = "<group>"; };
+		2FB2EE5D19977915000BBE61 /* switchCameraFront@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "switchCameraFront@2x.png"; sourceTree = "<group>"; };
+		2FB2EE6019977924000BBE61 /* videoModeOff@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "videoModeOff@2x.png"; sourceTree = "<group>"; };
+		2FB2EE6119977924000BBE61 /* videoModeOn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "videoModeOn@2x.png"; sourceTree = "<group>"; };
+		2FB2EE6419977938000BBE61 /* shortActionMode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shortActionMode@2x.png"; sourceTree = "<group>"; };
+		2FB2EE6519977938000BBE61 /* shortStillMode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shortStillMode@2x.png"; sourceTree = "<group>"; };
+		2FB2EE6619977938000BBE61 /* shortVideoMode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shortVideoMode@2x.png"; sourceTree = "<group>"; };
+		2FB2EE6A1997795B000BBE61 /* settingsIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "settingsIcon@2x.png"; path = "../../../../Dropbox/Remote Shot/icons/settingsIcon@2x.png"; sourceTree = "<group>"; };
+		2FB2EE6C19977961000BBE61 /* skipTutorial@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "skipTutorial@2x.png"; path = "../../../../Dropbox/Remote Shot/icons/skipTutorial@2x.png"; sourceTree = "<group>"; };
+		2FB2EE6E1997796D000BBE61 /* exposure@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "exposure@2x.png"; path = "../../../../Dropbox/Remote Shot/icons/exposure@2x.png"; sourceTree = "<group>"; };
+		2FB2EE7019977973000BBE61 /* focus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "focus@2x.png"; path = "../../../../Dropbox/Remote Shot/icons/focus@2x.png"; sourceTree = "<group>"; };
+		2FB2EE7219977979000BBE61 /* mergeVideos@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "mergeVideos@2x.png"; path = "../../../../Dropbox/Remote Shot/icons/mergeVideos@2x.png"; sourceTree = "<group>"; };
 		2FC9490C198485E400C36D41 /* shortActionMode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shortActionMode.png; sourceTree = "<group>"; };
 		2FC9490D198485E400C36D41 /* shortStillMode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shortStillMode.png; sourceTree = "<group>"; };
 		2FC9490E198485E400C36D41 /* shortVideoMode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shortVideoMode.png; sourceTree = "<group>"; };
@@ -230,6 +303,7 @@
 		2FDE4EB9195F8D96009E2E12 /* stillSwipeImage@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "stillSwipeImage@2x.png"; path = "../../../../Dropbox/Remote Shot/icons/swipe views/stillSwipeImage@2x.png"; sourceTree = "<group>"; };
 		2FDE4EBA195F8D96009E2E12 /* videoSwipeImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = videoSwipeImage.png; path = "../../../../Dropbox/Remote Shot/icons/swipe views/videoSwipeImage.png"; sourceTree = "<group>"; };
 		2FDE4EBB195F8D96009E2E12 /* videoSwipeImage@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "videoSwipeImage@2x.png"; path = "../../../../Dropbox/Remote Shot/icons/swipe views/videoSwipeImage@2x.png"; sourceTree = "<group>"; };
+		2FFD531119A451640064E216 /* TransferService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TransferService.h; path = "../../Cam Remote/Cam Remote/TransferService.h"; sourceTree = "<group>"; };
 		2FFFDFA6192FD3D900F3370B /* Click-Shot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Click-Shot.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FFFDFA9192FD3D900F3370B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		2FFFDFAB192FD3D900F3370B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -384,7 +458,6 @@
 		2FFFE113192FD89100F3370B /* autoFocusOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = autoFocusOff.png; sourceTree = "<group>"; };
 		2FFFE114192FD89100F3370B /* autoFocusOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = autoFocusOn.png; sourceTree = "<group>"; };
 		2FFFE116192FD89100F3370B /* cameraButtonDarkBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cameraButtonDarkBG.png; sourceTree = "<group>"; };
-		2FFFE117192FD89100F3370B /* cameraButtons.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = cameraButtons.psd; sourceTree = "<group>"; };
 		2FFFE118192FD89100F3370B /* inner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = inner.png; sourceTree = "<group>"; };
 		2FFFE119192FD89100F3370B /* innerHighlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = innerHighlighted.png; sourceTree = "<group>"; };
 		2FFFE11A192FD89100F3370B /* outer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = outer.png; sourceTree = "<group>"; };
@@ -460,6 +533,8 @@
 			isa = PBXGroup;
 			children = (
 				2F38038E1942C63E004559C3 /* bluetoothOff.png */,
+				2FB2EE34199778AD000BBE61 /* bluetoothOff@2x.png */,
+				2FB2EE35199778AD000BBE61 /* bluetoothOn@2x.png */,
 				2F38038F1942C63E004559C3 /* bluetoothOn.png */,
 			);
 			name = bluetooth;
@@ -491,6 +566,9 @@
 				2FC9490C198485E400C36D41 /* shortActionMode.png */,
 				2FC9490D198485E400C36D41 /* shortStillMode.png */,
 				2FC9490E198485E400C36D41 /* shortVideoMode.png */,
+				2FB2EE6419977938000BBE61 /* shortActionMode@2x.png */,
+				2FB2EE6519977938000BBE61 /* shortStillMode@2x.png */,
+				2FB2EE6619977938000BBE61 /* shortVideoMode@2x.png */,
 			);
 			name = "shorter camera modes";
 			path = "../../../../Dropbox/Remote Shot/icons/shorter camera modes";
@@ -577,10 +655,10 @@
 				2F71F2C0193E823E00FA41C2 /* UIApplication+ScreenSize.m */,
 				2F38039C1942DC7D004559C3 /* UIImage+ImageFromColor.h */,
 				2F38039D1942DC7D004559C3 /* UIImage+ImageFromColor.m */,
+				2FFD531119A451640064E216 /* TransferService.h */,
 				2F6519D31980BB0D00CBC479 /* ODRefreshControl */,
 				2FFFE0FE192FD7E500F3370B /* MBProgressHUD */,
 				2FFFE0A9192FD56300F3370B /* SDWebImage */,
-				2FFFE06D192FD52000F3370B /* Custom SARangeSlider */,
 				2FFFDFE2192FD4C900F3370B /* Custom MHGallery */,
 				2FFFDFC4192FD3D900F3370B /* Images.xcassets */,
 				2FFFDFB0192FD3D900F3370B /* Supporting Files */,
@@ -817,6 +895,7 @@
 				2FFFE070192FD53700F3370B /* SAVideoRangeSlider */,
 			);
 			name = "Custom SARangeSlider";
+			path = ..;
 			sourceTree = "<group>";
 		};
 		2FFFE070192FD53700F3370B /* SAVideoRangeSlider */ = {
@@ -837,6 +916,7 @@
 		2FFFE0A9192FD56300F3370B /* SDWebImage */ = {
 			isa = PBXGroup;
 			children = (
+				2FFFE06D192FD52000F3370B /* Custom SARangeSlider */,
 				2FFFE0AA192FD56300F3370B /* NSData+ImageContentType.h */,
 				2FFFE0AB192FD56300F3370B /* NSData+ImageContentType.m */,
 				2FFFE0AC192FD56300F3370B /* SDImageCache.h */,
@@ -904,6 +984,7 @@
 				2F38038B19403F4E004559C3 /* tableViewDivider@2x.png */,
 				2F38038919403E02004559C3 /* tableViewDivider.png */,
 				2F2B18A91963E8B60073BBC4 /* skipTutorial.png */,
+				2FB2EE6C19977961000BBE61 /* skipTutorial@2x.png */,
 				2F38037A193EF7AF004559C3 /* hud */,
 				2FFFE10F192FD89100F3370B /* auto exposure */,
 				2FFFE112192FD89100F3370B /* auto focus */,
@@ -918,9 +999,13 @@
 				2FC9490B198485E400C36D41 /* shorter camera modes */,
 				2FDE4EAF195F8CCA009E2E12 /* Swipe views */,
 				2FFFE12D192FD8A400F3370B /* exposure.png */,
+				2FB2EE6E1997796D000BBE61 /* exposure@2x.png */,
 				2FFFE132192FD8A400F3370B /* focus.png */,
+				2FB2EE7019977973000BBE61 /* focus@2x.png */,
 				2FFFE133192FD8A400F3370B /* mergeVideos.png */,
+				2FB2EE7219977979000BBE61 /* mergeVideos@2x.png */,
 				2FFFE141192FD8BA00F3370B /* settingsIcon.png */,
+				2FB2EE6A1997795B000BBE61 /* settingsIcon@2x.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -930,6 +1015,8 @@
 			children = (
 				2FFFE110192FD89100F3370B /* autoExposureOff.png */,
 				2FFFE111192FD89100F3370B /* autoExposureOn.png */,
+				2FB2EE2C1997788F000BBE61 /* autoExposureOff@2x.png */,
+				2FB2EE2D1997788F000BBE61 /* autoExposureOn@2x.png */,
 			);
 			name = "auto exposure";
 			path = "../../../../Dropbox/Remote Shot/icons/auto exposure";
@@ -940,6 +1027,8 @@
 			children = (
 				2FFFE113192FD89100F3370B /* autoFocusOff.png */,
 				2FFFE114192FD89100F3370B /* autoFocusOn.png */,
+				2FB2EE3019977897000BBE61 /* autoFocusOff@2x.png */,
+				2FB2EE3119977897000BBE61 /* autoFocusOn@2x.png */,
 			);
 			name = "auto focus";
 			path = "../../../../Dropbox/Remote Shot/icons/auto focus";
@@ -948,8 +1037,8 @@
 		2FFFE115192FD89100F3370B /* camera button */ = {
 			isa = PBXGroup;
 			children = (
+				2FB2EE2A19976456000BBE61 /* innerPlayingSound.png */,
 				2FFFE116192FD89100F3370B /* cameraButtonDarkBG.png */,
-				2FFFE117192FD89100F3370B /* cameraButtons.psd */,
 				2FFFE118192FD89100F3370B /* inner.png */,
 				2FFFE119192FD89100F3370B /* innerHighlighted.png */,
 				2FFFE11A192FD89100F3370B /* outer.png */,
@@ -957,6 +1046,15 @@
 				2FFFE11C192FD89100F3370B /* rapidInnerHighlighted.png */,
 				2FFFE11D192FD89100F3370B /* redInner.png */,
 				2FFFE11E192FD89100F3370B /* redInnerHighlighted.png */,
+				2FB2EE38199778BC000BBE61 /* cameraButtonDarkBG@2x.png */,
+				2FB2EE39199778BC000BBE61 /* inner@2x.png */,
+				2FB2EE3A199778BC000BBE61 /* innerHighlighted@2x.png */,
+				2FB2EE3B199778BC000BBE61 /* innerPlayingSound@2x.png */,
+				2FB2EE3C199778BC000BBE61 /* outer@2x.png */,
+				2FB2EE3D199778BC000BBE61 /* rapidInner@2x.png */,
+				2FB2EE3E199778BC000BBE61 /* rapidInnerHighlighted@2x.png */,
+				2FB2EE3F199778BC000BBE61 /* redInner@2x.png */,
+				2FB2EE40199778BC000BBE61 /* redInnerHighlighted@2x.png */,
 			);
 			name = "camera button";
 			path = "../../../../Dropbox/Remote Shot/icons/camera button";
@@ -968,6 +1066,9 @@
 				2FFFE12F192FD8A400F3370B /* autoFlashOn.png */,
 				2FFFE130192FD8A400F3370B /* flashOff.png */,
 				2FFFE131192FD8A400F3370B /* flashOn.png */,
+				2FB2EE4A199778D2000BBE61 /* autoFlashOn@2x.png */,
+				2FB2EE4B199778D2000BBE61 /* flashOff@2x.png */,
+				2FB2EE4C199778D2000BBE61 /* flashOn@2x.png */,
 			);
 			name = flash;
 			path = "../../../../Dropbox/Remote Shot/icons/flash";
@@ -978,6 +1079,8 @@
 			children = (
 				2FFFE13C192FD8BA00F3370B /* pictureModeOff.png */,
 				2FFFE13D192FD8BA00F3370B /* pictureModeOn.png */,
+				2FB2EE50199778DD000BBE61 /* pictureModeOff@2x.png */,
+				2FB2EE51199778DD000BBE61 /* pictureModeOn@2x.png */,
 			);
 			name = "picture mode";
 			path = "../../../../Dropbox/Remote Shot/icons/picture mode";
@@ -988,6 +1091,8 @@
 			children = (
 				2FFFE13F192FD8BA00F3370B /* rapidShotOff.png */,
 				2FFFE140192FD8BA00F3370B /* rapidShotOn.png */,
+				2FB2EE54199778F3000BBE61 /* rapidShotOff@2x.png */,
+				2FB2EE55199778F3000BBE61 /* rapidShotOn@2x.png */,
 			);
 			name = "rapid shot mode";
 			path = "../../../../Dropbox/Remote Shot/icons/rapid shot mode";
@@ -998,6 +1103,8 @@
 			children = (
 				2FFFE145192FD8BA00F3370B /* switchCameraBack.png */,
 				2FFFE146192FD8BA00F3370B /* switchCameraFront.png */,
+				2FB2EE5C19977915000BBE61 /* switchCameraBack@2x.png */,
+				2FB2EE5D19977915000BBE61 /* switchCameraFront@2x.png */,
 			);
 			name = "switch camera";
 			path = "../../../../Dropbox/Remote Shot/icons/switch camera";
@@ -1008,6 +1115,8 @@
 			children = (
 				2FFFE148192FD8BA00F3370B /* videoModeOff.png */,
 				2FFFE149192FD8BA00F3370B /* videoModeOn.png */,
+				2FB2EE6019977924000BBE61 /* videoModeOff@2x.png */,
+				2FB2EE6119977924000BBE61 /* videoModeOn@2x.png */,
 			);
 			name = "video mode";
 			path = "../../../../Dropbox/Remote Shot/icons/video mode";
@@ -1018,6 +1127,8 @@
 			children = (
 				2FFFE142192FD8BA00F3370B /* soundOffIcon.png */,
 				2FFFE143192FD8BA00F3370B /* soundOnIcon.png */,
+				2FB2EE5819977907000BBE61 /* soundOffIcon@2x.png */,
+				2FB2EE5919977907000BBE61 /* soundOnIcon@2x.png */,
 			);
 			name = "sound icon";
 			sourceTree = "<group>";
@@ -1125,25 +1236,39 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FFFE044192FD50300F3370B /* left_arrow.png in Resources */,
+				2FB2EE2B19976456000BBE61 /* innerPlayingSound.png in Resources */,
 				2FFFE038192FD50300F3370B /* activityMH.png in Resources */,
-				2FFFE124192FD89100F3370B /* cameraButtons.psd in Resources */,
 				2FFFE04D192FD50300F3370B /* play@2x.png in Resources */,
+				2FB2EE6319977924000BBE61 /* videoModeOn@2x.png in Resources */,
+				2FB2EE6719977938000BBE61 /* shortActionMode@2x.png in Resources */,
 				2FC94910198485E400C36D41 /* shortStillMode.png in Resources */,
+				2FB2EE6219977924000BBE61 /* videoModeOff@2x.png in Resources */,
 				2FFFE052192FD50300F3370B /* saveMH@2x.png in Resources */,
 				2FFFE134192FD8A400F3370B /* cameraRollIcon.png in Resources */,
 				2FFFE126192FD89100F3370B /* innerHighlighted.png in Resources */,
 				2FFFE03D192FD50300F3370B /* EditControlSelected@2x.png in Resources */,
 				2F38038A19403E02004559C3 /* tableViewDivider.png in Resources */,
+				2FB2EE4E199778D2000BBE61 /* flashOff@2x.png in Resources */,
 				2FC9490F198485E400C36D41 /* shortActionMode.png in Resources */,
+				2FB2EE52199778DD000BBE61 /* pictureModeOff@2x.png in Resources */,
 				2FFFE127192FD89100F3370B /* outer.png in Resources */,
 				2FFFDFC0192FD3D900F3370B /* Main_iPad.storyboard in Resources */,
+				2FB2EE53199778DD000BBE61 /* pictureModeOn@2x.png in Resources */,
+				2FB2EE45199778BC000BBE61 /* outer@2x.png in Resources */,
 				2FFFE046192FD50300F3370B /* mailMH.png in Resources */,
 				2F3803931942C63E004559C3 /* bluetoothOff.png in Resources */,
 				2FFFE03F192FD50300F3370B /* error@2x.png in Resources */,
 				2F2B18AA1963E8B60073BBC4 /* skipTutorial.png in Resources */,
 				2FC94911198485E400C36D41 /* shortVideoMode.png in Resources */,
+				2FB2EE2E1997788F000BBE61 /* autoExposureOff@2x.png in Resources */,
 				2FFFE153192FD8BA00F3370B /* videoModeOff.png in Resources */,
 				2FFFE059192FD50300F3370B /* videoIcon.png in Resources */,
+				2FB2EE5F19977915000BBE61 /* switchCameraFront@2x.png in Resources */,
+				2FB2EE6819977938000BBE61 /* shortStillMode@2x.png in Resources */,
+				2FB2EE3319977897000BBE61 /* autoFocusOn@2x.png in Resources */,
+				2FB2EE6F1997796D000BBE61 /* exposure@2x.png in Resources */,
+				2FB2EE49199778BC000BBE61 /* redInnerHighlighted@2x.png in Resources */,
+				2FB2EE5A19977907000BBE61 /* soundOffIcon@2x.png in Resources */,
 				2FFFE128192FD89100F3370B /* rapidInner.png in Resources */,
 				2FFFE04E192FD50300F3370B /* playButton.png in Resources */,
 				2FFFE04F192FD50300F3370B /* playButton@2x.png in Resources */,
@@ -1155,36 +1280,54 @@
 				2FFFE05D192FD50300F3370B /* MHGallery.bundle in Resources */,
 				2FFFE050192FD50300F3370B /* right_arrow.png in Resources */,
 				2FFFE14A192FD8BA00F3370B /* pictureModeOff.png in Resources */,
+				2FB2EE4D199778D2000BBE61 /* autoFlashOn@2x.png in Resources */,
 				2FFFE138192FD8A400F3370B /* flashOn.png in Resources */,
+				2FB2EE56199778F3000BBE61 /* rapidShotOff@2x.png in Resources */,
+				2FB2EE44199778BC000BBE61 /* innerPlayingSound@2x.png in Resources */,
+				2FB2EE37199778AD000BBE61 /* bluetoothOn@2x.png in Resources */,
 				2F380381193EF7AF004559C3 /* cross.png in Resources */,
 				2F3803951942C63E004559C3 /* tutorialIcon.png in Resources */,
+				2FB2EE5B19977907000BBE61 /* soundOnIcon@2x.png in Resources */,
 				2FFFE11F192FD89100F3370B /* autoExposureOff.png in Resources */,
 				2FFFE055192FD50300F3370B /* twitterMH.png in Resources */,
 				2FDE4EBE195F8D96009E2E12 /* stillSwipeImage.png in Resources */,
 				2FDE4EBC195F8D96009E2E12 /* actionSwipeImage.png in Resources */,
+				2FB2EE4F199778D2000BBE61 /* flashOn@2x.png in Resources */,
 				2FFFE12B192FD89100F3370B /* redInnerHighlighted.png in Resources */,
 				2FFFE125192FD89100F3370B /* inner.png in Resources */,
 				2FFFE139192FD8A400F3370B /* focus.png in Resources */,
 				2FFFE122192FD89100F3370B /* autoFocusOn.png in Resources */,
+				2FB2EE42199778BC000BBE61 /* inner@2x.png in Resources */,
+				2FB2EE41199778BC000BBE61 /* cameraButtonDarkBG@2x.png in Resources */,
+				2FB2EE3219977897000BBE61 /* autoFocusOff@2x.png in Resources */,
 				2FFFE151192FD8BA00F3370B /* switchCameraBack.png in Resources */,
 				2FFFE129192FD89100F3370B /* rapidInnerHighlighted.png in Resources */,
+				2FB2EE43199778BC000BBE61 /* innerHighlighted@2x.png in Resources */,
 				2FFFE051192FD50300F3370B /* right_arrow@2x.png in Resources */,
 				2FFFE04B192FD50300F3370B /* pause@2x.png in Resources */,
 				2FFFE136192FD8A400F3370B /* autoFlashOn.png in Resources */,
 				2FFFE14F192FD8BA00F3370B /* soundOffIcon.png in Resources */,
+				2FB2EE7119977973000BBE61 /* focus@2x.png in Resources */,
 				2FFFE042192FD50300F3370B /* ic_square.png in Resources */,
+				2FB2EE46199778BC000BBE61 /* rapidInner@2x.png in Resources */,
 				2FFFE14C192FD8BA00F3370B /* rapidShotOff.png in Resources */,
 				2FFFE053192FD50300F3370B /* sliderPoint.png in Resources */,
 				2F38037F193EF7AF004559C3 /* check.png in Resources */,
 				2FFFE121192FD89100F3370B /* autoFocusOff.png in Resources */,
+				2FB2EE36199778AD000BBE61 /* bluetoothOff@2x.png in Resources */,
 				2F3803981942C96B004559C3 /* tutorialIcon@2x.png in Resources */,
 				2FDE4EBF195F8D96009E2E12 /* stillSwipeImage@2x.png in Resources */,
+				2FB2EE5E19977915000BBE61 /* switchCameraBack@2x.png in Resources */,
 				2FFFE048192FD50300F3370B /* messageMH.png in Resources */,
+				2FB2EE57199778F3000BBE61 /* rapidShotOn@2x.png in Resources */,
+				2FB2EE7319977979000BBE61 /* mergeVideos@2x.png in Resources */,
 				2FFFE057192FD50300F3370B /* unplay.png in Resources */,
 				2FFFE04A192FD50300F3370B /* pause.png in Resources */,
+				2FB2EE48199778BC000BBE61 /* redInner@2x.png in Resources */,
 				2FFFE041192FD50300F3370B /* facebookMH@2x.png in Resources */,
 				2FFFE03C192FD50300F3370B /* EditControlSelected.png in Resources */,
 				2FFFE047192FD50300F3370B /* mailMH@2x.png in Resources */,
+				2FB2EE6919977938000BBE61 /* shortVideoMode@2x.png in Resources */,
 				2FDE4EC0195F8D96009E2E12 /* videoSwipeImage.png in Resources */,
 				2FFFE03E192FD50300F3370B /* error.png in Resources */,
 				2FFFE152192FD8BA00F3370B /* switchCameraFront.png in Resources */,
@@ -1201,6 +1344,7 @@
 				2FFFE040192FD50300F3370B /* facebookMH.png in Resources */,
 				2FFFE13A192FD8A400F3370B /* mergeVideos.png in Resources */,
 				2FFFE137192FD8A400F3370B /* flashOff.png in Resources */,
+				2FB2EE6B1997795B000BBE61 /* settingsIcon@2x.png in Resources */,
 				2FFFE120192FD89100F3370B /* autoExposureOn.png in Resources */,
 				2FFFE154192FD8BA00F3370B /* videoModeOn.png in Resources */,
 				2FFFDFC5192FD3D900F3370B /* Images.xcassets in Resources */,
@@ -1210,16 +1354,19 @@
 				2F38038C19403F4E004559C3 /* tableViewDivider@2x.png in Resources */,
 				2FDE4EBD195F8D96009E2E12 /* actionSwipeImage@2x.png in Resources */,
 				2FDE4EC1195F8D96009E2E12 /* videoSwipeImage@2x.png in Resources */,
+				2FB2EE47199778BC000BBE61 /* rapidInnerHighlighted@2x.png in Resources */,
 				2FFFE135192FD8A400F3370B /* exposure.png in Resources */,
 				2FFFE150192FD8BA00F3370B /* soundOnIcon.png in Resources */,
 				2FFFE04C192FD50300F3370B /* play.png in Resources */,
 				2F3803941942C63E004559C3 /* bluetoothOn.png in Resources */,
 				2FFFE03B192FD50300F3370B /* EditControl@2x.png in Resources */,
 				2F380382193EF7AF004559C3 /* cross@2x.png in Resources */,
+				2FB2EE6D19977961000BBE61 /* skipTutorial@2x.png in Resources */,
 				2FFFDFB4192FD3D900F3370B /* InfoPlist.strings in Resources */,
 				2FFFE045192FD50300F3370B /* left_arrow@2x.png in Resources */,
 				2FFFE123192FD89100F3370B /* cameraButtonDarkBG.png in Resources */,
 				2FFFE14B192FD8BA00F3370B /* pictureModeOn.png in Resources */,
+				2FB2EE2F1997788F000BBE61 /* autoExposureOn@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1384,7 +1531,7 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "0BA6185C-FE15-4B9B-9F6E-6DE080BE3C63";
+				PROVISIONING_PROFILE = "97277fdb-23a6-4d1d-bdc6-f42d81dcf83b";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1436,6 +1583,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SYSTEM_APPS_DIR)/Reveal.app/Contents/SharedSupport/iOS-Libraries",
@@ -1446,6 +1594,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1457,6 +1606,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SYSTEM_APPS_DIR)/Reveal.app/Contents/SharedSupport/iOS-Libraries",
@@ -1466,6 +1616,7 @@
 				INFOPLIST_FILE = "Click-Shot/Click-Shot-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};

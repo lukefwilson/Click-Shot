@@ -132,6 +132,8 @@
 
 - (void)saveMovieToCameraRoll
 {
+    recordingWillBeStopped = NO;
+//    self.recording = NO;
 	ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
 	[library writeVideoAtPathToSavedPhotosAlbum:movieURL
 								completionBlock:^(NSURL *assetURL, NSError *error) {
@@ -141,8 +143,7 @@
 										[self removeFile:movieURL];
 									
 									dispatch_async(movieWritingQueue, ^{
-										recordingWillBeStopped = NO;
-										self.recording = NO;
+
                                         [self.delegate recordingDidStop:self.firstVideoFrame savedAt:assetURL];
 
                                         self.firstVideoFrame = nil;
@@ -294,7 +295,8 @@
 //			return;
 		
 		recordingWillBeStopped = YES;
-		
+        self.recording = NO;
+
 		// recordingDidStop is called from saveMovieToCameraRoll
 		[self.delegate recordingWillStop];
         if ([assetWriter finishWriting]) {
@@ -363,15 +365,23 @@
 
 -(void)toggleActionShot {
     if (self.actionShooting) {
-        NSLog(@"stop action shot");
-        [self.delegate actionShotDidStop];
-        self.actionShooting = NO;
+        [self stopActionShot];
     } else {
-        NSLog(@"start action shot");
-        actionShotsTaken = 0;
-        [self.delegate actionShotDidStart];
-        self.actionShooting = YES;
+        [self startActionShot];
     }
+}
+
+-(void)startActionShot {
+    NSLog(@"start action shot");
+    actionShotsTaken = 0;
+    [self.delegate actionShotDidStart];
+    self.actionShooting = YES;
+}
+
+-(void)stopActionShot {
+    NSLog(@"stop action shot");
+    [self.delegate actionShotDidStop];
+    self.actionShooting = NO;
 }
 
 -(void)toggleRecordVideo {
@@ -386,6 +396,7 @@
         NSLog(@"start video recording");
 	}
 }
+
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {

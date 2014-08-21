@@ -12,18 +12,18 @@
 #import "VideoProcessor.h"
 #import "LWBluetoothTableViewController.h"
 #import "CameraButton.h"
+#import "TransferService.h"
 
 
 @interface CameraViewController : UIViewController <LWBluetoothButtonDelegate>
 
 -(void)pressedCameraButton;
--(void)setCameraButtonText:(NSString *)text withOffset:(CGPoint)offset fontSize:(float)fontSize; 
--(UIImage *) currentCameraButtonImage;
--(UIImage *) currentHighlightedCameraButtonImage;
+-(void)enableProperCameraModeButtonsForCurrentCameraMode:(BOOL)setEnabled;
 -(AVCaptureTorchMode) currentAVTorchMode;
 -(AVCaptureFlashMode) currentAVFlashMode;
 -(CGPoint) devicePointForScreenPoint:(CGPoint)screenPoint;
-
+-(void)setExposureDevicePointWithTouchLocation:(CGPoint)touchLocation;
+-(void)setFocusDevicePointWithTouchLocation:(CGPoint)touchLocation;
 -(void)resumeSessions;
 -(void)pauseSessions;
 
@@ -41,10 +41,16 @@
 
 @property (nonatomic) BOOL autoFocusMode;
 @property (nonatomic) BOOL autoExposureMode;
+@property (nonatomic) CGPoint exposureDevicePoint;
+@property (nonatomic) CGPoint focusDevicePoint;
+@property (nonatomic) BOOL currentDeviceHasFlash;
+
 @property (nonatomic) BOOL swipeModesGestureIsBlocked;
-@property (nonatomic) NSInteger cameraMode;
+@property (nonatomic) CSStateCameraMode cameraMode;
 @property (nonatomic, strong) NSString *cameraButtonString;
 @property (nonatomic) CGRect tappablePreviewRect; // used in MoveableImageView
+
+@property (nonatomic) BOOL takePictureAfterSound;
 
 @property (nonatomic) int actionShotSequenceNumber;
 
@@ -74,5 +80,13 @@
 @property (nonatomic) BOOL tutorialIsOpen;
 
 @property (nonatomic) VideoProcessor *videoProcessor;
+
+@property (nonatomic) UIDeviceOrientation lockedOrientation;
+
+@property (nonatomic) float soundDuration;
+@property (nonatomic) CSStateCameraSound cameraSound;
+
+@property (nonatomic) NSData *lastReceivedRemoteState;
+
 
 @end

@@ -25,6 +25,7 @@
 
 -(void)refreshBluetoothDevices;
 -(void)cleanupBluetooth;
+-(void)updateRemoteWithCurrentCameraState;
 
 @end
 
@@ -35,5 +36,7 @@
 -(void)bluetoothButtonPressed;
 -(void)connectedToBluetoothDevice;
 -(void)disconnectedFromBluetoothDevice;
+-(void)receivedMessageFromCameraRemoteApp:(NSData *)message;
+-(NSData *)currentStateData;
 @end
 

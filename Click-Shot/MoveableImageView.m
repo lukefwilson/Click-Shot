@@ -40,9 +40,9 @@
         CGPoint touchLocation = [[touches anyObject] locationInView:self.parentViewController.view];
         self.center = touchLocation;
         if (self.tag == kExposeViewTag) {
-            [self.parentViewController.videoProcessor exposeAtPoint:[self.parentViewController devicePointForScreenPoint:touchLocation]];
+            [self.parentViewController setExposureDevicePointWithTouchLocation:touchLocation];
         } else if (self.tag == kFocusViewTag){
-            [self.parentViewController.videoProcessor focusAtPoint:[self.parentViewController devicePointForScreenPoint:touchLocation]];
+            [self.parentViewController setFocusDevicePointWithTouchLocation:touchLocation];
         }
         [self fixIfOffscreen];
     }
