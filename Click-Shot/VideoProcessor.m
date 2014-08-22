@@ -14,6 +14,7 @@
 #define BYTES_PER_PIXEL 4
 #define LOCK_EXPOSURE_DELAY 1.5
 #define ACTION_SHOT_INTERVAL 0.2
+#define SEND_PREVIEW_IMAGE_INTERVAL 0.35
 
 @interface VideoProcessor ()
 
@@ -397,9 +398,43 @@
 	}
 }
 
+// used for getting preview frame for remote
+- (UIImage*) cgImageBackedImageWithCIImage:(CIImage*) ciImage {
+    
+    CIContext *context = [CIContext contextWithOptions:nil];
+    CGImageRef ref = [context createCGImage:ciImage fromRect:ciImage.extent];
+    UIImage* image = [UIImage imageWithCGImage:ref scale:[UIScreen mainScreen].scale orientation:UIImageOrientationRight];
+    CGImageRelease(ref);
+    
+    return image;
+}
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
+    // if connectedPeer, turn frame into uiimage and give uiimage to bluetooth to send
+    if ([_delegate connectedToPeer]) {
+        NSDate *now = [NSDate date];
+        NSTimeInterval secs = [now timeIntervalSinceDate:lastSentPreviewImageDate];
+        if (secs > SEND_PREVIEW_IMAGE_INTERVAL) {
+            
+            CVImageBufferRef cvImage = CMSampleBufferGetImageBuffer(sampleBuffer);
+            CIImage *ciImage = [[CIImage alloc] initWithCVPixelBuffer:cvImage];
+            
+            CIFilter *scaleFilter = [CIFilter filterWithName:@"CILanczosScaleTransform"];
+            [scaleFilter setValue:ciImage forKey:@"inputImage"];
+            if (IPAD) {
+                [scaleFilter setValue:[NSNumber numberWithFloat:0.25] forKey:@"inputScale"];
+            } else {
+                [scaleFilter setValue:[NSNumber numberWithFloat:0.4] forKey:@"inputScale"];
+            }
+            [scaleFilter setValue:[NSNumber numberWithFloat:1.0] forKey:@"inputAspectRatio"];
+            CIImage *finalImage = [scaleFilter valueForKey:@"outputImage"];
+            UIImage* cgBackedImage = [self cgImageBackedImageWithCIImage:finalImage];
+            
+            [_delegate sendPreviewImageToPeer:cgBackedImage];
+            lastSentPreviewImageDate = now;
+        }
+    }
     if (self.actionShooting && connection == videoConnection) {
         NSDate *now = [NSDate date];
         NSTimeInterval secs = [now timeIntervalSinceDate:lastActionShotDate];
@@ -639,7 +674,7 @@
     }
 
     lastActionShotDate = [NSDate date];
-    
+    lastSentPreviewImageDate = lastActionShotDate;
     if (self.previewView) [self.previewView setSession:captureSession];
     
 	return YES;

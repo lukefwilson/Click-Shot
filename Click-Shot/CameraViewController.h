@@ -85,8 +85,9 @@
 
 @property (nonatomic) float soundDuration;
 @property (nonatomic) CSStateCameraSound cameraSound;
+@property (nonatomic) CSStateCameraOrientation cameraOrientation;
 
-@property (nonatomic) NSData *lastReceivedRemoteState;
+@property (nonatomic) BOOL shouldSendChangesToRemote;
 
 
 @end

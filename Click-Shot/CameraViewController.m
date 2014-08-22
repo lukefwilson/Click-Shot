@@ -51,9 +51,7 @@
 #define kPhotoDimension (3.0/4)
 
 
-#define IPAD (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-#define IPHONE_4 ([UIScreen mainScreen].bounds.size.height == 480)
-#define IPHONE_5 ([UIScreen mainScreen].bounds.size.height == 568)
+
 
 
 // Interface here for private properties
@@ -174,6 +172,11 @@ static NSInteger const bluetoothOpenAnimStep = 3;
     // Do any additional setup after loading the view.
     __weak CameraViewController *weakSelf = self;
 
+    _shouldSendChangesToRemote = YES;
+    _exposureDevicePoint = CGPointMake(0.5, 0.5);
+    _focusDevicePoint = _exposureDevicePoint;
+    _cameraOrientation = CSStateCameraOrientationPortrait;
+    
     self.cameraMode = CSStateCameraModeStill;
     [self updateModeButtonsForMode:self.cameraMode];
     self.flashMode = CSStateFlashModeAuto;
@@ -380,7 +383,7 @@ static NSInteger const bluetoothOpenAnimStep = 3;
     }
     [self.focusPointView fixIfOffscreen];
     [self.exposePointView fixIfOffscreen];
-    NSLog(@"%@", NSStringFromCGRect(self.tappablePreviewRect));
+//    NSLog(@"%@", NSStringFromCGRect(self.tappablePreviewRect));
 }
 
 // used to fix iphone centering picture preview frame
@@ -502,9 +505,9 @@ static NSInteger const bluetoothOpenAnimStep = 3;
         [self.exposePointView fixIfOffscreen];
         CGPoint devicePoint =[self devicePointForScreenPoint:touchPoint];
         [self.videoProcessor focusWithMode:[self currentAVFocusMode] exposeWithMode:[self currentAVExposureMode] atDevicePoint:devicePoint monitorSubjectAreaChange:NO];
-        [self.bluetoothViewController updateRemoteWithCurrentCameraState];
         _focusDevicePoint = devicePoint;
         _exposureDevicePoint = devicePoint;
+        [self.bluetoothViewController updateRemoteWithCurrentCameraState];
         if (!self.autoFocusMode) {
             [UIView animateWithDuration:0.4 animations:^{
                 self.focusPointView.alpha = kDefaultAlpha;
@@ -1107,24 +1110,6 @@ static NSInteger const bluetoothOpenAnimStep = 3;
         }
         [self.view layoutIfNeeded];
     } completion:^(BOOL finished) {
-        if ([sender isEqual:self.flashModeAutoButton]) {
-            self.currentFlashButton = self.flashModeAutoButton;
-            self.flashMode = CSStateFlashModeAuto;
-        } else if ([sender isEqual:self.flashModeOnButton]) {
-            self.currentFlashButton = self.flashModeOnButton;
-            self.flashMode = CSStateFlashModeOn;
-        } else if ([sender isEqual:self.flashModeOffButton]) {
-            self.currentFlashButton = self.flashModeOffButton;
-            self.flashMode = CSStateFlashModeOff;
-        }
-        if (self.cameraMode == CSStateCameraModeVideo || self.cameraMode == CSStateCameraModeActionShot) {
-            [self.videoProcessor setTorchMode:[self currentAVTorchMode]];
-            [self.videoProcessor setFlashMode:AVCaptureFlashModeOff];
-        } else {
-            [self.videoProcessor setTorchMode:AVCaptureTorchModeOff];
-            [self.videoProcessor setFlashMode:[self currentAVFlashMode]];
-        }
-        [self.bluetoothViewController updateRemoteWithCurrentCameraState];
 
         [UIView animateWithDuration:0.5 delay:0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             _flashOnLabel.alpha = 0;
@@ -1133,6 +1118,26 @@ static NSInteger const bluetoothOpenAnimStep = 3;
         } completion:nil];
         
     }];
+    
+    if ([sender isEqual:self.flashModeAutoButton]) {
+        self.currentFlashButton = self.flashModeAutoButton;
+        self.flashMode = CSStateFlashModeAuto;
+    } else if ([sender isEqual:self.flashModeOnButton]) {
+        self.currentFlashButton = self.flashModeOnButton;
+        self.flashMode = CSStateFlashModeOn;
+    } else if ([sender isEqual:self.flashModeOffButton]) {
+        self.currentFlashButton = self.flashModeOffButton;
+        self.flashMode = CSStateFlashModeOff;
+    }
+    if (self.cameraMode == CSStateCameraModeVideo || self.cameraMode == CSStateCameraModeActionShot) {
+        [self.videoProcessor setTorchMode:[self currentAVTorchMode]];
+        [self.videoProcessor setFlashMode:AVCaptureFlashModeOff];
+    } else {
+        [self.videoProcessor setTorchMode:AVCaptureTorchModeOff];
+        [self.videoProcessor setFlashMode:[self currentAVFlashMode]];
+    }
+    [self.bluetoothViewController updateRemoteWithCurrentCameraState];
+    
     self.flashModeMenuIsOpen = NO;
 }
 
@@ -1485,24 +1490,26 @@ static NSInteger const bluetoothOpenAnimStep = 3;
         case UIDeviceOrientationPortrait:
             rotation = 0;
             [self.videoProcessor setReferenceOrientation:AVCaptureVideoOrientationPortrait];
-            
+            self.cameraOrientation = CSStateCameraOrientationPortrait;
             break;
         case UIDeviceOrientationPortraitUpsideDown:
             rotation = -M_PI;
             [self.videoProcessor setReferenceOrientation:AVCaptureVideoOrientationPortraitUpsideDown];
-            
+            self.cameraOrientation = CSStateCameraOrientationUpsideDownPortrait;
+
             break;
         case UIDeviceOrientationLandscapeLeft:
             rotation = M_PI_2;
             [self.videoProcessor setReferenceOrientation:AVCaptureVideoOrientationLandscapeRight];
-            
+            self.cameraOrientation = CSStateCameraOrientationUpsideDownLandscape;
             break;
         case UIDeviceOrientationLandscapeRight:
             rotation = -M_PI_2;
             [self.videoProcessor setReferenceOrientation:AVCaptureVideoOrientationLandscapeLeft];
-            
+            self.cameraOrientation = CSStateCameraOrientationLandscape;
             break;
     }
+    [self.bluetoothViewController updateRemoteWithCurrentCameraState]; // for orientation change
     
     CGAffineTransform transform = CGAffineTransformMakeRotation(rotation);
     [UIView animateWithDuration:0.4 delay:0.0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
@@ -1561,155 +1568,143 @@ static NSInteger const bluetoothOpenAnimStep = 3;
 }
 
 -(void)receivedMessageFromCameraRemoteApp:(NSData *)message {
-    self.lastReceivedRemoteState = message;
-    NSLog(@"Received from remote: %@", message);
-    CGFloat remoteFocusDevicePointX = 0;
-    CGFloat remoteFocusDevicePointY = 0;
-    CGFloat remoteExposureDevicePointX = 0;
-    CGFloat remoteExposureDevicePointY = 0;
-    for (int i = 0; i < message.length; i++) {
-        Byte byteBuffer;
-        [message getBytes:&byteBuffer range:NSMakeRange(i, 1)];
-        switch (i) {
-            case 0: // Camera Action
-                switch (byteBuffer) {
-                    case CSStateButtonActionNone:
-                        // do nothing
-                        break;
-                    case CSStateButtonActionTakePicture:
-//                        if (self.cameraButton.enabled) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _shouldSendChangesToRemote = NO;
+        NSLog(@"Received from remote: %@", message);
+        CGFloat remoteFocusDevicePointX = 0;
+        CGFloat remoteFocusDevicePointY = 0;
+        CGFloat remoteExposureDevicePointX = 0;
+        CGFloat remoteExposureDevicePointY = 0;
+        for (int i = 0; i < message.length; i++) {
+            Byte byteBuffer;
+            [message getBytes:&byteBuffer range:NSMakeRange(i, 1)];
+            switch (i) {
+                case 0: // Camera Action
+                    switch (byteBuffer) {
+                        case CSStateButtonActionNone:
+                            // do nothing
+                            break;
+                        case CSStateButtonActionTakePicture:
+                            //                        if (self.cameraButton.enabled) {
                             [self pressedCameraButton];
-//                        }
-                        break;
-                    case CSStateButtonActionStartActionShot:
-                        [self startActionShot];
-                        break;
-                    case CSStateButtonActionStopActionShot:
-                        [self stopActionShot];
-                        break;
-                    case CSStateButtonActionStartVideo:
-                        [self startRecording];
-                        break;
-                    case CSStateButtonActionStopVideo:
-                        [self stopRecording];
-                        break;
-                    default:
-                        break;
-                }
-//                NSLog(@"camera action: %i", byteBuffer);
-                break;
-            case 1: // Camera Mode
-                if (self.cameraMode != byteBuffer) {
-                    switch (byteBuffer) {
-                        case CSStateCameraModeStill:
-                            [self pressedPictureMode:nil];
+                            //                        }
                             break;
-                        case CSStateCameraModeActionShot:
-                            [self pressedRapidShotMode:nil];
+                        case CSStateButtonActionStartActionShot:
+                            [self startActionShot];
                             break;
-                        case CSStateCameraModeVideo:
-                            [self pressedVideoMode:nil];
+                        case CSStateButtonActionStopActionShot:
+                            [self stopActionShot];
+                            break;
+                        case CSStateButtonActionStartVideo:
+                            [self startRecording];
+                            break;
+                        case CSStateButtonActionStopVideo:
+                            [self stopRecording];
                             break;
                         default:
                             break;
                     }
-                }
-//                NSLog(@"camera mode: %i", byteBuffer);
-                break;
-            case 2: // Flash Mode
-                if (byteBuffer != self.flashMode) {
+                    break;
+                case 1: // Camera Mode
+                    if (self.cameraMode != byteBuffer) {
+                        switch (byteBuffer) {
+                            case CSStateCameraModeStill:
+                                [self pressedPictureMode:nil];
+                                break;
+                            case CSStateCameraModeActionShot:
+                                [self pressedRapidShotMode:nil];
+                                break;
+                            case CSStateCameraModeVideo:
+                                [self pressedVideoMode:nil];
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    break;
+                case 2: // Flash Mode
+                    if (byteBuffer != self.flashMode) {
+                        switch (byteBuffer) {
+                            case CSStateFlashModeAuto:
+                                [self closeFlashModeMenu:self.flashModeAutoButton];
+                                break;
+                            case CSStateFlashModeOn:
+                                [self closeFlashModeMenu:self.flashModeOnButton];
+                                break;
+                            case CSStateFlashModeOff:
+                                [self closeFlashModeMenu:self.flashModeOffButton];
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    break;
+                case 3: // Camera Position
                     switch (byteBuffer) {
-                        case CSStateFlashModeAuto:
-                            [self closeFlashModeMenu:self.flashModeAutoButton];
+                        case CSStateCameraPositionBack:
+                            if ([self.videoProcessor.captureDevice position] != AVCaptureDevicePositionBack) {
+                                [self.videoProcessor beginSwitchingCamera];
+                            }
                             break;
-                        case CSStateFlashModeOn:
-                            [self closeFlashModeMenu:self.flashModeOnButton];
-                            break;
-                        case CSStateFlashModeOff:
-                            [self closeFlashModeMenu:self.flashModeOffButton];
+                        case CSStateCameraPositionFront:
+                            if ([self.videoProcessor.captureDevice position] != AVCaptureDevicePositionFront) {
+                                [self.videoProcessor beginSwitchingCamera];
+                            }
                             break;
                         default:
                             break;
                     }
+                    break;
+                case 4: // Sound
+                    if (self.cameraSound != byteBuffer) {
+                        [self updateSoundPlayerWithSoundNumber:byteBuffer];
+                    }
+                    break;
+                case 5: // auto focus
+                    if (_autoFocusMode != byteBuffer) {
+                        _autoFocusMode = byteBuffer;
+                        [self updateMoveableFocusView];
+                    }
+                    break;
+                case 6: { // Focus X
+                    remoteFocusDevicePointX = ((CGFloat)byteBuffer)/100.0;
+                    break;
                 }
-//                NSLog(@"flash mode: %i", byteBuffer);
-
-                break;
-            case 3: // Camera Position
-                switch (byteBuffer) {
-                    case CSStateCameraPositionBack:
-                        if ([self.videoProcessor.captureDevice position] != AVCaptureDevicePositionBack) {
-                            [self.videoProcessor beginSwitchingCamera];
-                        }
-                        break;
-                    case CSStateCameraPositionFront:
-                        if ([self.videoProcessor.captureDevice position] != AVCaptureDevicePositionFront) {
-                            [self.videoProcessor beginSwitchingCamera];
-                        }
-                        break;
-                    default:
-                        break;
+                case 7: { // Focus Y
+                    remoteFocusDevicePointY = ((CGFloat)byteBuffer)/100.0;
+                    break;
                 }
-//                NSLog(@"camera position: %i", byteBuffer);
-
-                break;
-            case 4: // Sound
-                if (self.cameraSound != byteBuffer) {
-                    [self updateSoundPlayerWithSoundNumber:byteBuffer];
+                case 8: // auto expsure
+                    if (_autoExposureMode != byteBuffer) {
+                        _autoExposureMode = byteBuffer;
+                        [self updateMoveableExposureView];
+                    }
+                    break;
+                case 9: { // Exposure X
+                    remoteExposureDevicePointX = ((CGFloat)byteBuffer)/100.0;
+                    break;
                 }
-//                NSLog(@"sound number: %i", byteBuffer);
-                break;
-            case 5:
-                // auto focus
-                if (_autoFocusMode != byteBuffer) {
-                    _autoFocusMode = byteBuffer;
-                    [self updateMoveableFocusView];
+                case 10: { // Exposure Y
+                    remoteExposureDevicePointY = ((CGFloat)byteBuffer)/100.0;
+                    break;
                 }
-//                NSLog(@"auto focus: %i", _autoFocusMode);
-                break;
-            case 6: { // Focus X
-                remoteFocusDevicePointX = ((CGFloat)byteBuffer)/100.0;
-//                NSLog(@"focus X pos: %f", remoteFocusDevicePointX);
-                break;
+                default:
+                    break;
             }
-            case 7: { // Focus Y
-                remoteFocusDevicePointY = ((CGFloat)byteBuffer)/100.0;
-//                NSLog(@"focus Y pos: %f", remoteFocusDevicePointY);
-                break;
-            }
-            case 8:
-                // auto expsure
-                if (_autoExposureMode != byteBuffer) {
-                    _autoExposureMode = byteBuffer;
-                    [self updateMoveableExposureView];
-                }
-//                NSLog(@"auto exposure: %i", _autoExposureMode);
-                break;
-            case 9: { // Exposure X
-                remoteExposureDevicePointX = ((CGFloat)byteBuffer)/100.0;
-//                NSLog(@"exposure X pos: %f", remoteExposureDevicePointX);
-                break;
-            }
-            case 10: { // Exposure Y
-                remoteExposureDevicePointY = ((CGFloat)byteBuffer)/100.0;
-//                NSLog(@"exposure Y pos: %f", remoteExposureDevicePointY);
-                break;
-            }
-            default:
-                break;
         }
-    }
-    if (remoteFocusDevicePointY != _focusDevicePoint.y || remoteFocusDevicePointX != _focusDevicePoint.x) {
-        _focusDevicePoint = CGPointMake(remoteFocusDevicePointX, remoteFocusDevicePointY);
-        [self.videoProcessor focusAtPoint:_focusDevicePoint];
-        [self updateMoveableFocusViewForCurrentFocusPoint];
-    }
-    if (remoteExposureDevicePointY != _exposureDevicePoint.y || remoteExposureDevicePointX != _exposureDevicePoint.x) {
-        _exposureDevicePoint = CGPointMake(remoteExposureDevicePointX, remoteExposureDevicePointY);
-        [self.videoProcessor exposeAtPoint:_exposureDevicePoint];
-        [self updateMoveableExposureViewForCurrentExposurePoint];
-    }
+        if (remoteFocusDevicePointY != _focusDevicePoint.y || remoteFocusDevicePointX != _focusDevicePoint.x) {
+            _focusDevicePoint = CGPointMake(remoteFocusDevicePointX, remoteFocusDevicePointY);
+            [self.videoProcessor focusAtPoint:_focusDevicePoint];
+            [self updateMoveableFocusViewForCurrentFocusPoint];
+        }
+        if (remoteExposureDevicePointY != _exposureDevicePoint.y || remoteExposureDevicePointX != _exposureDevicePoint.x) {
+            _exposureDevicePoint = CGPointMake(remoteExposureDevicePointX, remoteExposureDevicePointY);
+            [self.videoProcessor exposeAtPoint:_exposureDevicePoint];
+            [self updateMoveableExposureViewForCurrentExposurePoint];
+        }
+        _shouldSendChangesToRemote = YES;
 
+    });
 
 }
 
@@ -1724,16 +1719,15 @@ static NSInteger const bluetoothOpenAnimStep = 3;
     if (currentCameraPosition == AVCaptureDevicePositionFront) {
         cameraPosition = CSStateCameraPositionFront;
     }
-    const Byte messageBytes[12] = { CSStateButtonActionNone , self.cameraMode, self.flashMode, cameraPosition, self.cameraSound, self.autoFocusMode,focusX, focusY, self.autoExposureMode, exposureX, exposureY, self.currentDeviceHasFlash};
+    const Byte messageBytes[13] = { CSStateButtonActionNone , self.cameraMode, self.flashMode, cameraPosition, self.cameraSound, self.autoFocusMode,focusX, focusY, self.autoExposureMode, exposureX, exposureY, self.currentDeviceHasFlash, self.cameraOrientation};
     
     
     NSData *currentState = [NSData dataWithBytes:messageBytes length:sizeof(messageBytes)];
     
-    if ([[currentState subdataWithRange:NSMakeRange(0, 11)] isEqualToData:self.lastReceivedRemoteState]) {
+    if (!_shouldSendChangesToRemote) {
         const Byte empty[1] = {0x00};
         return [NSData dataWithBytes:empty length:1];
     } else {
-        self.lastReceivedRemoteState = nil;
         return currentState;
     }
 
@@ -2326,6 +2320,16 @@ static NSInteger const bluetoothOpenAnimStep = 3;
     }
     [self.bluetoothViewController updateRemoteWithCurrentCameraState];
 }
+
+- (BOOL)connectedToPeer {
+    return self.bluetoothViewController.fullyConnectedToPeer;
+}
+
+- (void)sendPreviewImageToPeer:(UIImage *)image {
+    NSData *compressedImageData = UIImageJPEGRepresentation(image, 0.0);
+    [self.bluetoothViewController sendImageDataToRemote:compressedImageData];
+}
+
 
 -(void)updateGalleryItems {
     //TODO: dont do this on main queue?

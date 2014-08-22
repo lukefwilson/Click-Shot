@@ -9,34 +9,41 @@
 #import <UIKit/UIKit.h>
 #import "ODRefreshControl.h"
 @import CoreBluetooth;
+@import MultipeerConnectivity;
 
 
 @protocol LWBluetoothButtonDelegate;
 
-@interface LWBluetoothTableViewController : UITableViewController <CBCentralManagerDelegate, CBPeripheralDelegate>
+@interface LWBluetoothTableViewController : UITableViewController <CBCentralManagerDelegate, CBPeripheralDelegate, MCNearbyServiceBrowserDelegate, MCSessionDelegate>
 
 @property (nonatomic, weak) id <LWBluetoothButtonDelegate> delegate;
 @property (strong, nonatomic) CBCentralManager *centralManager;
 @property (strong, nonatomic) CBPeripheral *connectedPeripheral;
+@property (strong, nonatomic) MCPeerID *connectedPeer;
+@property (nonatomic) BOOL fullyConnectedToPeer;
 @property (strong, nonatomic) NSMutableArray *discoveredPeripherals;
+@property (strong, nonatomic) NSMutableArray *discoveredPeers;
 @property (strong, nonatomic) NSIndexPath *selectedIndexPath;
 @property (strong, nonatomic) NSTimer *scanTimer;
+@property (strong, nonatomic) NSTimer *hideRefreshTimer;
 @property (strong, nonatomic) ODRefreshControl *betterRefreshControl;
+
 
 -(void)refreshBluetoothDevices;
 -(void)cleanupBluetooth;
 -(void)updateRemoteWithCurrentCameraState;
+-(void)sendImageDataToRemote:(NSData *)imageData;
 
 @end
 
 
 @protocol LWBluetoothButtonDelegate <NSObject>
 
-@optional
 -(void)bluetoothButtonPressed;
 -(void)connectedToBluetoothDevice;
 -(void)disconnectedFromBluetoothDevice;
 -(void)receivedMessageFromCameraRemoteApp:(NSData *)message;
 -(NSData *)currentStateData;
+
 @end
 

@@ -41,6 +41,7 @@
 	BOOL recording;
     int actionShotsTaken;
     NSDate *lastActionShotDate;
+    NSDate *lastSentPreviewImageDate;
 @public
     AVCaptureSession *captureSession;
 }
@@ -90,7 +91,6 @@
 - (CGPoint)startFocusMode:(AVCaptureFocusMode)focusMode;
 - (void)exposeAtPoint:(CGPoint)devicePoint;
 - (CGPoint)startExposeMode:(AVCaptureExposureMode)exposureMode;
-- (BOOL)currentDeviceSupportsFlash;
 
 -(void)startActionShot;
 -(void)stopActionShot;
@@ -116,5 +116,6 @@
 - (void)willSwitchCamera:(UIImage *)image;
 - (void)readyToSwitchToCurrentOutputQuality:(UIImage *)image;
 - (void)switchedToCameraDevice:(AVCaptureDevice *)device;
-
+- (BOOL)connectedToPeer;
+- (void)sendPreviewImageToPeer:(UIImage *)image;
 @end

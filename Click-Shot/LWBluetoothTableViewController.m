@@ -21,7 +21,9 @@
 @interface LWBluetoothTableViewController ()
 
 @property (nonatomic) NSInteger failCount;
-
+@property (nonatomic) MCPeerID *myPeerID;
+@property (nonatomic) MCSession *mySession;
+@property (nonatomic) MCNearbyServiceBrowser *browser;
 @end
 
 @implementation LWBluetoothTableViewController
@@ -41,11 +43,11 @@
     
      self.clearsSelectionOnViewWillAppear = NO;
     _centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
-    self.discoveredPeripherals = [NSMutableArray array];
-    if (_centralManager.state == CBCentralManagerStatePoweredOn) [self startScanningForButton];
+    _discoveredPeripherals = [NSMutableArray array];
+    _discoveredPeers = [NSMutableArray array];
 
     _failCount = 0;
-    
+    _fullyConnectedToPeer = NO;
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, kTableHeaderHeight)];
     headerView.backgroundColor = [UIColor clearColor];
     
@@ -64,15 +66,22 @@
     
     self.tableView.tableHeaderView = headerView;
 
-//    self.refreshControl = [[UIRefreshControl alloc] init];
-//    self.refreshControl.tintColor = [UIColor whiteColor];
-//    [self.refreshControl addTarget:self action:@selector(refreshBluetoothDevices) forControlEvents:UIControlEventValueChanged];
-//    UIView *refreshPositionView = [self.refreshControl.subviews objectAtIndex:0];
-//    [refreshPositionView setFrame:CGRectMake(0, 10, refreshPositionView.frame.size.width, refreshPositionView.frame.size.height)];
     self.betterRefreshControl = [[ODRefreshControl alloc] initInScrollView:self.tableView];
     [self.betterRefreshControl addTarget:self action:@selector(refreshBluetoothDevices) forControlEvents:UIControlEventValueChanged];
     [self.betterRefreshControl setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];
     [self.betterRefreshControl setTintColor:[UIColor colorWithRed:0.651 green:0.929 blue:1.000 alpha:1.000]];
+    
+    //MPC
+    _myPeerID = [[MCPeerID alloc] initWithDisplayName:@"Click-Shot"];
+    _mySession = [[MCSession alloc] initWithPeer:_myPeerID];
+    [_mySession setDelegate:self];
+    _browser = [[MCNearbyServiceBrowser alloc] initWithPeer:_myPeerID serviceType:MPC_SERVICE_TYPE];
+    [_browser setDelegate:self];
+    [_browser startBrowsingForPeers];
+    NSLog(@"start MCP Scanning");
+    // BTLE Central starts scanning once turned on (done in callback changeState)
+    
+    self.scanTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(timedStopScanning:) userInfo:nil repeats:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -82,23 +91,123 @@
 }
 
 -(void)refreshBluetoothDevices {
-    self.discoveredPeripherals = [NSMutableArray array];
-    if (_connectedPeripheral) {
-        [self.discoveredPeripherals addObject:_connectedPeripheral];
-        self.selectedIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    }
+
     [self startScanningForButton];
+    [_browser startBrowsingForPeers];
     if (self.scanTimer) [self.scanTimer invalidate];
-    self.scanTimer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(timedStopScanning:) userInfo:nil repeats:NO];
+    self.scanTimer = [NSTimer scheduledTimerWithTimeInterval:40 target:self selector:@selector(timedStopScanning:) userInfo:nil repeats:YES];
+    NSLog(@"started All scanning");
+
+    self.hideRefreshTimer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(timedHideRefresh:) userInfo:nil repeats:NO];
 }
 
--(void)timedStopScanning:(NSTimer *)timer {
-    NSLog(@"Scanning stopped");
-    [self.centralManager stopScan];
-//    [self.refreshControl endRefreshing];
+-(void)timedHideRefresh:(NSTimer *)timer {
     [self.betterRefreshControl endRefreshing];
     [timer invalidate];
     [self.tableView reloadData];
+}
+
+-(void)timedStopScanning:(NSTimer *)timer {
+    NSLog(@"All Scanning stopped");
+    [self.centralManager stopScan];
+    [_browser stopBrowsingForPeers];
+    [timer invalidate];
+    self.scanTimer = nil;
+    [self.tableView reloadData];
+}
+
+#pragma mark - MPC Delegates
+
+-(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info {
+    NSLog(@"found peer %@", peerID);
+    if (![_discoveredPeers containsObject:peerID]) {
+        [_discoveredPeers addObject:peerID];
+        [self.tableView reloadData];
+    }
+}
+
+-(void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID {
+    NSLog(@"lost peer %@", peerID);
+    [_discoveredPeers removeObject:peerID];
+    [self.tableView reloadData];
+}
+
+-(void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state {
+    switch (state) {
+        case MCSessionStateConnected:
+            NSLog(@"Connected to peer: %@", peerID);
+            if ([peerID isEqual:_connectedPeer]) {
+                [self setSelectedCell:[self.tableView cellForRowAtIndexPath:_selectedIndexPath] atIndexPath:_selectedIndexPath isFullyConnected:YES];
+                _fullyConnectedToPeer = YES;
+                [_delegate connectedToBluetoothDevice];
+                [self updateRemoteWithCurrentCameraState];
+            }
+            break;
+        case MCSessionStateConnecting:
+            NSLog(@"connecting to peer: %@", peerID);
+            break;
+        case MCSessionStateNotConnected:
+            NSLog(@"NOT Connected to peer: %@", peerID);
+            if ([peerID isEqual:_connectedPeer]) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UITableViewCell *prevCell = [self.tableView cellForRowAtIndexPath:_selectedIndexPath];
+                    [prevCell setSelected:NO animated:YES];
+                    prevCell.accessoryType = UITableViewCellAccessoryNone;
+                    prevCell.accessoryView = nil;
+                    _connectedPeer = nil;
+                    _fullyConnectedToPeer = NO;
+                    _selectedIndexPath = nil;
+                    [_delegate disconnectedFromBluetoothDevice];
+                });
+            }
+            break;
+    }
+}
+
+-(void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress {
+    
+}
+
+-(void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error {
+    
+}
+
+-(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID {
+    if ([peerID isEqual:_connectedPeer]) {
+        [_delegate receivedMessageFromCameraRemoteApp:data];
+    }
+}
+
+-(void)session:(MCSession *)session didReceiveStream:(NSInputStream *)stream withName:(NSString *)streamName fromPeer:(MCPeerID *)peerID {
+    
+}
+
+#pragma mark - MPC Sending Data
+
+
+-(void)updateRemoteWithCurrentCameraState {
+    if (_connectedPeer && _fullyConnectedToPeer) {
+        NSData *currentStateData = [_delegate currentStateData];
+        if ( currentStateData.length != 1) {
+            NSError *error = nil;
+            if (![_mySession sendData:currentStateData toPeers:@[_connectedPeer] withMode:MCSessionSendDataReliable error:&error]) {
+                NSLog(@"failed sending data: %@\n with error: %@", currentStateData, error);
+            } else {
+                NSLog(@"Sent to remote: %@", currentStateData);
+            }
+        }
+    }
+}
+
+-(void)sendImageDataToRemote:(NSData *)imageData {
+    if (_connectedPeer && _fullyConnectedToPeer) {
+            NSError *error = nil;
+            if (![_mySession sendData:imageData toPeers:@[_connectedPeer] withMode:MCSessionSendDataUnreliable error:&error]) {
+                NSLog(@"failed sending image with error: %@", error);
+            } else {
+                NSLog(@"Sent preview image to remote with size: %lu", (unsigned long)imageData.length);
+            }
+    }
 }
 
 #pragma mark - Table view data source
@@ -106,14 +215,17 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    NSLog(@"BT table count: %i", [self.discoveredPeripherals count]);
-    return [self.discoveredPeripherals count];
+    if (section == 0) {
+        return [_discoveredPeers count];
+    } else {
+        return [self.discoveredPeripherals count];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -122,12 +234,9 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
     }
-    CBPeripheral *peripheral = [self.discoveredPeripherals objectAtIndex:indexPath.row];
-
+    
     cell.backgroundColor = [UIColor clearColor];
-
-    cell.textLabel.text = peripheral.name;
-    cell.textLabel.textColor = [UIColor colorWithRed:0.639 green:0.910 blue:0.980 alpha:1.000];
+    
     cell.textLabel.backgroundColor = [UIColor clearColor];
     
     UIImageView *divider = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tableViewDivider.png"]];
@@ -140,12 +249,32 @@
     
     cell.tintColor = [UIColor whiteColor]; // for the checkmark when selected
     
-    if ([peripheral isEqual:_connectedPeripheral]) {
-        _selectedIndexPath = indexPath;
-        [self setSelectedCell:cell atIndexPath:indexPath isFullyConnected:YES];
-        [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+    if (indexPath.section == 0) {
+        MCPeerID *peerID = [self.discoveredPeers objectAtIndex:indexPath.row];
+        cell.textLabel.textColor = [UIColor colorWithRed:0.747 green:0.636 blue:0.999 alpha:1.000];
+        cell.textLabel.text = peerID.displayName;
+        
+        if ([_mySession.connectedPeers containsObject:peerID]) {
+            _selectedIndexPath = indexPath;
+            [self setSelectedCell:cell atIndexPath:indexPath isFullyConnected:YES];
+            [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
+        
     } else {
-        cell.accessoryType = UITableViewCellAccessoryNone;
+        CBPeripheral *peripheral = [self.discoveredPeripherals objectAtIndex:indexPath.row];
+        
+        cell.textLabel.text = peripheral.name;
+        cell.textLabel.textColor = [UIColor colorWithRed:0.639 green:0.910 blue:0.980 alpha:1.000];
+        
+        if ([peripheral isEqual:_connectedPeripheral]) {
+            _selectedIndexPath = indexPath;
+            [self setSelectedCell:cell atIndexPath:indexPath isFullyConnected:YES];
+            [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
     }
     
     return cell;
@@ -158,36 +287,93 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row != _selectedIndexPath.row || !_selectedIndexPath || !_connectedPeripheral) {
-        if (_connectedPeripheral) {
-            [self.centralManager cancelPeripheralConnection:_connectedPeripheral];
+    if (indexPath.section == 0) {
+        MCPeerID *selectedPeerID = [self.discoveredPeers objectAtIndex:indexPath.row];
+        if ([selectedPeerID isEqual:_connectedPeer]) {
             UITableViewCell *prevCell = [self.tableView cellForRowAtIndexPath:_selectedIndexPath];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [prevCell setSelected:NO animated:YES];
+                prevCell.accessoryType = UITableViewCellAccessoryNone;
+                prevCell.accessoryView = nil;
+                [_delegate disconnectedFromBluetoothDevice];
+            });
+            _connectedPeer = nil;
+            _fullyConnectedToPeer = NO;
+            _selectedIndexPath = nil;
+        } else {
+            if (![[_mySession connectedPeers] containsObject:selectedPeerID]) {
+                NSLog(@"inviting peer: %@", selectedPeerID);
+                [_browser invitePeer:selectedPeerID toSession:_mySession withContext:nil timeout:20.0];
+                UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+                _fullyConnectedToPeer = NO;
+                [self setSelectedCell:cell atIndexPath:indexPath isFullyConnected:NO];
+            } else {
+                UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+                [self setSelectedCell:cell atIndexPath:indexPath isFullyConnected:YES];
+                _fullyConnectedToPeer = YES;
+            }
+            _connectedPeer = selectedPeerID;
+            if (_connectedPeripheral) {
+                [_centralManager cancelPeripheralConnection:_connectedPeripheral];
+                _connectedPeripheral = nil;
+            }
+        }
+    } else {
+        CBPeripheral *selectedPeripheral = [self.discoveredPeripherals objectAtIndex:indexPath.row];
+        
+        UITableViewCell *prevCell = [self.tableView cellForRowAtIndexPath:_selectedIndexPath];
+        dispatch_async(dispatch_get_main_queue(), ^{
             [prevCell setSelected:NO animated:YES];
             prevCell.accessoryType = UITableViewCellAccessoryNone;
+            prevCell.accessoryView = nil;
+        });
+        
+        
+        if ([_connectedPeripheral isEqual:selectedPeripheral]) {
+            [self.centralManager cancelPeripheralConnection:_connectedPeripheral];
             _connectedPeripheral = nil;
+            _selectedIndexPath = nil;
+            [_delegate disconnectedFromBluetoothDevice];
+
+        } else {
+            if (_connectedPeripheral) {
+                [self.centralManager cancelPeripheralConnection:_connectedPeripheral];
+            }
+            [_centralManager connectPeripheral:selectedPeripheral options:nil];
+            _connectedPeer = nil;
+            _fullyConnectedToPeer = NO;
+            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+            [self setSelectedCell:cell atIndexPath:indexPath isFullyConnected:NO];
         }
-        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-        [self setSelectedCell:cell atIndexPath:indexPath isFullyConnected:NO];
     }
 }
 
 
--(void)setSelectedCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath isFullyConnected:(BOOL)connected {
-    [cell setSelected:YES animated:YES];
-    if (connected) {
-        UIActivityIndicatorView *act = (UIActivityIndicatorView *)cell.accessoryView;
-        [act stopAnimating];
-        cell.accessoryView = nil;
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-    } else { // in progress
-        UIActivityIndicatorView *act = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-        act.hidesWhenStopped = YES;
-        [act startAnimating];
-        cell.accessoryView = act;
-        CBPeripheral *peripheral = [self.discoveredPeripherals objectAtIndex:indexPath.row];
-        [_centralManager connectPeripheral:peripheral options:nil];
+-(void)setSelectedCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath isFullyConnected:(BOOL)fullyConnected {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        UITableViewCell *prevCell = [self.tableView cellForRowAtIndexPath:_selectedIndexPath];
+        if (![prevCell isEqual:cell]) {
+            [prevCell setSelected:NO animated:YES];
+            prevCell.accessoryType = UITableViewCellAccessoryNone;
+            prevCell.accessoryView = nil;
+        }
+        [cell setSelected:YES animated:YES];
+        
         _selectedIndexPath = indexPath;
-    }
+        
+        if (fullyConnected) {
+            UIActivityIndicatorView *act = (UIActivityIndicatorView *)cell.accessoryView;
+            [act stopAnimating];
+            cell.accessoryView = nil;
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        } else { // in progress
+            UIActivityIndicatorView *act = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+            act.hidesWhenStopped = YES;
+            [act startAnimating];
+            cell.accessoryView = act;
+        }
+    });
 }
 
 #pragma mark -
@@ -217,15 +403,11 @@
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI {
     
     NSLog(@"Discovered %@ at %@", peripheral.name, RSSI);
-    NSLog(@"%@", advertisementData);
     
-    NSInteger index = [self.discoveredPeripherals indexOfObject:peripheral];
-    if (index == NSNotFound) {
+    if (![_discoveredPeripherals containsObject:peripheral]) {
         [self.discoveredPeripherals addObject:peripheral];
-    } else {
-        [self.discoveredPeripherals replaceObjectAtIndex:index withObject:peripheral];
+        [self.tableView reloadData];
     }
-    [self.tableView reloadData];
 
 //    if (!_connectedPeripheral && ([peripheral.name rangeOfString:@"V.BTTN"].location != NSNotFound || [peripheral.name rangeOfString:@"V.ALRT"].location != NSNotFound)) {
 //        // Auto connect to first V.ALRT or V.BTTN
@@ -241,12 +423,14 @@
     NSLog(@"Failed to connect to %@", peripheral.name);
     CBPeripheral *selectedPeripheral = [self.discoveredPeripherals objectAtIndex:self.selectedIndexPath.row];
     if ([selectedPeripheral isEqual:peripheral]) {
-        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:_selectedIndexPath];
-        UIActivityIndicatorView *act = (UIActivityIndicatorView *)cell.accessoryView;
-        [act stopAnimating];
-        cell.accessoryView = nil;
-        [cell setSelected:NO];
-        cell.accessoryType = UITableViewCellAccessoryNone;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:_selectedIndexPath];
+            UIActivityIndicatorView *act = (UIActivityIndicatorView *)cell.accessoryView;
+            [act stopAnimating];
+            cell.accessoryView = nil;
+            [cell setSelected:NO animated:YES];
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        });
 
         //TODO: display HUD with error
     }
@@ -255,8 +439,6 @@
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
     NSLog(@"Connected to %@", peripheral.name);
-    [_centralManager stopScan];
-    NSLog(@"So now I've stopped scanning");
     
     CBPeripheral *selectedPeripheral = [self.discoveredPeripherals objectAtIndex:self.selectedIndexPath.row];
     if ([selectedPeripheral isEqual:peripheral]) {
@@ -321,40 +503,40 @@
     }
 }
 
--(void)updateRemoteWithCurrentCameraState {
-    for (CBService *service in _connectedPeripheral.services) {
-        if ([service.UUID.UUIDString isEqualToString:REMOTE_APP_TRANSFER_SERVICE_UUID]) {
-            for (CBCharacteristic *characteristic in service.characteristics) {
-                if ([characteristic.UUID.UUIDString isEqualToString:CAMERA_TO_REMOTE_CHARACTERISTIC_UUID]) {
-                    NSData *currentStateData = [_delegate currentStateData];
-                    if (currentStateData.length != 1) {
-                        NSLog(@"Sent to remote: %@", currentStateData);
-                        [_connectedPeripheral writeValue:currentStateData forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
-                    }
-                }
-            }
-        }
-    }
-}
+//-(void)updateRemoteWithCurrentCameraState {
+//    for (CBService *service in _connectedPeripheral.services) {
+//        if ([service.UUID.UUIDString isEqualToString:REMOTE_APP_TRANSFER_SERVICE_UUID]) {
+//            for (CBCharacteristic *characteristic in service.characteristics) {
+//                if ([characteristic.UUID.UUIDString isEqualToString:CAMERA_TO_REMOTE_CHARACTERISTIC_UUID]) {
+//                    NSData *currentStateData = [_delegate currentStateData];
+//                    if (currentStateData.length != 1) {
+//                        NSLog(@"Sent to remote: %@", currentStateData);
+//                        [_connectedPeripheral writeValue:currentStateData forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 
--(void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
-    //TODO: used to notify the camera when the remote successfully received the info
-    if (error) {
-        _failCount++;
-        NSLog(@"FAIL: peripheral didn't receive camera message: %@ with error: %@", characteristic.value, error);
-        if (_failCount <= 3) {
-            [self updateRemoteWithCurrentCameraState];
-        } else {
-            NSLog(@"FAILED 3 times in a row, giving up");
-        }
-    } else {
-        _failCount = 0;
-//        NSLog(@"SUCCESS: peripheral did receive camera message: %@", characteristic.value);
-    }
-    
-}
+//-(void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+//    //TODO: used to notify the camera when the remote successfully received the info
+//    if (error) {
+//        _failCount++;
+//        NSLog(@"FAIL: peripheral didn't receive camera message: %@ with error: %@", characteristic.value, error);
+//        if (_failCount <= 3) {
+//            [self updateRemoteWithCurrentCameraState];
+//        } else {
+//            NSLog(@"FAILED 3 times in a row, giving up");
+//        }
+//    } else {
+//        _failCount = 0;
+////        NSLog(@"SUCCESS: peripheral did receive camera message: %@", characteristic.value);
+//    }
+//    
+//}
 
-//TODO: info from remote to camera
+//TODO: info from BTLE device to camera
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     if (error) {
         NSLog(@"Error didUpdateValueForCharacteristic:");
@@ -366,9 +548,9 @@
         if ([characteristic.value isEqualToData:buttonDownData]) {
             [_delegate bluetoothButtonPressed];
         }
-    } else { // Camera Remote App
+    }/* else { // Camera Remote App
         [_delegate receivedMessageFromCameraRemoteApp:characteristic.value];
-    }
+    }*/
     
 //    NSLog(@"peripheral did update characteristic value: %@", characteristic.value);
 }
@@ -399,7 +581,7 @@
 
 -(void)startScanningForButton {
     [_centralManager scanForPeripheralsWithServices:nil options:@{ CBCentralManagerScanOptionAllowDuplicatesKey : @NO }];
-    NSLog(@"started scanning");
+    NSLog(@"started BTLE scanning");
 }
 
 - (void)cleanupBluetooth {
