@@ -12,11 +12,12 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CameraPreviewView.h"
 #import "MoveableImageView.h"
-#import "GPUImage.h"
+//#import "GPUImage.h"
 #import "MHGallery.h"
 #import "LWTutorialViewController.h"
 #import "DragAnimationView.h"
-
+#import "UIImage+Overlay.h"
+#import "UIImage+StackBlur.h"
 
 
 //#define CSStateCameraModeStill 0
@@ -78,6 +79,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *flashOnLabel;
 @property (weak, nonatomic) IBOutlet UILabel *flashOffLabel;
 @property (weak, nonatomic) IBOutlet UILabel *flashAutoLabel;
+@property (weak, nonatomic) IBOutlet UIView *UITransparentBG;
+
 
 @property (nonatomic) CGFloat distanceToCenterPhotoPreview;
 @property (weak, nonatomic) IBOutlet UIView *blackBackground;
@@ -93,8 +96,7 @@
 
 @property (nonatomic, strong) UIButton *currentFlashButton;
 @property (nonatomic, strong) UIView *modeSelectorBar;
-
-
+@property (nonatomic, strong) CAShapeLayer *modeSelector;
 
 - (IBAction)pressedCameraRoll:(id)sender;
 - (IBAction)pressedSettings:(id)sender;
@@ -139,11 +141,15 @@
 @property (nonatomic) NSDate *recordingStart;
 @property (nonatomic) NSTimer *recordingTimer;
 
-@property (nonatomic) GPUImageiOSBlurFilter *blurFilter;
 @property (nonatomic) NSMutableArray *galleryItems;
 
 @property (nonatomic) BOOL micPermission;
 @property (nonatomic) BOOL assetsPermission;
+
+@property (nonatomic) BOOL isReadyToSendNextPreviewImage;
+
+@property (nonatomic) BOOL shouldSendPreviewImages;
+@property (nonatomic) BOOL shouldSendTakenPictures;
 
 
 @end
@@ -156,25 +162,59 @@ static NSInteger const settingsClosedAnimStep = 0;
 static NSInteger const settingsOpenAnimStep = 1;
 static NSInteger const soundsOpenAnimStep = 2;
 static NSInteger const bluetoothOpenAnimStep = 3;
+static UIColor *_highlightColor;
+
++(UIColor *)getHighlightColor {
+    return _highlightColor;
+}
+
+-(void)customInit {
+    _highlightColor = [UIColor colorWithRed:0.239 green:0.835 blue:0.984 alpha:1.000];
+}
+
+-(id)init {
+    self = [super init];
+    if (self) {
+        [self customInit];
+    }
+    return self;
+}
+
+-(id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [self customInit];
+    }
+    return self;
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        [self customInit];
     }
     return self;
 }
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     __weak CameraViewController *weakSelf = self;
-
+    _isReadyToSendNextPreviewImage = YES;
+    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+    
     _shouldSendChangesToRemote = YES;
+    _shouldSendPreviewImages = YES;
+    _shouldSendTakenPictures = YES;
+    
     _exposureDevicePoint = CGPointMake(0.5, 0.5);
     _focusDevicePoint = _exposureDevicePoint;
+    _focusedAtImagePoint = _exposureDevicePoint;
+    _exposededAtImagePoint = _exposureDevicePoint;
+    
     _cameraOrientation = CSStateCameraOrientationPortrait;
     
     self.cameraMode = CSStateCameraModeStill;
@@ -217,16 +257,19 @@ static NSInteger const bluetoothOpenAnimStep = 3;
     self.exposureButton.alpha = kDefaultAlpha;
     self.swithCameraButton.alpha = kDefaultAlpha;
     
-    self.modeSelectorBar = [[UIView alloc] initWithFrame:CGRectMake(self.pictureModeButton.frame.origin.x, self.pictureModeButton.frame.origin.y+self.pictureModeButton.frame.size.height+3, self.pictureModeButton.frame.size.width, 7)];
-    self.modeSelectorBar.backgroundColor = [UIColor whiteColor];
+    self.modeSelectorBar = [[UIView alloc] initWithFrame:self.pictureModeButton.frame];
+    self.modeSelectorBar.backgroundColor = [UIColor clearColor];
+    _modeSelector = [CAShapeLayer layer];
+    _modeSelector.lineWidth = 3;
+    _modeSelector.fillColor   = [UIColor clearColor].CGColor;
+    _modeSelector.bounds = CGRectMake(0, 0, 32, 28);
+    _modeSelector.path = [UIBezierPath bezierPathWithRect:_modeSelector.bounds].CGPath;
+    _modeSelector.anchorPoint = CGPointMake(0.5, 0.5);
+    _modeSelector.strokeColor = [UIColor whiteColor].CGColor;
+    _modeSelector.position = CGPointMake(self.pictureModeButton.frame.size.width/2, self.pictureModeButton.frame.size.height/2);
+    [self.modeSelectorBar.layer addSublayer:_modeSelector];
+    
     [self.cameraUIView addSubview:self.modeSelectorBar];
-//    self.pictureCameraButtonImage = [UIImage imageNamed:@"inner.png"];
-//    self.rapidCameraButtonImage = [UIImage imageNamed:@"rapidInner.png"];
-//    self.videoCameraButtonImage = [UIImage imageNamed:@"redInner.png"];
-//    self.pictureCameraButtonImageHighlighted = [UIImage imageNamed:@"innerHighlighted.png"];
-//    self.rapidCameraButtonImageHighlighted = [UIImage imageNamed:@"rapidInnerHighlighted.png"];
-//    self.videoCameraButtonImageHighlighted = [UIImage imageNamed:@"redInnerHighlighted.png"];
-//    self.darkCameraButtonBG = [UIImage imageNamed:@"cameraButtonDarkBG"];
 
     self.videoProcessor = [[VideoProcessor alloc] init];
     self.videoProcessor.delegate = self;
@@ -234,14 +277,10 @@ static NSInteger const bluetoothOpenAnimStep = 3;
     [self.videoProcessor setupAndStartCaptureSession];
     [self.videoProcessor setFlashMode:[self currentAVFlashMode]];
 
-    self.cameraRollImage = [[UIImageView alloc] initWithFrame:CGRectMake(3, 3, self.cameraRollButton.frame.size.width-6, self.cameraRollButton.frame.size.height-6)];
+    self.cameraRollImage = [[UIImageView alloc] initWithFrame:CGRectMake(9, 9, self.cameraRollButton.frame.size.width-18, self.cameraRollButton.frame.size.height-18)];
     self.cameraRollImage.contentMode = UIViewContentModeScaleAspectFill;
     self.cameraRollImage.clipsToBounds = YES;
     [self.cameraRollButton addSubview:self.cameraRollImage];
-    
-    self.blurFilter = [[GPUImageiOSBlurFilter alloc] init];
-    self.blurFilter.blurRadiusInPixels = 10.0f;
-    self.blurFilter.saturation = 0.6;
     
     self.distanceToCenterPhotoPreview = 0; // only iPhone 5 has non 0 here
     if (IPHONE_5) {
@@ -266,7 +305,83 @@ static NSInteger const bluetoothOpenAnimStep = 3;
         [self.cameraUIView addSubview:_previewOverlayDragView];
         [self.cameraUIView addSubview:_settingsButtonDragView];
     }
+    
+    [self updateUIWithHighlightColor:_highlightColor];
+
 }
+
+
+-(void)updateUIWithHighlightColor:(UIColor *)highlightColor {
+    UIColor *white = [UIColor whiteColor];
+    UIColor *mediumGray = [UIColor colorWithWhite:0.530 alpha:1.000];
+    UIColor *lightGray = [UIColor colorWithWhite:0.642 alpha:1.000];
+
+    [self.swithCameraButton setImage:[self.swithCameraButton.imageView.image imageWithColor:highlightColor] forState:UIControlStateNormal];
+    
+    [self.flashModeOnButton setImage:[self.flashModeOnButton.imageView.image imageWithColor:white] forState:UIControlStateNormal];
+    [self.flashModeOffButton setImage:[self.flashModeOffButton.imageView.image imageWithColor:mediumGray] forState:UIControlStateNormal];
+    [self.flashModeAutoButton setImage:[self.flashModeAutoButton.imageView.image imageWithColor:highlightColor] forState:UIControlStateNormal];
+    
+    [self.flashModeOnButton setImage:[self.flashModeOnButton.imageView.image imageWithColor:mediumGray] forState:UIControlStateDisabled];
+    [self.flashModeOffButton setImage:[self.flashModeOffButton.imageView.image imageWithColor:mediumGray] forState:UIControlStateDisabled];
+    [self.flashModeAutoButton setImage:[self.flashModeAutoButton.imageView.image imageWithColor:mediumGray] forState:UIControlStateDisabled];
+    
+    [self.cameraRollButton setImage:[self.cameraRollButton.imageView.image imageWithColor:highlightColor] forState:UIControlStateNormal];
+    [self.settingsButton setImage:[self.settingsButton.imageView.image imageWithColor:highlightColor] forState:UIControlStateNormal];
+
+    [self.pictureModeButton setImage:[self.pictureModeButton.imageView.image imageWithColor:lightGray] forState:UIControlStateNormal];
+    [self.pictureModeButton setImage:[self.pictureModeButton.imageView.image imageWithColor:white] forState:UIControlStateSelected];
+    [self.rapidShotModeButton setImage:[self.rapidShotModeButton.imageView.image imageWithColor:lightGray] forState:UIControlStateNormal];
+    [self.rapidShotModeButton setImage:[self.rapidShotModeButton.imageView.image imageWithColor:white] forState:UIControlStateSelected];
+    [self.videoModeButton setImage:[self.videoModeButton.imageView.image imageWithColor:lightGray] forState:UIControlStateNormal];
+    [self.videoModeButton setImage:[self.videoModeButton.imageView.image imageWithColor:white] forState:UIControlStateSelected];
+
+    _modeSelector.strokeColor = highlightColor.CGColor;
+    
+    [_cameraButton.outerButtonImage setImage:[_cameraButton.outerButtonImage.image imageWithColor:highlightColor]];
+    
+    [self.bluetoothButton setImage:[self.bluetoothButton.imageView.image imageWithColor:white] forState:UIControlStateSelected];
+    [self.bluetoothButton setImage:[self.bluetoothButton.imageView.image imageWithColor:lightGray] forState:UIControlStateNormal];
+    self.bluetoothButton.layer.borderWidth = 3;
+    if (self.bluetoothButton.selected) {
+        self.bluetoothButton.layer.borderColor = highlightColor.CGColor;
+    } else {
+        self.bluetoothButton.layer.borderColor = lightGray.CGColor;
+    }
+    [self.focusButton setImage:[self.focusButton.imageView.image imageWithColor:white] forState:UIControlStateSelected];
+    [self.focusButton setImage:[UIImage imageNamed:@"inwardAutoFocusLocked"] forState:UIControlStateNormal];
+    self.focusButton.layer.borderWidth = 3;
+    if (self.focusButton.selected) {
+        self.focusButton.layer.borderColor = highlightColor.CGColor;
+    } else {
+        self.focusButton.layer.borderColor = lightGray.CGColor;
+    }
+    [self.exposureButton setImage:[self.exposureButton.imageView.image imageWithColor:white] forState:UIControlStateSelected];
+    [self.exposureButton setImage:[UIImage imageNamed:@"inwardAutoExposureLocked"] forState:UIControlStateNormal];
+    self.exposureButton.layer.borderWidth = 3;
+    if (self.exposureButton.selected) {
+        self.exposureButton.layer.borderColor = highlightColor.CGColor;
+    } else {
+        self.exposureButton.layer.borderColor = lightGray.CGColor;
+    }
+    [self.soundsButton setImage:[self.soundsButton.imageView.image imageWithColor:white] forState:UIControlStateSelected];
+    [self.soundsButton setImage:[self.soundsButton.imageView.image imageWithColor:lightGray] forState:UIControlStateNormal];
+    self.soundsButton.layer.borderWidth = 3;
+    if (self.soundsButton.selected) {
+        self.soundsButton.layer.borderColor = highlightColor.CGColor;
+    } else {
+        self.soundsButton.layer.borderColor = lightGray.CGColor;
+    }
+    
+    [self.focusPointView setImage:[self.focusPointView.image imageWithColor:highlightColor]];
+    [self.exposePointView setImage:[self.exposePointView.image imageWithColor:highlightColor]];
+    
+    CGFloat hue, saturation, brightness, alpha;
+    [highlightColor getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha];
+    _soundPicker.backgroundColor = [UIColor colorWithHue:hue saturation:saturation-0.3 brightness:brightness alpha:alpha];
+}
+
+
 
 -(void)createMenuAnimationArrays {
     CABasicAnimation *moveUpForSettings=[CABasicAnimation animationWithKeyPath:@"position"];
@@ -358,34 +473,44 @@ static NSInteger const bluetoothOpenAnimStep = 3;
             CGFloat previewWidth = self.view.frame.size.height * kVideoDimension;
             CGFloat leftOffset = (self.view.frame.size.width - previewWidth) / 2;
             self.tappablePreviewRect = CGRectMake(leftOffset, self.swithCameraButton.frame.size.height, previewWidth, self.view.frame.size.height-self.cameraButton.outerButtonImage.frame.size.height);
+            self.previewImageRect = CGRectMake(leftOffset, 0, previewWidth, self.view.frame.size.height);
         } else {
             self.tappablePreviewRect = CGRectMake(0, self.swithCameraButton.frame.size.height, self.view.frame.size.width, self.view.frame.size.height-self.cameraButton.outerButtonImage.frame.size.height);
+            self.previewImageRect = self.view.frame;
         }
     } else if (IPHONE_5) {
         if (cameraMode == CSStateCameraModeVideo) {
             CGFloat previewWidth = self.view.frame.size.height * kVideoDimension;
             CGFloat leftOffset = (self.view.frame.size.width - previewWidth) / 2;
             self.tappablePreviewRect = CGRectMake(leftOffset, self.swithCameraButton.frame.size.height, previewWidth, self.view.frame.size.height-self.cameraButton.outerButtonImage.frame.size.height);
+            self.previewImageRect = self.view.frame;
         } else {
             self.distanceToCenterPhotoPreview = (self.view.center.y - ((self.view.frame.size.height-self.flashModeOnButton.frame.size.height-self.cameraButton.outerButtonImage.frame.size.height)/2+self.flashModeOnButton.frame.size.height))/2;
             CGFloat previewHeight = self.view.frame.size.height * kPhotoDimension;
             
             self.tappablePreviewRect = CGRectMake(0, (self.view.frame.size.height-previewHeight)/2-self.distanceToCenterPhotoPreview, self.view.frame.size.width, previewHeight);
+            self.previewImageRect = CGRectMake(0, (self.view.frame.size.height-previewHeight)/2-self.distanceToCenterPhotoPreview, self.view.frame.size.width, previewHeight);
+            
         }
     } else {
         if (cameraMode == CSStateCameraModeVideo) {
             CGFloat previewWidth = self.view.frame.size.height * kVideoDimension;
             CGFloat leftOffset = (self.view.frame.size.width - previewWidth) / 2;
             self.tappablePreviewRect = CGRectMake(leftOffset, self.swithCameraButton.frame.size.height, previewWidth, self.view.frame.size.height-self.cameraButton.outerButtonImage.frame.size.height);
+            self.previewImageRect = CGRectMake(leftOffset, 0, previewWidth, self.view.frame.size.height);
+            
         } else {
+            CGFloat previewHeight = self.view.frame.size.height * kPhotoDimension;
+            
             self.tappablePreviewRect = CGRectMake(0, self.swithCameraButton.frame.size.height, self.view.frame.size.width, self.view.frame.size.height-self.cameraButton.outerButtonImage.frame.size.height);
+            self.previewImageRect = CGRectMake(0, (self.view.frame.size.height-previewHeight)/2, self.view.frame.size.width, previewHeight);
+            
         }
     }
     [self.focusPointView fixIfOffscreen];
     [self.exposePointView fixIfOffscreen];
-//    NSLog(@"%@", NSStringFromCGRect(self.tappablePreviewRect));
+    
 }
-
 // used to fix iphone centering picture preview frame
 // brings the cameraPreviewView to zero'd out position with its blurred image view
 -(void)updateCameraPreviewPosition {
@@ -407,14 +532,17 @@ static NSInteger const bluetoothOpenAnimStep = 3;
     [self.view layoutIfNeeded];
 }
 
--(void)resumeSessions {
+-(void)userReopenedApp {
     [self.videoProcessor resumeCaptureSession];
     [self.bluetoothViewController refreshBluetoothDevices];
 }
 
--(void)pauseSessions {
+-(void)userClosedApp {
     [self.videoProcessor pauseCaptureSession];
     [self.bluetoothViewController cleanupBluetooth];
+    if ([_cameraButton isAnimatingButton]) {
+        [_cameraButton cancelTimedAction];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -468,24 +596,26 @@ static NSInteger const bluetoothOpenAnimStep = 3;
 }
 
 - (IBAction)pressedCameraRoll:(id)sender {
-    MHGalleryController *gallery = [[MHGalleryController alloc]initWithPresentationStyle:MHGalleryViewModeOverView];
-    __weak MHGalleryController *blockGallery = gallery;
-    gallery.galleryItems = self.galleryItems;
-    MHUICustomization *customize = [[MHUICustomization alloc] init];
-    customize.barStyle = UIBarStyleBlackTranslucent;
-    customize.barTintColor = [UIColor blackColor];
-    
-    customize.barButtonsTintColor = [UIColor colorWithRed:0.242 green:0.804 blue:0.974 alpha:1.000];
-    [customize setMHGalleryBackgroundColor:[UIColor colorWithWhite:0.131 alpha:1.000] forViewMode:MHGalleryViewModeOverView];
-    [customize setMHGalleryBackgroundColor:[UIColor colorWithWhite:0.131 alpha:1.000] forViewMode:MHGalleryViewModeImageViewerNavigationBarShown];
-    [customize setMHGalleryBackgroundColor:[UIColor colorWithWhite:0.131 alpha:1.000] forViewMode:MHGalleryViewModeImageViewerNavigationBarHidden];
-
-    gallery.UICustomization = customize;
-    gallery.finishedCallback = ^(NSUInteger currentIndex,UIImage *image,MHTransitionDismissMHGallery *interactiveTransition,MHGalleryViewMode viewMode){
-        [blockGallery dismissViewControllerAnimated:YES dismissImageView:nil completion:nil];
-    };
-    self.cameraRollIsOpen = YES;
-    [self presentMHGalleryController:gallery animated:YES completion:nil];
+    if (!self.cameraButton.isDragging) {
+        MHGalleryController *gallery = [[MHGalleryController alloc]initWithPresentationStyle:MHGalleryViewModeOverView];
+        __weak MHGalleryController *blockGallery = gallery;
+        gallery.galleryItems = self.galleryItems;
+        MHUICustomization *customize = [[MHUICustomization alloc] init];
+        customize.barStyle = UIBarStyleBlackTranslucent;
+        customize.barTintColor = [UIColor blackColor];
+        
+        customize.barButtonsTintColor = _highlightColor;
+        [customize setMHGalleryBackgroundColor:[UIColor colorWithWhite:0.131 alpha:1.000] forViewMode:MHGalleryViewModeOverView];
+        [customize setMHGalleryBackgroundColor:[UIColor colorWithWhite:0.131 alpha:1.000] forViewMode:MHGalleryViewModeImageViewerNavigationBarShown];
+        [customize setMHGalleryBackgroundColor:[UIColor colorWithWhite:0.131 alpha:1.000] forViewMode:MHGalleryViewModeImageViewerNavigationBarHidden];
+        
+        gallery.UICustomization = customize;
+        gallery.finishedCallback = ^(NSUInteger currentIndex,UIImage *image,MHTransitionDismissMHGallery *interactiveTransition,MHGalleryViewMode viewMode){
+            [blockGallery dismissViewControllerAnimated:YES dismissImageView:nil completion:nil];
+        };
+        self.cameraRollIsOpen = YES;
+        [self presentMHGalleryController:gallery animated:YES completion:nil];
+    }
 }
 
 
@@ -507,6 +637,12 @@ static NSInteger const bluetoothOpenAnimStep = 3;
         [self.videoProcessor focusWithMode:[self currentAVFocusMode] exposeWithMode:[self currentAVExposureMode] atDevicePoint:devicePoint monitorSubjectAreaChange:NO];
         _focusDevicePoint = devicePoint;
         _exposureDevicePoint = devicePoint;
+        
+        CGPoint imagePoint = CGPointMake((touchPoint.x-_previewImageRect.origin.x)/_previewImageRect.size.width, (touchPoint.y-_previewImageRect.origin.y)/_previewImageRect.size.height);
+        imagePoint = CGPointMake([self clamp:imagePoint.x between:0 and:1], [self clamp:imagePoint.y between:0 and:1]);
+        _focusedAtImagePoint = imagePoint;
+        _exposededAtImagePoint = imagePoint;
+        
         [self.bluetoothViewController updateRemoteWithCurrentCameraState];
         if (!self.autoFocusMode) {
             [UIView animateWithDuration:0.4 animations:^{
@@ -541,6 +677,11 @@ static NSInteger const bluetoothOpenAnimStep = 3;
     CGPoint devicePoint = [self devicePointForScreenPoint:touchLocation];
     _exposureDevicePoint = devicePoint;
     [self.videoProcessor exposeAtPoint:_exposureDevicePoint];
+    
+    CGPoint imagePoint = CGPointMake((touchLocation.x-_previewImageRect.origin.x)/_previewImageRect.size.width, (touchLocation.y-_previewImageRect.origin.y)/_previewImageRect.size.height);
+    imagePoint = CGPointMake([self clamp:imagePoint.x between:0 and:1], [self clamp:imagePoint.y between:0 and:1]);
+    _exposededAtImagePoint = imagePoint;
+    
     [self.bluetoothViewController updateRemoteWithCurrentCameraState];
 }
 
@@ -548,6 +689,12 @@ static NSInteger const bluetoothOpenAnimStep = 3;
     CGPoint devicePoint = [self devicePointForScreenPoint:touchLocation];
     _focusDevicePoint = devicePoint;
     [self.videoProcessor focusAtPoint:_focusDevicePoint];
+    
+    CGPoint imagePoint = CGPointMake((touchLocation.x-_previewImageRect.origin.x)/_previewImageRect.size.width, (touchLocation.y-_previewImageRect.origin.y)/_previewImageRect.size.height);
+    imagePoint = CGPointMake([self clamp:imagePoint.x between:0 and:1], [self clamp:imagePoint.y between:0 and:1]);
+    _focusedAtImagePoint = imagePoint;
+    
+    
     [self.bluetoothViewController updateRemoteWithCurrentCameraState];
 
 }
@@ -795,6 +942,10 @@ static NSInteger const bluetoothOpenAnimStep = 3;
 }
 
 -(void)openTutorial {
+    [UIView animateWithDuration:0.4 animations:^{
+        self.focusPointView.alpha = 0;
+        self.exposePointView.alpha = 0;
+    }];
     [self closeSettingsMenu];
     [self.tutorialViewController restartTutorial];
     self.tutorialView.alpha = 0;
@@ -808,6 +959,12 @@ static NSInteger const bluetoothOpenAnimStep = 3;
 -(void)closeTutorial {
     [UIView animateWithDuration:0.5 animations:^{
         self.tutorialView.alpha = 0;
+        if (!self.autoFocusMode) {
+            self.focusPointView.alpha = 1;
+        }
+        if (!self.autoExposureMode) {
+            self.exposePointView.alpha = 1;
+        }
     } completion:^(BOOL finished){
         self.tutorialView.hidden = YES;
         self.tutorialIsOpen = NO;
@@ -1351,7 +1508,7 @@ static NSInteger const bluetoothOpenAnimStep = 3;
 			//Not granted access to mediaType
 			dispatch_async(dispatch_get_main_queue(), ^{
 				[[[UIAlertView alloc] initWithTitle:@"Where's the mic?"
-											message:@"Click-Shot doesn't have permission to use the microphone. You need to change this in your Privacy Settings to record a video."
+											message:@"Click-Shot doesn't have permission to use the microphone. Give the app permission in \nSettings -> Privacy -> Microphone"
 										   delegate:self
 								  cancelButtonTitle:@"OK, I'll fix that now"
 								  otherButtonTitles:nil] show];
@@ -1374,7 +1531,7 @@ static NSInteger const bluetoothOpenAnimStep = 3;
         self.assetsPermission = NO;
         dispatch_async(dispatch_get_main_queue(), ^{
             [[[UIAlertView alloc] initWithTitle:@"I can't save!"
-                                        message:@"Click-Shot doesn't have permission to access or save photos. You can change this in your Privacy Settings."
+                                        message:@"Click-Shot doesn't have permission to access or save photos. Give the app permission in \nSettings -> Privacy -> Photos"
                                        delegate:self
                               cancelButtonTitle:@"OK, I'll do that now"
                               otherButtonTitles:nil] show];
@@ -1387,6 +1544,11 @@ static NSInteger const bluetoothOpenAnimStep = 3;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:[NSNumber numberWithBool:!self.autoExposureMode] forKey:@"noAutoExposureMode"];
     [self.exposureButton setSelected:self.autoExposureMode];
+    if (self.exposureButton.selected) {
+        self.exposureButton.layer.borderColor = _highlightColor.CGColor;
+    } else {
+        self.exposureButton.layer.borderColor = [UIColor colorWithWhite:0.642 alpha:1.000].CGColor;
+    }
     CGPoint exposurePoint = [self.videoProcessor startExposeMode:[self currentAVExposureMode]];
     _exposureDevicePoint = exposurePoint;
     self.exposePointView.userInteractionEnabled = !self.autoExposureMode;
@@ -1406,7 +1568,7 @@ static NSInteger const bluetoothOpenAnimStep = 3;
 -(void) updateMoveableExposureViewForCurrentExposurePoint {
     self.exposePointView.alpha = 0;
     
-    self.exposePointView.center = CGPointMake(_exposureDevicePoint.x*_tappablePreviewRect.size.width + _tappablePreviewRect.origin.x, _exposureDevicePoint.y*_tappablePreviewRect.size.height + _tappablePreviewRect.origin.y);
+    self.exposePointView.center = CGPointMake(_exposededAtImagePoint.x*_previewImageRect.size.width + _previewImageRect.origin.x, _exposededAtImagePoint.y*_previewImageRect.size.height + _previewImageRect.origin.y);
     [self.exposePointView fixIfOffscreen];
 
     if (!self.autoExposureMode) {
@@ -1428,6 +1590,11 @@ static NSInteger const bluetoothOpenAnimStep = 3;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:[NSNumber numberWithBool:self.autoFocusMode] forKey:@"autoFocusMode"];
     [self.focusButton setSelected:self.autoFocusMode];
+    if (self.focusButton.selected) {
+        self.focusButton.layer.borderColor = _highlightColor.CGColor;
+    } else {
+        self.focusButton.layer.borderColor = [UIColor colorWithWhite:0.642 alpha:1.000].CGColor;
+    }
     CGPoint focusPoint = [self.videoProcessor startFocusMode:[self currentAVFocusMode]];
     _focusDevicePoint = focusPoint;
     self.focusPointView.userInteractionEnabled = !self.autoFocusMode;
@@ -1447,7 +1614,8 @@ static NSInteger const bluetoothOpenAnimStep = 3;
 -(void) updateMoveableFocusViewForCurrentFocusPoint {
     self.focusPointView.alpha = 0;
     
-    self.focusPointView.center = CGPointMake(_focusDevicePoint.x*_tappablePreviewRect.size.width + _tappablePreviewRect.origin.x, _focusDevicePoint.y*_tappablePreviewRect.size.height + _tappablePreviewRect.origin.y);
+    self.focusPointView.center = CGPointMake(_focusedAtImagePoint.x*_previewImageRect.size.width + _previewImageRect.origin.x, _focusedAtImagePoint.y*_previewImageRect.size.height + _previewImageRect.origin.y);
+
     [self.focusPointView fixIfOffscreen];
     if (!self.autoFocusMode) {
         [UIView animateWithDuration:0.4 animations:^{
@@ -1560,159 +1728,191 @@ static NSInteger const bluetoothOpenAnimStep = 3;
 }
 
 -(void)connectedToBluetoothDevice {
-    [self.bluetoothButton setSelected:YES];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.bluetoothButton setSelected:YES];
+        self.bluetoothButton.layer.borderColor = _highlightColor.CGColor;
+    });
 }
 
 -(void)disconnectedFromBluetoothDevice {
     [self.bluetoothButton setSelected:NO];
+    self.bluetoothButton.layer.borderColor = [UIColor colorWithWhite:0.642 alpha:1.000].CGColor;
 }
 
 -(void)receivedMessageFromCameraRemoteApp:(NSData *)message {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        _shouldSendChangesToRemote = NO;
-        NSLog(@"Received from remote: %@", message);
-        CGFloat remoteFocusDevicePointX = 0;
-        CGFloat remoteFocusDevicePointY = 0;
-        CGFloat remoteExposureDevicePointX = 0;
-        CGFloat remoteExposureDevicePointY = 0;
-        for (int i = 0; i < message.length; i++) {
-            Byte byteBuffer;
-            [message getBytes:&byteBuffer range:NSMakeRange(i, 1)];
-            switch (i) {
-                case 0: // Camera Action
-                    switch (byteBuffer) {
-                        case CSStateButtonActionNone:
-                            // do nothing
-                            break;
-                        case CSStateButtonActionTakePicture:
-                            //                        if (self.cameraButton.enabled) {
-                            [self pressedCameraButton];
-                            //                        }
-                            break;
-                        case CSStateButtonActionStartActionShot:
-                            [self startActionShot];
-                            break;
-                        case CSStateButtonActionStopActionShot:
-                            [self stopActionShot];
-                            break;
-                        case CSStateButtonActionStartVideo:
-                            [self startRecording];
-                            break;
-                        case CSStateButtonActionStopVideo:
-                            [self stopRecording];
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                case 1: // Camera Mode
-                    if (self.cameraMode != byteBuffer) {
+    if (message.length == 1) {
+        Byte byteBuffer;
+        [message getBytes:&byteBuffer range:NSMakeRange(0, 1)];
+        if (byteBuffer == CSCommunicationReceivedPreviewPhoto) {
+            _isReadyToSendNextPreviewImage = YES;
+        } else if (byteBuffer == CSCommunicationShouldSendPreviewImages) {
+            self.shouldSendPreviewImages = YES;
+        } else if (byteBuffer == CSCommunicationShouldNotSendPreviewImages){
+            self.shouldSendPreviewImages = NO;
+        } else if (byteBuffer == CSCommunicationVirtuallyDisconnectedFromRemote) {
+            [self.bluetoothViewController virtuallyDisconnectFromRemote];
+        } else if (byteBuffer == CSCommunicationShouldSendTakenPictures) {
+            self.shouldSendTakenPictures = YES;
+        } else if (byteBuffer == CSCommunicationShouldNotSendTakenPictures) {
+            self.shouldSendTakenPictures = NO;
+        }
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _shouldSendChangesToRemote = NO;
+            NSLog(@"Received from remote: %@", message);
+            CGFloat remoteFocusDevicePointX = 0;
+            CGFloat remoteFocusDevicePointY = 0;
+            CGFloat remoteExposureDevicePointX = 0;
+            CGFloat remoteExposureDevicePointY = 0;
+            for (int i = 0; i < message.length; i++) {
+                Byte byteBuffer;
+                [message getBytes:&byteBuffer range:NSMakeRange(i, 1)];
+                switch (i) {
+                    case 0: // Camera Action
                         switch (byteBuffer) {
-                            case CSStateCameraModeStill:
-                                [self pressedPictureMode:nil];
+                            case CSStateButtonActionNone:
+                                // do nothing
                                 break;
-                            case CSStateCameraModeActionShot:
-                                [self pressedRapidShotMode:nil];
+                            case CSStateButtonActionTakePicture:
+                                //                        if (self.cameraButton.enabled) {
+                                [self pressedCameraButton];
+                                //                        }
                                 break;
-                            case CSStateCameraModeVideo:
-                                [self pressedVideoMode:nil];
+                            case CSStateButtonActionStartActionShot:
+                                [self startActionShot];
+                                break;
+                            case CSStateButtonActionStopActionShot:
+                                [self stopActionShot];
+                                break;
+                            case CSStateButtonActionStartVideo:
+                                [self startRecording];
+                                break;
+                            case CSStateButtonActionStopVideo:
+                                [self stopRecording];
                                 break;
                             default:
                                 break;
                         }
-                    }
-                    break;
-                case 2: // Flash Mode
-                    if (byteBuffer != self.flashMode) {
+                        break;
+                    case 1: // Camera Mode
+                        if (self.cameraMode != byteBuffer) {
+                            switch (byteBuffer) {
+                                case CSStateCameraModeStill:
+                                    [self pressedPictureMode:nil];
+                                    break;
+                                case CSStateCameraModeActionShot:
+                                    [self pressedRapidShotMode:nil];
+                                    break;
+                                case CSStateCameraModeVideo:
+                                    [self pressedVideoMode:nil];
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        break;
+                    case 2: // Flash Mode
+                        if (byteBuffer != self.flashMode) {
+                            switch (byteBuffer) {
+                                case CSStateFlashModeAuto:
+                                    [self closeFlashModeMenu:self.flashModeAutoButton];
+                                    break;
+                                case CSStateFlashModeOn:
+                                    [self closeFlashModeMenu:self.flashModeOnButton];
+                                    break;
+                                case CSStateFlashModeOff:
+                                    [self closeFlashModeMenu:self.flashModeOffButton];
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        break;
+                    case 3: // Camera Position
                         switch (byteBuffer) {
-                            case CSStateFlashModeAuto:
-                                [self closeFlashModeMenu:self.flashModeAutoButton];
+                            case CSStateCameraPositionBack:
+                                if ([self.videoProcessor.captureDevice position] != AVCaptureDevicePositionBack) {
+                                    [self.videoProcessor beginSwitchingCamera];
+                                }
                                 break;
-                            case CSStateFlashModeOn:
-                                [self closeFlashModeMenu:self.flashModeOnButton];
-                                break;
-                            case CSStateFlashModeOff:
-                                [self closeFlashModeMenu:self.flashModeOffButton];
+                            case CSStateCameraPositionFront:
+                                if ([self.videoProcessor.captureDevice position] != AVCaptureDevicePositionFront) {
+                                    [self.videoProcessor beginSwitchingCamera];
+                                }
                                 break;
                             default:
                                 break;
                         }
+                        break;
+                    case 4: // Sound
+                        if (self.cameraSound != byteBuffer) {
+                            [self.soundPicker selectRow:byteBuffer inComponent:0 animated:YES];
+                            [self updateSoundPlayerWithSoundNumber:byteBuffer];
+                        }
+                        break;
+                    case 5: // auto focus
+                        if (_autoFocusMode != byteBuffer) {
+                            _autoFocusMode = byteBuffer;
+                            [self updateMoveableFocusView];
+                        }
+                        break;
+                    case 6: { // Focus X
+                        remoteFocusDevicePointX = ((CGFloat)byteBuffer)/100.0;
+                        break;
                     }
-                    break;
-                case 3: // Camera Position
-                    switch (byteBuffer) {
-                        case CSStateCameraPositionBack:
-                            if ([self.videoProcessor.captureDevice position] != AVCaptureDevicePositionBack) {
-                                [self.videoProcessor beginSwitchingCamera];
-                            }
-                            break;
-                        case CSStateCameraPositionFront:
-                            if ([self.videoProcessor.captureDevice position] != AVCaptureDevicePositionFront) {
-                                [self.videoProcessor beginSwitchingCamera];
-                            }
-                            break;
-                        default:
-                            break;
+                    case 7: { // Focus Y
+                        remoteFocusDevicePointY = ((CGFloat)byteBuffer)/100.0;
+                        break;
                     }
-                    break;
-                case 4: // Sound
-                    if (self.cameraSound != byteBuffer) {
-                        [self updateSoundPlayerWithSoundNumber:byteBuffer];
+                    case 8: // auto expsure
+                        if (_autoExposureMode != byteBuffer) {
+                            _autoExposureMode = byteBuffer;
+                            [self updateMoveableExposureView];
+                        }
+                        break;
+                    case 9: { // Exposure X
+                        remoteExposureDevicePointX = ((CGFloat)byteBuffer)/100.0;
+                        break;
                     }
-                    break;
-                case 5: // auto focus
-                    if (_autoFocusMode != byteBuffer) {
-                        _autoFocusMode = byteBuffer;
-                        [self updateMoveableFocusView];
+                    case 10: { // Exposure Y
+                        remoteExposureDevicePointY = ((CGFloat)byteBuffer)/100.0;
+                        break;
                     }
-                    break;
-                case 6: { // Focus X
-                    remoteFocusDevicePointX = ((CGFloat)byteBuffer)/100.0;
-                    break;
+                    default:
+                        break;
                 }
-                case 7: { // Focus Y
-                    remoteFocusDevicePointY = ((CGFloat)byteBuffer)/100.0;
-                    break;
-                }
-                case 8: // auto expsure
-                    if (_autoExposureMode != byteBuffer) {
-                        _autoExposureMode = byteBuffer;
-                        [self updateMoveableExposureView];
-                    }
-                    break;
-                case 9: { // Exposure X
-                    remoteExposureDevicePointX = ((CGFloat)byteBuffer)/100.0;
-                    break;
-                }
-                case 10: { // Exposure Y
-                    remoteExposureDevicePointY = ((CGFloat)byteBuffer)/100.0;
-                    break;
-                }
-                default:
-                    break;
             }
-        }
-        if (remoteFocusDevicePointY != _focusDevicePoint.y || remoteFocusDevicePointX != _focusDevicePoint.x) {
-            _focusDevicePoint = CGPointMake(remoteFocusDevicePointX, remoteFocusDevicePointY);
-            [self.videoProcessor focusAtPoint:_focusDevicePoint];
-            [self updateMoveableFocusViewForCurrentFocusPoint];
-        }
-        if (remoteExposureDevicePointY != _exposureDevicePoint.y || remoteExposureDevicePointX != _exposureDevicePoint.x) {
-            _exposureDevicePoint = CGPointMake(remoteExposureDevicePointX, remoteExposureDevicePointY);
-            [self.videoProcessor exposeAtPoint:_exposureDevicePoint];
-            [self updateMoveableExposureViewForCurrentExposurePoint];
-        }
-        _shouldSendChangesToRemote = YES;
-
-    });
-
+            if (remoteFocusDevicePointY != _focusedAtImagePoint.y || remoteFocusDevicePointX != _focusedAtImagePoint.x) {
+                _focusedAtImagePoint = CGPointMake(remoteFocusDevicePointX, remoteFocusDevicePointY);
+                
+                CGPoint screenPoint = CGPointMake(remoteFocusDevicePointX*_previewImageRect.size.width + _previewImageRect.origin.x, remoteFocusDevicePointY*_previewImageRect.size.height + _previewImageRect.origin.y);
+                
+                
+                _focusDevicePoint = [self devicePointForScreenPoint:screenPoint];
+                [self.videoProcessor focusAtPoint:_focusDevicePoint];
+                [self updateMoveableFocusViewForCurrentFocusPoint];
+            }
+            if (remoteExposureDevicePointY != _exposureDevicePoint.y || remoteExposureDevicePointX != _exposureDevicePoint.x) {
+                _exposededAtImagePoint = CGPointMake(remoteExposureDevicePointX, remoteExposureDevicePointY);
+                
+                CGPoint screenPoint = CGPointMake(remoteExposureDevicePointX*_previewImageRect.size.width + _previewImageRect.origin.x, remoteExposureDevicePointY*_previewImageRect.size.height + _previewImageRect.origin.y);
+                
+                _exposureDevicePoint = [self devicePointForScreenPoint:screenPoint];
+                [self.videoProcessor exposeAtPoint:_exposureDevicePoint];
+                [self updateMoveableExposureViewForCurrentExposurePoint];
+            }
+            _shouldSendChangesToRemote = YES;
+            
+        });
+    }
+    
 }
 
 -(NSData *)currentStateData {
-    Byte focusX = [self byteForFEFloat:_focusDevicePoint.x];
-    Byte focusY = [self byteForFEFloat:_focusDevicePoint.y];
-    Byte exposureX = [self byteForFEFloat:_exposureDevicePoint.x];
-    Byte exposureY = [self byteForFEFloat:_exposureDevicePoint.y];
+    Byte focusX = [self byteForFEFloat:_focusedAtImagePoint.x];
+    Byte focusY = [self byteForFEFloat:_focusedAtImagePoint.y];
+    Byte exposureX = [self byteForFEFloat:_exposededAtImagePoint.x];
+    Byte exposureY = [self byteForFEFloat:_exposededAtImagePoint.y];
     
     AVCaptureDevicePosition currentCameraPosition = [self.videoProcessor.captureDevice position];
     Byte cameraPosition = CSStateCameraPositionBack;
@@ -2076,6 +2276,7 @@ static NSInteger const bluetoothOpenAnimStep = 3;
         self.cameraRollImage.alpha = 0;
         self.cameraRollButton.alpha = 0;
         self.settingsButton.alpha = 0;
+        _UITransparentBG.alpha = 0;
     } completion:^(BOOL finished) {
         self.settingsButtonDragView.userInteractionEnabled = NO;
         self.settingsButton.enabled = NO;
@@ -2101,6 +2302,7 @@ static NSInteger const bluetoothOpenAnimStep = 3;
         self.cameraRollImage.alpha = 1;
         self.cameraRollButton.alpha = 1;
         self.settingsButton.alpha = 1;
+        _UITransparentBG.alpha = 1;
     } completion:nil];
 }
 
@@ -2171,13 +2373,24 @@ static NSInteger const bluetoothOpenAnimStep = 3;
 - (void)didTakeStillImage:(UIImage *)image {
     [self runStillImageCaptureAnimation];
     [self updateCameraRollButtonWithImage:image duration:0.35];
-    // updated gallery items in didFinishSavingStillImage instead
-    //    MHGalleryItem *item = [[MHGalleryItem alloc] initWithImage:image];
-    //    [self.galleryItems insertObject:item atIndex:0];
+    
+    if (_shouldSendTakenPictures) {
+        NSData *jpegData = UIImageJPEGRepresentation(image, 0.5);
+        NSDateFormatter *inFormat = [NSDateFormatter new];
+        [inFormat setDateFormat:@"yyMMdd-HHmmss"];
+        NSString *imageName = [NSString stringWithFormat:@"image-%@.JPG", [inFormat stringFromDate:[NSDate date]]];
+        // Create a file path to our documents directory
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:imageName];
+        [jpegData writeToFile:filePath atomically:YES]; // Write the file
+        // Get a URL for this file resource
+        NSURL *imageUrl = [NSURL fileURLWithPath:filePath];
+        [self.bluetoothViewController sendImageAtURL:imageUrl withName:imageName];
+    }
 }
 
--(void)didFinishSavingStillImage {
-        [self updateGalleryItems];
+- (void)didFinishSavingStillImageAt:(NSURL *)url {
+    [self updateGalleryItems];
 }
 
 
@@ -2196,20 +2409,6 @@ static NSInteger const bluetoothOpenAnimStep = 3;
                 //TODO: might not need this line below
                 [self.cameraButton updateCameraButtonWithText:self.cameraButton.cameraButtonString];
             }
-
-//            [UIView animateWithDuration:0.05 delay:0 options:UIViewAnimationOptionAllowAnimatedContent animations:^{
-//                self.cameraButton.buttonImage.alpha = 0;
-//            } completion:^(BOOL finished) {
-//                [UIView animateWithDuration:0.05 animations:^{
-//                    self.cameraButton.buttonImage.alpha = 1;
-//                }];
-//            }];
-            
-            // taken out because caused large memory over load problems
-            //TODO: updated gallery items here instead
-//            [self updateGalleryItems];
-//            MHGalleryItem *item = [[MHGalleryItem alloc] initWithImage:image];
-//            [self.galleryItems insertObject:item atIndex:0];
         }
     });
 }
@@ -2254,8 +2453,10 @@ static NSInteger const bluetoothOpenAnimStep = 3;
     _settingsButtonDragView.userInteractionEnabled = NO;
     [UIView transitionWithView:self.blurredImagePlaceholder duration:0.5 options:UIViewAnimationOptionTransitionFlipFromLeft animations:nil completion:nil];
     [UIView transitionWithView:self.previewView duration:0.5 options:UIViewAnimationOptionTransitionFlipFromLeft animations:nil completion:^(BOOL finished){
+        _previewView.alpha = 0;
         [UIView animateWithDuration:0.5 delay:0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.blurredImagePlaceholder.alpha = 0;
+            _previewView.alpha = 1;
             [self updateCameraPreviewPosition];
             [self updateTappablePreviewRectForCameraMode:self.cameraMode];
         } completion:^(BOOL finished) {
@@ -2264,7 +2465,7 @@ static NSInteger const bluetoothOpenAnimStep = 3;
         }];
     }];
     
-    UIImage *blurredImage = [self.blurFilter imageByFilteringImage:image];
+    UIImage *blurredImage = [image blurredImageWithRadius:20 iterations:2 tint:[UIColor colorWithWhite:0.8 alpha:1]];
     if (self.videoProcessor.captureDevice.position == AVCaptureDevicePositionFront) {
         _blurredImagePlaceholder.transform = CGAffineTransformMakeScale(-1, 1);
     } else {
@@ -2275,7 +2476,7 @@ static NSInteger const bluetoothOpenAnimStep = 3;
 }
 
 -(void)readyToSwitchToCurrentOutputQuality:(UIImage *)image {
-    UIImage *blurredImage = [self.blurFilter imageByFilteringImage:image];
+    UIImage *blurredImage = [image blurredImageWithRadius:20 iterations:2 tint:[UIColor colorWithWhite:0.8 alpha:1]];
     if (self.videoProcessor.captureDevice.position == AVCaptureDevicePositionFront) {
         _blurredImagePlaceholder.transform = CGAffineTransformMakeScale(-1, 1);
     } else {
@@ -2321,18 +2522,25 @@ static NSInteger const bluetoothOpenAnimStep = 3;
     [self.bluetoothViewController updateRemoteWithCurrentCameraState];
 }
 
-- (BOOL)connectedToPeer {
-    return self.bluetoothViewController.fullyConnectedToPeer;
+- (BOOL)shouldSendPreviewImage:(NSTimeInterval)secondsFromLastPicture {
+    if (secondsFromLastPicture < SEND_PREVIEW_IMAGE_INTERVAL || !_shouldSendPreviewImages) {
+        return NO;
+    }
+    if (self.bluetoothViewController.fullyConnectedToPeer && secondsFromLastPicture > SEND_PREVIEW_IMAGE_INTERVAL_MAX_WAIT) {
+        return YES;
+    }
+    return (self.bluetoothViewController.fullyConnectedToPeer && _isReadyToSendNextPreviewImage);
 }
 
 - (void)sendPreviewImageToPeer:(UIImage *)image {
+
+    _isReadyToSendNextPreviewImage = NO;
     NSData *compressedImageData = UIImageJPEGRepresentation(image, 0.0);
-    [self.bluetoothViewController sendImageDataToRemote:compressedImageData];
+    [self.bluetoothViewController sendDataToRemote:compressedImageData withMode:MCSessionSendDataUnreliable];
 }
 
 
 -(void)updateGalleryItems {
-    //TODO: dont do this on main queue?
     NSLog(@"updated gallery items");
     self.galleryItems = [NSMutableArray new];
     ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
@@ -2397,7 +2605,6 @@ static NSInteger const bluetoothOpenAnimStep = 3;
 }
 
 -(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
-    
     [self updateSoundPlayerWithSoundNumber:row];
     if (self.shouldPlaySound) {
         self.takePictureAfterSound = NO;
@@ -2447,10 +2654,16 @@ static NSInteger const bluetoothOpenAnimStep = 3;
         self.soundDuration = CMTimeGetSeconds(audioDuration);
         self.soundPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundURL error:&error];
     }
-    if (number == 0)
+    if (number == 0) {
         [self.soundsButton setSelected:NO];
-    else
+    } else {
         [self.soundsButton setSelected:YES];
+    }
+    if (self.soundsButton.selected) {
+        self.soundsButton.layer.borderColor = _highlightColor.CGColor;
+    } else {
+        self.soundsButton.layer.borderColor = [UIColor colorWithWhite:0.642 alpha:1.000].CGColor;
+    }
     self.soundPlayer.delegate = self;
     [self.soundPlayer prepareToPlay];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

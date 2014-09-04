@@ -468,7 +468,8 @@
 
 
 -(void)mergePressed{
-    //    if (self.UICustomization.showMHShareViewInsteadOfActivityViewController) {
+    
+    
     MHShareViewController *merge = [MHShareViewController new];
     
     MHGalleryItem *selectedVideo = [self.galleryItems objectAtIndex:self.pageIndex];
@@ -478,11 +479,6 @@
     merge.galleryItems = self.videoGalleryItems;
     [self.navigationController pushViewController:merge
                                          animated:YES];
-    //    }else{
-    //        UIActivityViewController *act = [UIActivityViewController.alloc initWithActivityItems:@[[(MHImageViewController*)self.pageViewController.viewControllers.firstObject imageView].image] applicationActivities:nil];
-    //        [self presentViewController:act animated:YES completion:nil];
-    //
-    //    }
 }
 
 // adds new gallery item to front of gallery

@@ -24,8 +24,10 @@
 -(CGPoint) devicePointForScreenPoint:(CGPoint)screenPoint;
 -(void)setExposureDevicePointWithTouchLocation:(CGPoint)touchLocation;
 -(void)setFocusDevicePointWithTouchLocation:(CGPoint)touchLocation;
--(void)resumeSessions;
--(void)pauseSessions;
+
+
+-(void)userReopenedApp;
+-(void)userClosedApp;
 
 -(void)openFlashModeMenu;
 -(void)closeFlashModeMenu:(id)sender;
@@ -39,16 +41,23 @@
 - (IBAction)pressedRapidShotMode:(id)sender;
 - (IBAction)pressedPictureMode:(id)sender;
 
++(UIColor *)getHighlightColor;
+
 @property (nonatomic) BOOL autoFocusMode;
 @property (nonatomic) BOOL autoExposureMode;
 @property (nonatomic) CGPoint exposureDevicePoint;
 @property (nonatomic) CGPoint focusDevicePoint;
+@property (nonatomic) CGPoint focusedAtImagePoint;
+@property (nonatomic) CGPoint exposededAtImagePoint;
+
+
 @property (nonatomic) BOOL currentDeviceHasFlash;
 
 @property (nonatomic) BOOL swipeModesGestureIsBlocked;
 @property (nonatomic) CSStateCameraMode cameraMode;
 @property (nonatomic, strong) NSString *cameraButtonString;
 @property (nonatomic) CGRect tappablePreviewRect; // used in MoveableImageView
+@property (nonatomic) CGRect previewImageRect;
 
 @property (nonatomic) BOOL takePictureAfterSound;
 
@@ -88,6 +97,4 @@
 @property (nonatomic) CSStateCameraOrientation cameraOrientation;
 
 @property (nonatomic) BOOL shouldSendChangesToRemote;
-
-
 @end

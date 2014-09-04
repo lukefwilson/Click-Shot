@@ -32,7 +32,9 @@
 -(void)refreshBluetoothDevices;
 -(void)cleanupBluetooth;
 -(void)updateRemoteWithCurrentCameraState;
--(void)sendImageDataToRemote:(NSData *)imageData;
+-(void)sendDataToRemote:(NSData *)data withMode:(MCSessionSendDataMode)sendingMode;
+-(void)sendImageAtURL:(NSURL *)url withName:(NSString *)imageName;
+-(void)virtuallyDisconnectFromRemote;
 
 @end
 

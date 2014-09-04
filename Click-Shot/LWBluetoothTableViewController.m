@@ -24,6 +24,7 @@
 @property (nonatomic) MCPeerID *myPeerID;
 @property (nonatomic) MCSession *mySession;
 @property (nonatomic) MCNearbyServiceBrowser *browser;
+@property (nonatomic) UILabel *headerLabel;
 @end
 
 @implementation LWBluetoothTableViewController
@@ -55,14 +56,14 @@
     UIImageView *divider = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tableViewDivider.png"]];
     divider.frame = CGRectMake(0, kTableHeaderHeight-divider.frame.size.height, self.view.frame.size.width, divider.frame.size.height);
     [headerView addSubview:divider];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 40, headerView.frame.size.width-40, 40)];
-    label.text = @"Connect to a campatible Bluetooth Device to control the camera";
-    label.textColor = [UIColor colorWithRed:0.639 green:0.910 blue:0.980 alpha:1.000];
-    label.textAlignment = NSTextAlignmentCenter;
-    label.font = [UIFont systemFontOfSize:16];
-    label.lineBreakMode = NSLineBreakByWordWrapping;
-    label.numberOfLines = 0;
-    [headerView addSubview:label];
+    _headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 40, headerView.frame.size.width-40, 40)];
+    _headerLabel.text = @"Connect to a campatible Bluetooth Device to control the camera";
+    _headerLabel.textColor = [UIColor colorWithRed:0.639 green:0.910 blue:0.980 alpha:1.000];
+    _headerLabel.textAlignment = NSTextAlignmentCenter;
+    _headerLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
+    _headerLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    _headerLabel.numberOfLines = 0;
+    [headerView addSubview:_headerLabel];
     
     self.tableView.tableHeaderView = headerView;
 
@@ -72,7 +73,7 @@
     [self.betterRefreshControl setTintColor:[UIColor colorWithRed:0.651 green:0.929 blue:1.000 alpha:1.000]];
     
     //MPC
-    _myPeerID = [[MCPeerID alloc] initWithDisplayName:@"Click-Shot"];
+    _myPeerID = [[MCPeerID alloc] initWithDisplayName:[UIDevice currentDevice].name];
     _mySession = [[MCSession alloc] initWithPeer:_myPeerID];
     [_mySession setDelegate:self];
     _browser = [[MCNearbyServiceBrowser alloc] initWithPeer:_myPeerID serviceType:MPC_SERVICE_TYPE];
@@ -120,7 +121,17 @@
 
 -(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info {
     NSLog(@"found peer %@", peerID);
-    if (![_discoveredPeers containsObject:peerID]) {
+    MCPeerID *samePeer = nil;
+    for (MCPeerID *discovedPeer in _discoveredPeers) {
+        if ([discovedPeer.displayName isEqualToString:peerID.displayName]) {
+            samePeer = discovedPeer;
+        }
+    }
+    if (!samePeer) {
+        [_discoveredPeers addObject:peerID];
+        [self.tableView reloadData];
+    } else {
+        [_discoveredPeers removeObject:samePeer];
         [_discoveredPeers addObject:peerID];
         [self.tableView reloadData];
     }
@@ -156,12 +167,30 @@
                     prevCell.accessoryView = nil;
                     _connectedPeer = nil;
                     _fullyConnectedToPeer = NO;
+                    NSIndexPath *prevIndexPath = _selectedIndexPath;
                     _selectedIndexPath = nil;
                     [_delegate disconnectedFromBluetoothDevice];
+                    // try to reconnect
+                    NSLog(@"trying to reconnect");
+                    [self tableView:self.tableView didSelectRowAtIndexPath:prevIndexPath];
                 });
             }
             break;
     }
+}
+
+// called when remote virtually disconnects from camera
+-(void)virtuallyDisconnectFromRemote {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UITableViewCell *prevCell = [self.tableView cellForRowAtIndexPath:_selectedIndexPath];
+        [prevCell setSelected:NO animated:YES];
+        prevCell.accessoryType = UITableViewCellAccessoryNone;
+        prevCell.accessoryView = nil;
+        _connectedPeer = nil;
+        _fullyConnectedToPeer = NO;
+        _selectedIndexPath = nil;
+        [_delegate disconnectedFromBluetoothDevice];
+    });
 }
 
 -(void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress {
@@ -199,14 +228,25 @@
     }
 }
 
--(void)sendImageDataToRemote:(NSData *)imageData {
+-(void)sendDataToRemote:(NSData *)data withMode:(MCSessionSendDataMode)sendingMode {
     if (_connectedPeer && _fullyConnectedToPeer) {
             NSError *error = nil;
-            if (![_mySession sendData:imageData toPeers:@[_connectedPeer] withMode:MCSessionSendDataUnreliable error:&error]) {
-                NSLog(@"failed sending image with error: %@", error);
+            if (![_mySession sendData:data toPeers:@[_connectedPeer] withMode:sendingMode error:&error]) {
+                NSLog(@"failed sending data with error: %@", error);
             } else {
-                NSLog(@"Sent preview image to remote with size: %lu", (unsigned long)imageData.length);
+//                NSLog(@"Sent preview image to remote with size: %lu", (unsigned long)imageData.length);
             }
+    }
+}
+
+-(void)sendImageAtURL:(NSURL *)url withName:(NSString *)imageName{
+    if (_connectedPeer && _fullyConnectedToPeer) {
+        NSLog(@"sending high quality image");
+        [_mySession sendResourceAtURL:url withName:imageName toPeer:_connectedPeer withCompletionHandler:^(NSError *error){
+            if (error) {
+                NSLog(@"error in sending full image to remote: %@", error);
+            }
+        }];
     }
 }
 
@@ -288,8 +328,14 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
+        if (self.discoveredPeers.count-1 < indexPath.row || self.discoveredPeers.count == 0) return; // something messed up
         MCPeerID *selectedPeerID = [self.discoveredPeers objectAtIndex:indexPath.row];
         if ([selectedPeerID isEqual:_connectedPeer]) {
+            // send virtual disconnect message to remote
+            const Byte disconnectedMessage[1] = {CSCommunicationVirtuallyDisconnectedFromRemote};
+            NSData *dataToSend = [NSData dataWithBytes:disconnectedMessage length:1];
+            [self sendDataToRemote:dataToSend withMode:MCSessionSendDataReliable];
+            
             UITableViewCell *prevCell = [self.tableView cellForRowAtIndexPath:_selectedIndexPath];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [prevCell setSelected:NO animated:YES];
@@ -301,6 +347,8 @@
             _fullyConnectedToPeer = NO;
             _selectedIndexPath = nil;
         } else {
+            _connectedPeer = selectedPeerID;
+            
             if (![[_mySession connectedPeers] containsObject:selectedPeerID]) {
                 NSLog(@"inviting peer: %@", selectedPeerID);
                 [_browser invitePeer:selectedPeerID toSession:_mySession withContext:nil timeout:20.0];
@@ -308,11 +356,17 @@
                 _fullyConnectedToPeer = NO;
                 [self setSelectedCell:cell atIndexPath:indexPath isFullyConnected:NO];
             } else {
+                _fullyConnectedToPeer = YES;
                 UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
                 [self setSelectedCell:cell atIndexPath:indexPath isFullyConnected:YES];
-                _fullyConnectedToPeer = YES;
+                [_delegate connectedToBluetoothDevice];
+
+                // send virtual connect message to remote
+                const Byte connectedMessage[1] = {CSCommunicationVirtuallyConnectedToRemote};
+                NSData *dataToSend = [NSData dataWithBytes:connectedMessage length:1];
+                [self sendDataToRemote:dataToSend withMode:MCSessionSendDataReliable];
+                [self updateRemoteWithCurrentCameraState];
             }
-            _connectedPeer = selectedPeerID;
             if (_connectedPeripheral) {
                 [_centralManager cancelPeripheralConnection:_connectedPeripheral];
                 _connectedPeripheral = nil;
@@ -409,14 +463,6 @@
         [self.tableView reloadData];
     }
 
-//    if (!_connectedPeripheral && ([peripheral.name rangeOfString:@"V.BTTN"].location != NSNotFound || [peripheral.name rangeOfString:@"V.ALRT"].location != NSNotFound)) {
-//        // Auto connect to first V.ALRT or V.BTTN
-//        NSIndexPath *selectedPath = [NSIndexPath indexPathForRow:[self.discoveredPeripherals indexOfObject:peripheral] inSection:0];
-//        NSLog(@"Auto Connecting to peripheral %@", peripheral);
-//        [self.tableView reloadData];
-//        [self tableView:self.tableView didSelectRowAtIndexPath:selectedPath];
-//    }
-
 }
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
@@ -445,7 +491,7 @@
         UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:_selectedIndexPath];
         [self setSelectedCell:cell atIndexPath:_selectedIndexPath isFullyConnected:YES];
         peripheral.delegate = self;
-        [peripheral discoverServices:@[[CBUUID UUIDWithString:BTTN_SERVICE_UUID],[CBUUID UUIDWithString:REMOTE_APP_TRANSFER_SERVICE_UUID]]];
+        [peripheral discoverServices:@[[CBUUID UUIDWithString:BTTN_SERVICE_UUID]]];
         _connectedPeripheral = selectedPeripheral;
         [_delegate connectedToBluetoothDevice];
     } else {
@@ -462,11 +508,7 @@
     
     for (CBService *service in peripheral.services) {
         NSLog(@"found service: %@", service);
-        if ([service.UUID.UUIDString isEqualToString:REMOTE_APP_TRANSFER_SERVICE_UUID]) {
-            [peripheral discoverCharacteristics:@[[CBUUID UUIDWithString:CAMERA_TO_REMOTE_CHARACTERISTIC_UUID], [CBUUID UUIDWithString:REMOTE_TO_CAMERA_CHARACTERISTIC_UUID]] forService:service];
-        } else { // is V.BTTN?
-            [peripheral discoverCharacteristics:@[[CBUUID UUIDWithString:BTTN_NOTIFICATION_CHARACTERISTIC_UUID], [CBUUID UUIDWithString:BTTN_VERIFICATION_CHARACTERISTIC_UUID], [CBUUID UUIDWithString:BTTN_DETECTION_CHARACTERISTIC_UUID]] forService:service];
-        }
+        [peripheral discoverCharacteristics:@[[CBUUID UUIDWithString:BTTN_NOTIFICATION_CHARACTERISTIC_UUID], [CBUUID UUIDWithString:BTTN_VERIFICATION_CHARACTERISTIC_UUID], [CBUUID UUIDWithString:BTTN_DETECTION_CHARACTERISTIC_UUID]] forService:service];
     }
 }
 
@@ -492,49 +534,11 @@
             const Byte identifierByte[1] = { 0x01 };
             NSMutableData *data = [[NSMutableData alloc] initWithBytes:identifierByte length:1];
             [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
-        } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:CAMERA_TO_REMOTE_CHARACTERISTIC_UUID]]) {
-            [self updateRemoteWithCurrentCameraState];
-        } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:REMOTE_TO_CAMERA_CHARACTERISTIC_UUID]]) {
-            [peripheral setNotifyValue:YES forCharacteristic:characteristic];
-            NSLog(@"NOTIFICATION characteristic: %@", characteristic);
         }
-        
         
     }
 }
 
-//-(void)updateRemoteWithCurrentCameraState {
-//    for (CBService *service in _connectedPeripheral.services) {
-//        if ([service.UUID.UUIDString isEqualToString:REMOTE_APP_TRANSFER_SERVICE_UUID]) {
-//            for (CBCharacteristic *characteristic in service.characteristics) {
-//                if ([characteristic.UUID.UUIDString isEqualToString:CAMERA_TO_REMOTE_CHARACTERISTIC_UUID]) {
-//                    NSData *currentStateData = [_delegate currentStateData];
-//                    if (currentStateData.length != 1) {
-//                        NSLog(@"Sent to remote: %@", currentStateData);
-//                        [_connectedPeripheral writeValue:currentStateData forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
-
-//-(void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
-//    //TODO: used to notify the camera when the remote successfully received the info
-//    if (error) {
-//        _failCount++;
-//        NSLog(@"FAIL: peripheral didn't receive camera message: %@ with error: %@", characteristic.value, error);
-//        if (_failCount <= 3) {
-//            [self updateRemoteWithCurrentCameraState];
-//        } else {
-//            NSLog(@"FAILED 3 times in a row, giving up");
-//        }
-//    } else {
-//        _failCount = 0;
-////        NSLog(@"SUCCESS: peripheral did receive camera message: %@", characteristic.value);
-//    }
-//    
-//}
 
 //TODO: info from BTLE device to camera
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
@@ -548,11 +552,7 @@
         if ([characteristic.value isEqualToData:buttonDownData]) {
             [_delegate bluetoothButtonPressed];
         }
-    }/* else { // Camera Remote App
-        [_delegate receivedMessageFromCameraRemoteApp:characteristic.value];
-    }*/
-    
-//    NSLog(@"peripheral did update characteristic value: %@", characteristic.value);
+    }
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {

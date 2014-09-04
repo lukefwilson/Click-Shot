@@ -35,6 +35,8 @@
 
 @property (nonatomic)  NSInteger index;
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *page2TextDistanceFromTop;
+@property (weak, nonatomic) IBOutlet UIButton *skipTutorialButton;
+
 - (IBAction)closeTutorial:(id)sender;
 
 @end

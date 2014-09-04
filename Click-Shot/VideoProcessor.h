@@ -109,13 +109,13 @@
 - (void)recordingDidStop:(UIImage *)image savedAt:(NSURL *)assetURL;
 - (void)willTakeStillImage;
 - (void)didTakeStillImage:(UIImage *)image;
-- (void)didFinishSavingStillImage;
+- (void)didFinishSavingStillImageAt:(NSURL *)url;
 - (void)actionShotDidStart;
 - (void)didTakeActionShot:(UIImage *)image number:(int)seriesNumber;
 - (void)actionShotDidStop;
 - (void)willSwitchCamera:(UIImage *)image;
 - (void)readyToSwitchToCurrentOutputQuality:(UIImage *)image;
 - (void)switchedToCameraDevice:(AVCaptureDevice *)device;
-- (BOOL)connectedToPeer;
+- (BOOL)shouldSendPreviewImage:(NSTimeInterval)secondsFromLastPicture;
 - (void)sendPreviewImageToPeer:(UIImage *)image;
 @end

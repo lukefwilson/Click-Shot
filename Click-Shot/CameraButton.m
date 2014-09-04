@@ -63,7 +63,7 @@
         CAShapeLayer *ring = [CAShapeLayer layer];
         switch (i) {
             case 0:
-                ring.strokeColor = [UIColor colorWithRed:61.0/255.0 green:213.0/255.0 blue:251.0/255.0 alpha:255].CGColor;
+                ring.strokeColor = [CameraViewController getHighlightColor].CGColor;
                 break;
             case 1:
                 ring.strokeColor = [UIColor blackColor].CGColor;
@@ -93,7 +93,7 @@
     self.soundTimerRing.zPosition = 20;
     self.soundTimerRing.position =  [self convertPoint:self.originalCenterPosition toView:self.buttonImage];
     self.soundTimerRing.fillColor   = [UIColor clearColor].CGColor;
-    self.soundTimerRing.strokeColor = [UIColor colorWithRed:61.0/255.0 green:213.0/255.0 blue:251.0/255.0 alpha:255].CGColor;
+    self.soundTimerRing.strokeColor = [CameraViewController getHighlightColor].CGColor;
     self.soundTimerRing.strokeEnd = 0.0;
     self.soundTimerRing.bounds = CGRectMake(0, 0, self.buttonImage.frame.size.width-20, self.buttonImage.frame.size.height-20);
     self.soundTimerRing.path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, self.buttonImage.frame.size.width-20, self.buttonImage.frame.size.height-20)].CGPath;
@@ -127,6 +127,8 @@
     }
     return self;
 }
+
+
 
 - (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event {
     if (self.enabled) {
@@ -242,10 +244,10 @@
                             [ring addAnimation:group forKey:nil];
                             
                             
-                            if (self.cameraController.cameraMode == CSStateCameraModeVideo) {
+                            if (self.cameraController.cameraMode != CSStateCameraModeStill) {
                                 ring.strokeColor = [UIColor whiteColor].CGColor;
                             } else {
-                                ring.strokeColor = [UIColor colorWithRed:61.0/255.0 green:213.0/255.0 blue:251.0/255.0 alpha:255].CGColor;
+                                ring.strokeColor = [CameraViewController getHighlightColor].CGColor;
                             }
                             
                             break;
@@ -330,7 +332,6 @@
     [self.cameraController enableProperCameraModeButtonsForCurrentCameraMode:NO];
     self.cameraController.cameraRollButton.enabled = NO;
     [CATransaction begin];
-//    CAShapeLayer *ring = [self.rings objectAtIndex:0];
     
     [CATransaction setCompletionBlock:^{
         _soundTimerRing.opacity = 0;
@@ -409,6 +410,28 @@
     self.cameraController.cameraRollButton.enabled = YES;
 }
 
+-(void)cancelTimedAction { // called when view will disappear if is animating
+    for (int i = 0; i < [self.rings count]; i++) {
+        CAShapeLayer *ring = [self.rings objectAtIndex:i];
+        ring.opacity = 0;
+        [ring removeAllAnimations];
+    }
+    [_cameraTimer invalidate];
+    [self updateCameraButtonWithText:@""];
+    
+    [UIView animateWithDuration:0.05 delay:0 options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState animations:^{
+        self.buttonImage.center = _originalCenterPosition;
+    } completion:nil];
+    
+    self.isAnimatingButton = NO;
+    
+    [self.cameraController enableProperCameraModeButtonsForCurrentCameraMode:YES];
+    
+    self.cameraController.cameraRollButton.enabled = YES;
+    
+    self.cameraController.swipeModesGestureIsBlocked = NO;
+}
+
 -(void)updateCameraButtonWithText:(NSString *)text {
     self.cameraButtonString = text;
     
@@ -422,7 +445,7 @@
             }
             case CSStateCameraModeActionShot: {
                 if (self.isAnimatingButton) {
-                    self.buttonImage.image = [self maskImage:self.pictureCameraButtonImage withMaskText:_cameraButtonString offsetFromCenter:CGPointZero fontSize:kSmallFontSize];
+                    self.buttonImage.image = [self maskImage:self.videoCameraButtonImage withMaskText:_cameraButtonString offsetFromCenter:CGPointZero fontSize:kSmallFontSize];
                 } else {
                     if (self.isHighlighted) {
                         self.buttonImage.image = [self maskImage:self.pictureCameraButtonImageHighlighted withMaskText:_cameraButtonString offsetFromCenter:CGPointZero fontSize:kMediumFontSize];

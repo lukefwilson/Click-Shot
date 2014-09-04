@@ -15,6 +15,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait animated:NO];
+
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter] addObserver:self.window.rootViewController  selector:NSSelectorFromString(@"deviceDidRotate:")  name:UIDeviceOrientationDidChangeNotification  object:nil];
 //    NSLog(@"finished launching");
@@ -32,7 +34,7 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     CameraViewController* mainController = (CameraViewController *)self.window.rootViewController;
-    [mainController pauseSessions];
+    [mainController userClosedApp];
 //    NSLog(@"did enter background");
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
@@ -42,7 +44,7 @@
 {
 //    NSLog(@"will enter foreground");
     CameraViewController* mainController = (CameraViewController *)self.window.rootViewController;
-    [mainController resumeSessions];
+    [mainController userReopenedApp];
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
 
@@ -54,7 +56,7 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     CameraViewController* mainController = (CameraViewController *)self.window.rootViewController;
-    [mainController pauseSessions];
+    [mainController userClosedApp];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
 //    NSLog(@"TERINATE");

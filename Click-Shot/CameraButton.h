@@ -40,5 +40,6 @@
 - (void)initialize;
 -(void)updateCameraButtonWithText:(NSString *)text;
 -(void)animateSoundRingForDuration:(float)soundDuration;
+-(void)cancelTimedAction;
 
 @end

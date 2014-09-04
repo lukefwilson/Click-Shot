@@ -20,6 +20,9 @@
 #import "MBProgressHUD.h"
 #import "UIApplication+ScreenSize.h"
 
+#import "CameraViewController.h"
+#import "UIImage+ImageFromColor.h"
+
 @implementation MHImageURL
 
 - (id)initWithURL:(NSString*)URL
@@ -457,7 +460,11 @@
         cell.backgroundColor = [UIColor clearColor];
         self.mergeVideosButton = [UIButton buttonWithType:UIButtonTypeCustom];
         self.mergeVideosButton.frame = CGRectMake(0, 0, 200, 60);
-        [self.mergeVideosButton setImage:[UIImage imageNamed:@"mergeVideos"] forState:UIControlStateNormal];
+//        [self.mergeVideosButton setImage:[UIImage imageNamed:@"mergeVideos"] forState:UIControlStateNormal];
+        [self.mergeVideosButton setTitle:@"Merge Videos" forState:UIControlStateNormal];
+        [self.mergeVideosButton setTitleColor:[UIColor colorWithWhite:0.95 alpha:1.0] forState:UIControlStateNormal];
+        self.mergeVideosButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:17];
+        [self.mergeVideosButton setBackgroundImage:[UIImage imageWithColor:[CameraViewController getHighlightColor]] forState:UIControlStateNormal];
         self.mergeVideosButton.center = CGPointMake([UIApplication currentSize].width/2, tableView.frame.size.height/4);
         [self.mergeVideosButton addTarget:self
                           action:@selector(mergeSelectedVideos)

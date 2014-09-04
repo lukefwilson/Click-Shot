@@ -8,6 +8,7 @@
 
 #import "LWTutorialViewController.h"
 #import "CameraViewController.h"
+#import "UIImage+ImageFromColor.h"
 
 #define kCloseButtonWidth 100
 #define kCloseButtonHeight 34
@@ -106,6 +107,11 @@
     LWTutorialChildViewController *childViewController = [self.storyboard instantiateViewControllerWithIdentifier:[NSString stringWithFormat:@"tutorialPage%li", (unsigned long)index]];
     childViewController.view.backgroundColor = [UIColor clearColor];
     childViewController.index = index;
+    
+    if (index == 0) {
+    
+        [childViewController.skipTutorialButton setBackgroundImage:[UIImage imageWithColor:[CameraViewController getHighlightColor]] forState:UIControlStateNormal];
+    }
     
     return childViewController;
     
@@ -307,7 +313,6 @@
 @end
 
 @interface LWTutorialChildViewController ()
-
 
 @end
 
