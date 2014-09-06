@@ -41,6 +41,8 @@
 - (IBAction)pressedRapidShotMode:(id)sender;
 - (IBAction)pressedPictureMode:(id)sender;
 
+-(void)switchingToClickShotMode;
+
 +(UIColor *)getHighlightColor;
 
 @property (nonatomic) BOOL autoFocusMode;

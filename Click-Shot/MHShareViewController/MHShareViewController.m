@@ -1131,6 +1131,7 @@
         //        }
         //
         CGSize videoSize = videoTrackSegment.naturalSize;
+        
         // For transforms, the origin is upper left corner. Scale and Rotate effect Translations
         if (videoSize.height > videoSize.width) {
             // these cases happen when its a portrait video merged & saved by ClickShot

@@ -18,7 +18,7 @@
 #import "DragAnimationView.h"
 #import "UIImage+Overlay.h"
 #import "UIImage+StackBlur.h"
-
+#import "CameraRemoteViewController.h"
 
 //#define CSStateCameraModeStill 0
 //#define CSStateCameraModeActionShot 1
@@ -80,6 +80,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *flashOffLabel;
 @property (weak, nonatomic) IBOutlet UILabel *flashAutoLabel;
 @property (weak, nonatomic) IBOutlet UIView *UITransparentBG;
+@property (weak, nonatomic) IBOutlet UIView *remoteContainerView;
 
 
 @property (nonatomic) CGFloat distanceToCenterPhotoPreview;
@@ -108,6 +109,7 @@
 @property (nonatomic, weak) IBOutlet UIView *settingsView;
 
 @property (nonatomic, weak) IBOutlet UIButton *tutorialButton;
+@property (nonatomic, weak) IBOutlet UIButton *remoteModeButton;
 @property (nonatomic, weak) IBOutlet UIView *bluetoothMenu;
 @property (nonatomic, weak) LWBluetoothTableViewController *bluetoothViewController;
 @property (nonatomic, weak) IBOutlet LWTutorialContainerView *tutorialView;
@@ -119,6 +121,7 @@
 - (IBAction)toggleFocusButton:(id)sender;
 - (IBAction)toggleExposureButton:(id)sender;
 - (IBAction)pressedSounds:(id)sender;
+- (IBAction)pressedRemoteMode:(id)sender;
 
 // Utilities.
 @property (nonatomic) BOOL lockInterfaceRotation;
@@ -150,6 +153,8 @@
 
 @property (nonatomic) BOOL shouldSendPreviewImages;
 @property (nonatomic) BOOL shouldSendTakenPictures;
+
+@property (nonatomic) CameraRemoteViewController *remoteViewController;
 
 
 @end
@@ -817,6 +822,45 @@ static UIColor *_highlightColor;
         [self openSoundsMenu];
     }
     self.bluetoothMenuIsOpen = NO;
+}
+
+- (IBAction)pressedRemoteMode:(id)sender {
+    [UIView animateWithDuration:0.3 animations:^{
+        // slide over switching view
+    } completion:^(BOOL finished) {
+        // Close settings menu
+        self.settingsMenuIsOpen = NO;
+        self.soundsMenuIsOpen = NO;
+        self.bluetoothMenuIsOpen = NO;
+        self.settingsButtonDragView.currentAnimationStep = settingsClosedAnimStep;
+        self.previewOverlayDragView.currentAnimationStep = settingsClosedAnimStep;
+        _previewOverlayDragView.hidden = YES;
+        
+        [self.view layoutIfNeeded];
+        [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.cameraUIDistanceToBottom.constant = 0;
+            self.cameraUIDistanceToTop.constant = 0;
+            [self updateCameraPreviewPosition];
+        } completion:^(BOOL finished){
+            [self ensureClosedSettingsMenu];
+            // Fade in remote mode view
+            _remoteContainerView.hidden = NO;
+            [UIView animateWithDuration:0.3 animations:^{
+                _remoteContainerView.alpha = 1;
+            }];
+            [self.remoteViewController switchingToRemoteMode];
+            // reset sliding view and stuff
+        }];
+    }];
+}
+
+// called by CameraRemoteViewController to hide itself
+-(void)switchingToClickShotMode {
+    [UIView animateWithDuration:0.3 animations:^{
+        _remoteContainerView.alpha = 0;
+    } completion:^(BOOL finished) {
+        _remoteContainerView.hidden = YES;
+    }];
 }
 
 -(void)openSoundsMenu {
@@ -1715,6 +1759,10 @@ static UIColor *_highlightColor;
         self.tutorialViewController = tutorialController;
         self.tutorialView.delegate = tutorialController;
         self.tutorialViewController.mainController = self;
+    } else if ([segue.identifier isEqualToString:@"remoteEmbed"]) {
+        CameraRemoteViewController *remoteController = segue.destinationViewController;
+        remoteController.cameraViewController = self;
+        self.remoteViewController = remoteController;
     }
 }
 

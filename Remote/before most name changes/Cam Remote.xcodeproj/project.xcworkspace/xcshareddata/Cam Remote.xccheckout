@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>26CE425E-E151-42C9-82E7-CBDDFD678677</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Cam Remote</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>C635F133-5197-47E6-A8C9-11EE9DAD87BC</key>
+		<string>https://github.com/lukefwilson/Click-Shot.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Cam Remote.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>C635F133-5197-47E6-A8C9-11EE9DAD87BC</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/lukefwilson/Click-Shot.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>C635F133-5197-47E6-A8C9-11EE9DAD87BC</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>C635F133-5197-47E6-A8C9-11EE9DAD87BC</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Click-Shot</string>
+		</dict>
+	</array>
+</dict>
+</plist>

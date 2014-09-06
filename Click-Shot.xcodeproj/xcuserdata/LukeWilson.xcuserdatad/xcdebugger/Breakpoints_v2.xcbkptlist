@@ -431,7 +431,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "330"
             endingLineNumber = "330"
-            landmarkName = "-tableView:didSelectRowAtIndexPath:"
+            landmarkName = "-tableView:heightForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -463,8 +463,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "327"
             endingLineNumber = "327"
-            landmarkName = "-tableView:heightForRowAtIndexPath:"
-            landmarkType = "5">
+            landmarkName = "@implementation LWBluetoothTableViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -602,11 +602,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2480"
-            endingLineNumber = "2480"
+            startingLineNumber = "2528"
+            endingLineNumber = "2528"
             landmarkName = "-readyToSwitchToCurrentOutputQuality:"
             landmarkType = "5">
          </BreakpointContent>
@@ -650,11 +650,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2474"
-            endingLineNumber = "2474"
+            startingLineNumber = "2522"
+            endingLineNumber = "2522"
             landmarkName = "-willSwitchCamera:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1154,11 +1154,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2403"
-            endingLineNumber = "2403"
+            startingLineNumber = "2451"
+            endingLineNumber = "2451"
             landmarkName = "-didTakeActionShot:number:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1170,11 +1170,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2402"
-            endingLineNumber = "2402"
+            startingLineNumber = "2450"
+            endingLineNumber = "2450"
             landmarkName = "-didTakeActionShot:number:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1186,11 +1186,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2401"
-            endingLineNumber = "2401"
+            startingLineNumber = "2449"
+            endingLineNumber = "2449"
             landmarkName = "-didTakeActionShot:number:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1330,11 +1330,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2309"
-            endingLineNumber = "2309"
+            startingLineNumber = "2357"
+            endingLineNumber = "2357"
             landmarkName = "-recordingWillStart"
             landmarkType = "5">
          </BreakpointContent>
@@ -1362,11 +1362,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2615"
-            endingLineNumber = "2615"
+            startingLineNumber = "2662"
+            endingLineNumber = "2662"
             landmarkName = "@implementation CameraViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -1442,11 +1442,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/MHShareViewController/MHShareViewController.m"
-            timestampString = "431407679.096574"
+            timestampString = "431678043.389298"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1150"
-            endingLineNumber = "1150"
+            startingLineNumber = "1151"
+            endingLineNumber = "1151"
             landmarkName = "-mergeSelectedVideos"
             landmarkType = "5">
          </BreakpointContent>
@@ -1458,11 +1458,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/MHShareViewController/MHShareViewController.m"
-            timestampString = "431407679.096574"
+            timestampString = "431678043.389298"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1176"
-            endingLineNumber = "1176"
+            startingLineNumber = "1177"
+            endingLineNumber = "1177"
             landmarkName = "-mergeSelectedVideos"
             landmarkType = "5">
          </BreakpointContent>
@@ -1474,11 +1474,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/MHShareViewController/MHShareViewController.m"
-            timestampString = "431407679.096574"
+            timestampString = "431678043.389298"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1167"
-            endingLineNumber = "1167"
+            startingLineNumber = "1168"
+            endingLineNumber = "1168"
             landmarkName = "-mergeSelectedVideos"
             landmarkType = "5">
          </BreakpointContent>
@@ -1490,11 +1490,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/MHShareViewController/MHShareViewController.m"
-            timestampString = "431407679.096574"
+            timestampString = "431678043.389298"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1154"
-            endingLineNumber = "1154"
+            startingLineNumber = "1155"
+            endingLineNumber = "1155"
             landmarkName = "-mergeSelectedVideos"
             landmarkType = "5">
          </BreakpointContent>
@@ -1506,11 +1506,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/MHShareViewController/MHShareViewController.m"
-            timestampString = "431407679.096574"
+            timestampString = "431678043.389298"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1135"
-            endingLineNumber = "1135"
+            startingLineNumber = "1136"
+            endingLineNumber = "1136"
             landmarkName = "-mergeSelectedVideos"
             landmarkType = "5">
          </BreakpointContent>
@@ -1522,11 +1522,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2523"
-            endingLineNumber = "2523"
+            startingLineNumber = "2571"
+            endingLineNumber = "2571"
             landmarkName = "-switchedToCameraDevice:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1538,11 +1538,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "632"
-            endingLineNumber = "632"
+            startingLineNumber = "637"
+            endingLineNumber = "637"
             landmarkName = "-focusAndExposeTap:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1623,8 +1623,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "545"
             endingLineNumber = "545"
-            landmarkName = "-peripheral:didUpdateValueForCharacteristic:error:"
-            landmarkType = "5">
+            landmarkName = "@implementation LWBluetoothTableViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1634,11 +1634,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1801"
-            endingLineNumber = "1801"
+            startingLineNumber = "1849"
+            endingLineNumber = "1849"
             landmarkName = "-receivedMessageFromCameraRemoteApp:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1650,11 +1650,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1800"
-            endingLineNumber = "1800"
+            startingLineNumber = "1848"
+            endingLineNumber = "1848"
             landmarkName = "-receivedMessageFromCameraRemoteApp:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1666,11 +1666,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1246"
-            endingLineNumber = "1246"
+            startingLineNumber = "1290"
+            endingLineNumber = "1290"
             landmarkName = "-closeFlashModeMenu:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1682,11 +1682,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1776"
-            endingLineNumber = "1776"
+            startingLineNumber = "1824"
+            endingLineNumber = "1824"
             landmarkName = "-receivedMessageFromCameraRemoteApp:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1698,11 +1698,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1947"
-            endingLineNumber = "1947"
+            startingLineNumber = "1995"
+            endingLineNumber = "1995"
             landmarkName = "-touchesBegan:withEvent:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1714,11 +1714,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1923"
-            endingLineNumber = "1923"
+            startingLineNumber = "1971"
+            endingLineNumber = "1971"
             landmarkName = "-currentStateData"
             landmarkType = "5">
          </BreakpointContent>
@@ -1730,11 +1730,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1245"
-            endingLineNumber = "1245"
+            startingLineNumber = "1289"
+            endingLineNumber = "1289"
             landmarkName = "-closeFlashModeMenu:"
             landmarkType = "5">
             <Locations>
@@ -1776,11 +1776,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1929"
-            endingLineNumber = "1929"
+            startingLineNumber = "1977"
+            endingLineNumber = "1977"
             landmarkName = "-currentStateData"
             landmarkType = "5">
          </BreakpointContent>
@@ -1792,11 +1792,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2511"
-            endingLineNumber = "2511"
+            startingLineNumber = "2559"
+            endingLineNumber = "2559"
             landmarkName = "-switchedToCameraDevice:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1808,11 +1808,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2510"
-            endingLineNumber = "2510"
+            startingLineNumber = "2558"
+            endingLineNumber = "2558"
             landmarkName = "-switchedToCameraDevice:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1845,7 +1845,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "262"
             endingLineNumber = "262"
-            landmarkName = "-tableView:numberOfRowsInSection:"
+            landmarkName = "-numberOfSectionsInTableView:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1877,7 +1877,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "147"
             endingLineNumber = "147"
-            landmarkName = "-session:peer:didChangeState:"
+            landmarkName = "-browser:lostPeer:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1952,11 +1952,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1762"
-            endingLineNumber = "1762"
+            startingLineNumber = "1810"
+            endingLineNumber = "1810"
             landmarkName = "-receivedMessageFromCameraRemoteApp:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1968,11 +1968,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "636"
-            endingLineNumber = "636"
+            startingLineNumber = "641"
+            endingLineNumber = "641"
             landmarkName = "-focusAndExposeTap:"
             landmarkType = "5">
          </BreakpointContent>
@@ -2030,11 +2030,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1639"
-            endingLineNumber = "1639"
+            startingLineNumber = "1683"
+            endingLineNumber = "1683"
             landmarkName = "-shouldAutorotate"
             landmarkType = "5">
          </BreakpointContent>
@@ -2046,11 +2046,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1643"
-            endingLineNumber = "1643"
+            startingLineNumber = "1687"
+            endingLineNumber = "1687"
             landmarkName = "-deviceDidRotate:"
             landmarkType = "5">
          </BreakpointContent>
@@ -2062,11 +2062,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Click-Shot/CameraViewController.m"
-            timestampString = "431558688.578926"
+            timestampString = "431571139.619738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1753"
-            endingLineNumber = "1753"
+            startingLineNumber = "1801"
+            endingLineNumber = "1801"
             landmarkName = "-receivedMessageFromCameraRemoteApp:"
             landmarkType = "5">
          </BreakpointContent>

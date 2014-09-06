@@ -121,6 +121,10 @@
 
 -(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info {
     NSLog(@"found peer %@", peerID);
+    
+    // dont allow to remote to self
+    if ([peerID.displayName isEqualToString:[@"Click-Shot Remote: " stringByAppendingString:[UIDevice currentDevice].name]]) return;
+    
     MCPeerID *samePeer = nil;
     for (MCPeerID *discovedPeer in _discoveredPeers) {
         if ([discovedPeer.displayName isEqualToString:peerID.displayName]) {
