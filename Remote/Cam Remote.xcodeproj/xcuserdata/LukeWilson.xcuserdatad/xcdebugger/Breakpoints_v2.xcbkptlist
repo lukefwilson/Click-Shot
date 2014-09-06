@@ -1026,11 +1026,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cam Remote/CSRCameraButton.m"
-            timestampString = "430470615.173685"
+            timestampString = "431686136.119709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "305"
-            endingLineNumber = "305"
+            startingLineNumber = "319"
+            endingLineNumber = "319"
             landmarkName = "-touchesEnded:withEvent:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1090,11 +1090,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cam Remote/CSRCameraButton.m"
-            timestampString = "430470615.173685"
+            timestampString = "431686136.119709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "432"
-            endingLineNumber = "432"
+            startingLineNumber = "446"
+            endingLineNumber = "446"
             landmarkName = "-cancelTimedAction"
             landmarkType = "5">
          </BreakpointContent>
@@ -1106,11 +1106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cam Remote/CSRCameraButton.m"
-            timestampString = "430211855.246581"
+            timestampString = "431686136.119709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "157"
-            endingLineNumber = "157"
+            startingLineNumber = "171"
+            endingLineNumber = "171"
             landmarkName = "-touchesMoved:withEvent:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1122,11 +1122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cam Remote/CSRCameraButton.m"
-            timestampString = "430211855.246581"
+            timestampString = "431686136.119709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "155"
-            endingLineNumber = "155"
+            startingLineNumber = "169"
+            endingLineNumber = "169"
             landmarkName = "-touchesMoved:withEvent:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1138,11 +1138,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cam Remote/CSRCameraButton.m"
-            timestampString = "430211855.246581"
+            timestampString = "431686136.119709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "156"
-            endingLineNumber = "156"
+            startingLineNumber = "170"
+            endingLineNumber = "170"
             landmarkName = "-touchesMoved:withEvent:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1154,11 +1154,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cam Remote/CSRCameraButton.m"
-            timestampString = "430211855.246581"
+            timestampString = "431686136.119709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "154"
-            endingLineNumber = "154"
+            startingLineNumber = "168"
+            endingLineNumber = "168"
             landmarkName = "-touchesMoved:withEvent:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1170,11 +1170,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cam Remote/CSRCameraButton.m"
-            timestampString = "430211855.246581"
+            timestampString = "431686136.119709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "203"
-            endingLineNumber = "203"
+            startingLineNumber = "217"
+            endingLineNumber = "217"
             landmarkName = "-touchesEnded:withEvent:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1186,11 +1186,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cam Remote/CSRCameraButton.m"
-            timestampString = "430211855.246581"
+            timestampString = "431686136.119709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "162"
-            endingLineNumber = "162"
+            startingLineNumber = "176"
+            endingLineNumber = "176"
             landmarkName = "-touchesMoved:withEvent:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1202,11 +1202,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cam Remote/CSRCameraButton.m"
-            timestampString = "430470615.173685"
+            timestampString = "431686136.119709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "412"
-            endingLineNumber = "412"
+            startingLineNumber = "426"
+            endingLineNumber = "426"
             landmarkName = "@implementation CSRCameraButton"
             landmarkType = "3">
          </BreakpointContent>
@@ -1394,11 +1394,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cam Remote/CSRCameraButton.m"
-            timestampString = "430470615.173685"
+            timestampString = "431686136.119709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "357"
-            endingLineNumber = "357"
+            startingLineNumber = "371"
+            endingLineNumber = "371"
             landmarkName = "-pointInside:withEvent:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1458,11 +1458,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cam Remote/CameraRemoteViewController.m"
-            timestampString = "431559318.839787"
+            timestampString = "431686136.119709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1707"
-            endingLineNumber = "1707"
+            startingLineNumber = "1709"
+            endingLineNumber = "1709"
             landmarkName = "@implementation CameraRemoteViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -1474,12 +1474,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cam Remote/CameraRemoteViewController.m"
-            timestampString = "431559318.839787"
+            timestampString = "431686136.119709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2543"
-            endingLineNumber = "2543"
-            landmarkName = "-pickerView:didSelectRow:inComponent:"
+            startingLineNumber = "2545"
+            endingLineNumber = "2545"
+            landmarkName = "-pickerView:titleForRow:forComponent:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1490,13 +1490,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cam Remote/CameraRemoteViewController.m"
-            timestampString = "431559318.839787"
+            timestampString = "431686136.119709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1682"
-            endingLineNumber = "1682"
-            landmarkName = "@implementation CameraRemoteViewController"
-            landmarkType = "3">
+            startingLineNumber = "1684"
+            endingLineNumber = "1684"
+            landmarkName = "-prepareForSegue:sender:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1538,11 +1538,43 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cam Remote/CameraRemoteViewController.m"
-            timestampString = "431559318.839787"
+            timestampString = "431686136.119709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1720"
-            endingLineNumber = "1720"
+            startingLineNumber = "1722"
+            endingLineNumber = "1722"
+            landmarkName = "-byteForFEFloat:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Cam Remote/CameraRemoteViewController.m"
+            timestampString = "431686136.119709"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1686"
+            endingLineNumber = "1686"
+            landmarkName = "-prepareForSegue:sender:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Cam Remote/CameraRemoteViewController.m"
+            timestampString = "431686136.119709"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1826"
+            endingLineNumber = "1826"
             landmarkName = "-receivedMessage:fromPeer:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1554,27 +1586,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cam Remote/CameraRemoteViewController.m"
-            timestampString = "431559318.839787"
+            timestampString = "431686136.119709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1684"
-            endingLineNumber = "1684"
-            landmarkName = "-updateCameraWithCurrentStateAndButtonAction:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Cam Remote/CameraRemoteViewController.m"
-            timestampString = "431559318.839787"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1824"
-            endingLineNumber = "1824"
+            startingLineNumber = "1833"
+            endingLineNumber = "1833"
             landmarkName = "-receivedMessage:fromPeer:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1586,28 +1602,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cam Remote/CameraRemoteViewController.m"
-            timestampString = "431559318.839787"
+            timestampString = "431686136.119709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1831"
-            endingLineNumber = "1831"
-            landmarkName = "-receivedMessage:fromPeer:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Cam Remote/CameraRemoteViewController.m"
-            timestampString = "431559318.839787"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1289"
-            endingLineNumber = "1289"
-            landmarkName = "-switchToRapidShotMode"
+            startingLineNumber = "1291"
+            endingLineNumber = "1291"
+            landmarkName = "-switchToPictureMode"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1639,8 +1639,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "594"
             endingLineNumber = "594"
-            landmarkName = "@implementation CameraRemoteViewController"
-            landmarkType = "3">
+            landmarkName = "-switchCamera:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1650,11 +1650,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cam Remote/CameraRemoteViewController.m"
-            timestampString = "431559318.839787"
+            timestampString = "431686136.119709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2417"
-            endingLineNumber = "2417"
+            startingLineNumber = "2419"
+            endingLineNumber = "2419"
             landmarkName = "-willSwitchCamera"
             landmarkType = "5">
          </BreakpointContent>
@@ -1698,11 +1698,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cam Remote/CameraRemoteViewController.m"
-            timestampString = "431559318.839787"
+            timestampString = "431686136.119709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1821"
-            endingLineNumber = "1821"
+            startingLineNumber = "1823"
+            endingLineNumber = "1823"
             landmarkName = "-receivedMessage:fromPeer:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1714,13 +1714,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cam Remote/CameraRemoteViewController.m"
-            timestampString = "431559318.839787"
+            timestampString = "431686136.119709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1716"
-            endingLineNumber = "1716"
-            landmarkName = "-receivedMessage:fromPeer:"
-            landmarkType = "5">
+            startingLineNumber = "1718"
+            endingLineNumber = "1718"
+            landmarkName = "@implementation CameraRemoteViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1730,11 +1730,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cam Remote/CameraRemoteViewController.m"
-            timestampString = "431559318.839787"
+            timestampString = "431686136.119709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1822"
-            endingLineNumber = "1822"
+            startingLineNumber = "1824"
+            endingLineNumber = "1824"
             landmarkName = "-receivedMessage:fromPeer:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1762,13 +1762,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cam Remote/CameraRemoteViewController.m"
-            timestampString = "431559318.839787"
+            timestampString = "431686136.119709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1712"
-            endingLineNumber = "1712"
-            landmarkName = "-byteForFEFloat:"
-            landmarkType = "5">
+            startingLineNumber = "1714"
+            endingLineNumber = "1714"
+            landmarkName = "@implementation CameraRemoteViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

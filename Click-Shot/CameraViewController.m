@@ -2731,6 +2731,8 @@ static UIColor *_highlightColor;
 #pragma  mark - Memory Warning
 -(void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+    NSLog(@"RECEIVED MEMORY WARNING IN MAIN CONTROLLER");
+    [self.bluetoothViewController cancelAllProgresses];
 }
 
 @end

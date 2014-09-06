@@ -1121,18 +1121,12 @@
                             ofTrack:[[asset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0] atTime:insertAtTime error:nil];
         CGAffineTransform trackPreferredTransform = videoTrackSegment.preferredTransform;
         UIImageOrientation trackOrientation = [self orientationForTransform:trackPreferredTransform andSize:videoTrackSegment.naturalSize];
-        
-//        if (trackOrientation != firstVideoOrientation || !CGSizeEqualToSize(renderSize, videoTrackSegment.naturalSize)) {
-//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Whoops!" message:@"At this time Click-Shot can only merge videos of the same orientation." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
-//            [alert dismissWithClickedButtonIndex:0 animated:YES];
-//            [self.hud hide:YES afterDelay:0];
-        //            [alert show];
-        //            return;
-        //        }
-        //
+
         CGSize videoSize = videoTrackSegment.naturalSize;
+        CGSize properVideoSize = videoSize; // height and width will be correct, no matter the orientation (changed if video is portrait or upside down portrait
         
         // For transforms, the origin is upper left corner. Scale and Rotate effect Translations
+        CGAffineTransform transform = CGAffineTransformIdentity;
         if (videoSize.height > videoSize.width) {
             // these cases happen when its a portrait video merged & saved by ClickShot
             if (renderInPortrait) {
@@ -1141,61 +1135,68 @@
                 float scale = renderSize.height/videoSize.height;
                 CGAffineTransform transform = CGAffineTransformMakeScale(scale, scale);
                 transform = CGAffineTransformTranslate(transform, renderSize.width/2/scale-videoSize.width/2, 0);
-                [videoTrackInstruction setTransform:transform atTime:insertAtTime];
             }
         } else {
             if (trackOrientation == UIImageOrientationRight) {  // Normal Portrait - 90 deg CW
+                properVideoSize = CGSizeMake(videoSize.height, videoSize.width);
                 if (renderInPortrait) {
-                    CGAffineTransform transform = CGAffineTransformMakeRotation(M_PI_2);
+                    transform = CGAffineTransformMakeRotation(M_PI_2);
                     transform = CGAffineTransformTranslate(transform,0,-renderSize.width);
-                    [videoTrackInstruction setTransform:transform atTime:insertAtTime];
                 } else {
                     if (videoSize.width > videoSize.height) videoSize = CGSizeMake(videoSize.height, videoSize.width);
                     float scale = renderSize.height/videoSize.height;
-                    CGAffineTransform transform = CGAffineTransformMakeScale(scale, scale);
+                    transform = CGAffineTransformMakeScale(scale, scale);
                     transform = CGAffineTransformRotate(transform, M_PI_2);
                     transform = CGAffineTransformTranslate(transform, 0, -renderSize.width/2/scale-videoSize.width/2);
-                    [videoTrackInstruction setTransform:transform atTime:insertAtTime];
                 }
             } else if (trackOrientation == UIImageOrientationLeft) { // Upside Down Portrait - 90 deg CCW
+                properVideoSize = CGSizeMake(videoSize.height, videoSize.width);
                 if (renderInPortrait) {
-                    CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
+                    transform = CGAffineTransformMakeRotation(-M_PI_2);
                     transform = CGAffineTransformTranslate(transform,-renderSize.height,0);
-                    [videoTrackInstruction setTransform:transform atTime:insertAtTime];
                 } else {
                     if (videoSize.width > videoSize.height) videoSize = CGSizeMake(videoSize.height, videoSize.width);
                     float scale = renderSize.height/videoSize.height;
-                    CGAffineTransform transform = CGAffineTransformMakeScale(scale, scale);
+                    transform = CGAffineTransformMakeScale(scale, scale);
                     transform = CGAffineTransformRotate(transform, -M_PI_2);
                     transform = CGAffineTransformTranslate(transform, -renderSize.height/scale, (renderSize.width/2/scale)-videoSize.width/2);
-                    [videoTrackInstruction setTransform:transform atTime:insertAtTime];
                 }
             } else if (trackOrientation == UIImageOrientationDown) { // upside down landscape - 180 deg rotation
                 if (renderInPortrait) {
                     if (videoSize.width < videoSize.height) videoSize = CGSizeMake(videoSize.height, videoSize.width);
                     float scale = renderSize.width/videoSize.width;
-                    CGAffineTransform transform = CGAffineTransformMakeScale(scale, scale);
+                    transform = CGAffineTransformMakeScale(scale, scale);
                     transform = CGAffineTransformRotate(transform, M_PI);
                     transform = CGAffineTransformTranslate(transform, -((renderSize.width)/scale), -((renderSize.height/2)/scale)-(videoSize.height/2));
-                    [videoTrackInstruction setTransform:transform atTime:insertAtTime];
                 } else {
-                    [videoTrackInstruction setTransform:CGAffineTransformConcat(CGAffineTransformMakeRotation(M_PI), CGAffineTransformMakeTranslation(renderSize.width, renderSize.height))  atTime:insertAtTime];
+                    transform = CGAffineTransformConcat(CGAffineTransformMakeRotation(M_PI), CGAffineTransformMakeTranslation(renderSize.width, renderSize.height));
                 }
             } else if (trackOrientation == UIImageOrientationUp) { // landscape - 90 deg CCW from portrait
                 if (renderInPortrait) {
                     if (videoSize.width < videoSize.height) videoSize = CGSizeMake(videoSize.height, videoSize.width);
                     float scale = renderSize.width/videoSize.width;
                     float move = ((renderSize.height/2)/scale)-(videoSize.height/2);
-                    CGAffineTransform transform = CGAffineTransformMakeScale(scale, scale);
+                    transform = CGAffineTransformMakeScale(scale, scale);
                     transform = CGAffineTransformTranslate(transform, 0, move);
-                    [videoTrackInstruction setTransform:transform atTime:insertAtTime];
                 } else {
-                    [videoTrackInstruction setTransform:CGAffineTransformIdentity atTime:insertAtTime];
+                    transform = CGAffineTransformIdentity;
                 }
             } else {
                 NSLog(@"NONE OF THESE ORIENTATIONS");
             }
         }
+        
+        BOOL isPortrait = (properVideoSize.height > properVideoSize.width);
+        if ((renderInPortrait && isPortrait) || (!renderInPortrait && !isPortrait)) {
+            if (renderSize.height != properVideoSize.height) {
+                float scale = renderSize.height/properVideoSize.height;
+                transform = CGAffineTransformScale(transform, scale, scale);
+                NSLog(@"scaling by %f, render size: %@ video size: %@", scale, NSStringFromCGSize(renderSize), NSStringFromCGSize(videoSize));
+            }
+        }
+        
+        [videoTrackInstruction setTransform:transform atTime:insertAtTime];
+
         
         NSLog(@"%@ - %@", NSStringFromCGSize(videoTrackSegment.naturalSize), NSStringFromCGAffineTransform(trackPreferredTransform));
         insertAtTime = CMTimeAdd(insertAtTime, videoTrackSegment.timeRange.duration);

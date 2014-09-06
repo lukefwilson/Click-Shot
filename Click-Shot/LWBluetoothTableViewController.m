@@ -25,6 +25,8 @@
 @property (nonatomic) MCSession *mySession;
 @property (nonatomic) MCNearbyServiceBrowser *browser;
 @property (nonatomic) UILabel *headerLabel;
+
+@property (nonatomic) NSMutableArray *allProgresses;
 @end
 
 @implementation LWBluetoothTableViewController
@@ -46,6 +48,7 @@
     _centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
     _discoveredPeripherals = [NSMutableArray array];
     _discoveredPeers = [NSMutableArray array];
+    _allProgresses = [NSMutableArray array];
 
     _failCount = 0;
     _fullyConnectedToPeer = NO;
@@ -246,12 +249,20 @@
 -(void)sendImageAtURL:(NSURL *)url withName:(NSString *)imageName{
     if (_connectedPeer && _fullyConnectedToPeer) {
         NSLog(@"sending high quality image");
-        [_mySession sendResourceAtURL:url withName:imageName toPeer:_connectedPeer withCompletionHandler:^(NSError *error){
+        NSProgress *progress = [_mySession sendResourceAtURL:url withName:imageName toPeer:_connectedPeer withCompletionHandler:^(NSError *error){
             if (error) {
                 NSLog(@"error in sending full image to remote: %@", error);
             }
         }];
+        [_allProgresses addObject:progress];
     }
+}
+
+-(void)cancelAllProgresses { // called when receive memory warning in root view controller
+    for (NSProgress *progress in _allProgresses) {
+        [progress cancel];
+    }
+    [_allProgresses removeAllObjects];
 }
 
 #pragma mark - Table view data source

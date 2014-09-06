@@ -101,6 +101,12 @@
 		2F4EB0D919BAE209007A186E /* tableViewDivider@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F4EB0D719BAE209007A186E /* tableViewDivider@2x.png */; };
 		2F4EB0DE19BAE210007A186E /* tutorialIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F4EB0DB19BAE210007A186E /* tutorialIcon.png */; };
 		2F4EB0E019BAE210007A186E /* tutorialIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F4EB0DD19BAE210007A186E /* tutorialIcon@2x.png */; };
+		2F4EB10819BB0118007A186E /* running10.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F4EB0FC19BB0118007A186E /* running10.png */; };
+		2F4EB10919BB0118007A186E /* running11.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F4EB0FD19BB0118007A186E /* running11.png */; };
+		2F4EB10A19BB0118007A186E /* running12.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F4EB0FE19BB0118007A186E /* running12.png */; };
+		2F4EB11019BB0118007A186E /* running7.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F4EB10419BB0118007A186E /* running7.png */; };
+		2F4EB11119BB0118007A186E /* running8.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F4EB10519BB0118007A186E /* running8.png */; };
+		2F4EB11219BB0118007A186E /* running9.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F4EB10619BB0118007A186E /* running9.png */; };
 		2F71F2C1193E823E00FA41C2 /* UIApplication+ScreenSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F71F2C0193E823E00FA41C2 /* UIApplication+ScreenSize.m */; };
 		2F8EA3D01985820100219F3B /* DragAnimationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8EA3CF1985820100219F3B /* DragAnimationView.m */; };
 		2FE9BFCB19A719DC00EC358F /* UIImage+Overlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE9BFCA19A719DC00EC358F /* UIImage+Overlay.m */; };
@@ -281,11 +287,17 @@
 		2F4EB0D719BAE209007A186E /* tableViewDivider@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tableViewDivider@2x.png"; path = "../../../../../Dropbox/Remote Shot/icons/tableViewDivider@2x.png"; sourceTree = "<group>"; };
 		2F4EB0DB19BAE210007A186E /* tutorialIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tutorialIcon.png; sourceTree = "<group>"; };
 		2F4EB0DD19BAE210007A186E /* tutorialIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tutorialIcon@2x.png"; sourceTree = "<group>"; };
+		2F4EB0FC19BB0118007A186E /* running10.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = running10.png; sourceTree = "<group>"; };
+		2F4EB0FD19BB0118007A186E /* running11.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = running11.png; sourceTree = "<group>"; };
+		2F4EB0FE19BB0118007A186E /* running12.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = running12.png; sourceTree = "<group>"; };
+		2F4EB10419BB0118007A186E /* running7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = running7.png; sourceTree = "<group>"; };
+		2F4EB10519BB0118007A186E /* running8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = running8.png; sourceTree = "<group>"; };
+		2F4EB10619BB0118007A186E /* running9.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = running9.png; sourceTree = "<group>"; };
+		2F4EB11319BB01AE007A186E /* UIImage+Overlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Overlay.h"; sourceTree = "<group>"; };
 		2F71F2BF193E823E00FA41C2 /* UIApplication+ScreenSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+ScreenSize.h"; sourceTree = "<group>"; };
 		2F71F2C0193E823E00FA41C2 /* UIApplication+ScreenSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+ScreenSize.m"; sourceTree = "<group>"; };
 		2F8EA3CE1985820100219F3B /* DragAnimationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragAnimationView.h; sourceTree = "<group>"; };
 		2F8EA3CF1985820100219F3B /* DragAnimationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragAnimationView.m; sourceTree = "<group>"; };
-		2FE9BFC919A719DC00EC358F /* UIImage+Overlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Overlay.h"; sourceTree = "<group>"; };
 		2FE9BFCA19A719DC00EC358F /* UIImage+Overlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Overlay.m"; sourceTree = "<group>"; };
 		2FE9C08E19A89E1C00EC358F /* UIImage+StackBlur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+StackBlur.h"; sourceTree = "<group>"; };
 		2FE9C08F19A89E1C00EC358F /* UIImage+StackBlur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+StackBlur.m"; sourceTree = "<group>"; };
@@ -594,6 +606,7 @@
 		2F4EB08219BAE1AE007A186E /* camera button */ = {
 			isa = PBXGroup;
 			children = (
+				2F4EB0FA19BB0118007A186E /* running */,
 				2F4EB08319BAE1AE007A186E /* cameraButtonDarkBG.png */,
 				2F4EB08419BAE1AE007A186E /* cameraButtonDarkBG@2x.png */,
 				2F4EB08619BAE1AE007A186E /* inner.png */,
@@ -665,6 +678,19 @@
 			path = "../../../../../Dropbox/Remote Shot/icons/tutorial";
 			sourceTree = "<group>";
 		};
+		2F4EB0FA19BB0118007A186E /* running */ = {
+			isa = PBXGroup;
+			children = (
+				2F4EB0FC19BB0118007A186E /* running10.png */,
+				2F4EB0FD19BB0118007A186E /* running11.png */,
+				2F4EB0FE19BB0118007A186E /* running12.png */,
+				2F4EB10419BB0118007A186E /* running7.png */,
+				2F4EB10519BB0118007A186E /* running8.png */,
+				2F4EB10619BB0118007A186E /* running9.png */,
+			);
+			path = running;
+			sourceTree = "<group>";
+		};
 		2FFFDF9D192FD3D900F3370B = {
 			isa = PBXGroup;
 			children = (
@@ -712,7 +738,7 @@
 				2FFFDFBE192FD3D900F3370B /* Main_iPad.storyboard */,
 				2FFFE0F1192FD73B00F3370B /* CameraRemoteViewController.h */,
 				2FFFE0F2192FD73B00F3370B /* CameraRemoteViewController.m */,
-				2FE9BFC919A719DC00EC358F /* UIImage+Overlay.h */,
+				2F4EB11319BB01AE007A186E /* UIImage+Overlay.h */,
 				2FE9BFCA19A719DC00EC358F /* UIImage+Overlay.m */,
 				2FE9C08E19A89E1C00EC358F /* UIImage+StackBlur.h */,
 				2FE9C08F19A89E1C00EC358F /* UIImage+StackBlur.m */,
@@ -899,6 +925,7 @@
 				2F4EB0C719BAE1EB007A186E /* stillSwipeImage@2x.png in Resources */,
 				2F4EB0AB19BAE1BB007A186E /* exposure.png in Resources */,
 				2F4EB0A719BAE1AE007A186E /* redInnerHighlighted.png in Resources */,
+				2F4EB11119BB0118007A186E /* running8.png in Resources */,
 				2F4EB0A019BAE1AE007A186E /* outer@2x.png in Resources */,
 				2F4EB07D19BAE199007A186E /* inwardSwitchCamera.png in Resources */,
 				2F4EB09F19BAE1AE007A186E /* outer.png in Resources */,
@@ -910,6 +937,7 @@
 				2F4EB09919BAE1AE007A186E /* inner.png in Resources */,
 				2F4EB09619BAE1AE007A186E /* cameraButtonDarkBG.png in Resources */,
 				2FFFE10C192FD84100F3370B /* dogBark.wav in Resources */,
+				2F4EB11019BB0118007A186E /* running7.png in Resources */,
 				2F4EB0AC19BAE1BB007A186E /* exposure@2x.png in Resources */,
 				2F4EB0D319BAE1FC007A186E /* switchAppModeToClickShot.png in Resources */,
 				2FFFE108192FD84100F3370B /* alienRampUp.wav in Resources */,
@@ -918,7 +946,9 @@
 				2F4EB0A219BAE1AE007A186E /* rapidInner@2x.png in Resources */,
 				2F4EB0A319BAE1AE007A186E /* rapidInnerHighlighted.png in Resources */,
 				2F4EB07719BAE199007A186E /* inwardCameraMode-Still.png in Resources */,
+				2F4EB10919BB0118007A186E /* running11.png in Resources */,
 				2F4EB0D119BAE1FC007A186E /* switchAppMode.png in Resources */,
+				2F4EB10819BB0118007A186E /* running10.png in Resources */,
 				2F4EB0A119BAE1AE007A186E /* rapidInner.png in Resources */,
 				2F4EB07919BAE199007A186E /* inwardCameraRoll.png in Resources */,
 				2F4EB0D919BAE209007A186E /* tableViewDivider@2x.png in Resources */,
@@ -937,6 +967,7 @@
 				2FFFE109192FD84100F3370B /* birdChirp.wav in Resources */,
 				2F4EB09D19BAE1AE007A186E /* innerPlayingSound.png in Resources */,
 				2F4EB0C919BAE1EB007A186E /* videoSwipeImage.png in Resources */,
+				2F4EB11219BB0118007A186E /* running9.png in Resources */,
 				2F4EB09C19BAE1AE007A186E /* innerHighlighted@2x.png in Resources */,
 				2F4EB09A19BAE1AE007A186E /* inner@2x.png in Resources */,
 				2F4EB0D219BAE1FC007A186E /* switchAppMode@2x.png in Resources */,
@@ -952,6 +983,7 @@
 				2F4EB0A619BAE1AE007A186E /* redInner@2x.png in Resources */,
 				2F4EB0CA19BAE1EB007A186E /* videoSwipeImage@2x.png in Resources */,
 				2F4EB0BA19BAE1CA007A186E /* cross@2x.png in Resources */,
+				2F4EB10A19BB0118007A186E /* running12.png in Resources */,
 				2FFFDFBD192FD3D900F3370B /* Main_iPhone.storyboard in Resources */,
 				2FFFDFB4192FD3D900F3370B /* InfoPlist.strings in Resources */,
 				2F4EB0D819BAE209007A186E /* tableViewDivider.png in Resources */,

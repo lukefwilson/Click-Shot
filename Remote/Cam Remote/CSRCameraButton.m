@@ -110,8 +110,22 @@
     self.darkCameraButtonBG = [UIImage imageNamed:@"cameraButtonDarkBG"];
     self.cameraButtonPlayingSound = [UIImage imageNamed:@"innerPlayingSound"];
     self.isHighlighted = NO;
-    
+
     self.buttonImage.alpha = 0.8;
+    NSMutableArray *actionAnimationImages = [NSMutableArray array];
+    for (int i = 7; i <= 12; i++) {
+        [actionAnimationImages addObject:[UIImage imageNamed:[@"running" stringByAppendingString:[NSString stringWithFormat:@"%i.png", i]]]];
+    }
+    self.buttonImage.animationImages = actionAnimationImages;
+    self.buttonImage.animationDuration = [actionAnimationImages count] * 0.2;
+}
+
+-(void)startActionAnimation:(BOOL)start {
+    if (start) {
+        [_buttonImage startAnimating];
+    } else {
+        [_buttonImage stopAnimating];
+    }
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder{

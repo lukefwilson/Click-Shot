@@ -179,7 +179,7 @@
             NSArray *progressArray = _runningProgressArrays[i];
             if ([progressArray[0] isEqual:object]) {
                 NSNumber *value = [change objectForKey:NSKeyValueChangeNewKey];
-                NSLog(@"%@", value);
+//                NSLog(@"%@", value);
                 CGFloat progressPercentage = [value floatValue];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     CAShapeLayer *ring = progressArray[1];

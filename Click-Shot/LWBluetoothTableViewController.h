@@ -35,6 +35,8 @@
 -(void)sendDataToRemote:(NSData *)data withMode:(MCSessionSendDataMode)sendingMode;
 -(void)sendImageAtURL:(NSURL *)url withName:(NSString *)imageName;
 -(void)virtuallyDisconnectFromRemote;
+-(void)cancelAllProgresses; // called when receive memory warning in root view controller
+
 
 @end
 

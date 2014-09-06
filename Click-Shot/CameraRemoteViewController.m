@@ -1072,10 +1072,12 @@ static UIColor *_highlightColor;
                     [self updateCameraWithCurrentStateAndButtonAction:CSStateButtonActionStopActionShot];
                     self.cameraIsActionShooting = NO;
                     [self recordingWillStop];
+                    [self.cameraButton startActionAnimation:NO];
                 } else {
                     [self updateCameraWithCurrentStateAndButtonAction:CSStateButtonActionStartActionShot];
                     self.cameraIsActionShooting = YES;
                     [self recordingWillStart];
+                    [self.cameraButton startActionAnimation:YES];
                 }
                 if (!self.cameraIsActionShooting && !self.cameraButton.isDragging)[self.cameraButton updateCameraButtonWithText:@""];
                 

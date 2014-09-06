@@ -14,7 +14,7 @@
 #import "SAVideoRangeSlider.h"
 #import "MBProgressHUD.h"
 #import "UIApplication+ScreenSize.h"
-
+#import "TransferService.h"
 
 @implementation MHPinchGestureRecognizer
 @end
@@ -469,16 +469,24 @@
 
 -(void)mergePressed{
     
-    
-    MHShareViewController *merge = [MHShareViewController new];
-    
-    MHGalleryItem *selectedVideo = [self.galleryItems objectAtIndex:self.pageIndex];
-    
-    merge.pageIndex = [self.videoGalleryItems indexOfObject:selectedVideo];
-    if (merge.pageIndex == NSNotFound) return;
-    merge.galleryItems = self.videoGalleryItems;
-    [self.navigationController pushViewController:merge
-                                         animated:YES];
+    if (IPHONE_4) {
+        [[[UIAlertView alloc] initWithTitle:@"Sorry!"
+                                    message:@"At this time Click-Shot cannot merge videos on the iPhone 4s"
+                                   delegate:self
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil] show];
+    } else {
+        
+        MHShareViewController *merge = [MHShareViewController new];
+        
+        MHGalleryItem *selectedVideo = [self.galleryItems objectAtIndex:self.pageIndex];
+        
+        merge.pageIndex = [self.videoGalleryItems indexOfObject:selectedVideo];
+        if (merge.pageIndex == NSNotFound) return;
+        merge.galleryItems = self.videoGalleryItems;
+        [self.navigationController pushViewController:merge
+                                             animated:YES];
+    }
 }
 
 // adds new gallery item to front of gallery

@@ -26,6 +26,12 @@
 		2F4EB01419BAE064007A186E /* BluetoothCommunicationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4EB01319BAE064007A186E /* BluetoothCommunicationViewController.m */; };
 		2F4EB01919BAE070007A186E /* CSRCameraButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4EB01619BAE070007A186E /* CSRCameraButton.m */; };
 		2F4EB01A19BAE070007A186E /* CSRMoveableImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4EB01819BAE070007A186E /* CSRMoveableImageView.m */; };
+		2F4EB0EF19BB003F007A186E /* running10.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F4EB0E319BB003F007A186E /* running10.png */; };
+		2F4EB0F019BB003F007A186E /* running11.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F4EB0E419BB003F007A186E /* running11.png */; };
+		2F4EB0F119BB003F007A186E /* running12.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F4EB0E519BB003F007A186E /* running12.png */; };
+		2F4EB0F719BB003F007A186E /* running7.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F4EB0EB19BB003F007A186E /* running7.png */; };
+		2F4EB0F819BB003F007A186E /* running8.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F4EB0EC19BB003F007A186E /* running8.png */; };
+		2F4EB0F919BB003F007A186E /* running9.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F4EB0ED19BB003F007A186E /* running9.png */; };
 		2F71F2C1193E823E00FA41C2 /* UIApplication+ScreenSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F71F2C0193E823E00FA41C2 /* UIApplication+ScreenSize.m */; };
 		2F7CEE9F19B93A900034A134 /* CameraRemoteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F7CEE9E19B93A900034A134 /* CameraRemoteViewController.m */; };
 		2F7CEEA519B946460034A134 /* switchAppMode.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F7CEEA119B946460034A134 /* switchAppMode.png */; };
@@ -224,6 +230,12 @@
 		2F4EB01619BAE070007A186E /* CSRCameraButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSRCameraButton.m; path = "Remote/Cam Remote/CSRCameraButton.m"; sourceTree = SOURCE_ROOT; };
 		2F4EB01719BAE070007A186E /* CSRMoveableImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSRMoveableImageView.h; path = "Remote/Cam Remote/CSRMoveableImageView.h"; sourceTree = SOURCE_ROOT; };
 		2F4EB01819BAE070007A186E /* CSRMoveableImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSRMoveableImageView.m; path = "Remote/Cam Remote/CSRMoveableImageView.m"; sourceTree = SOURCE_ROOT; };
+		2F4EB0E319BB003F007A186E /* running10.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = running10.png; sourceTree = "<group>"; };
+		2F4EB0E419BB003F007A186E /* running11.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = running11.png; sourceTree = "<group>"; };
+		2F4EB0E519BB003F007A186E /* running12.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = running12.png; sourceTree = "<group>"; };
+		2F4EB0EB19BB003F007A186E /* running7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = running7.png; sourceTree = "<group>"; };
+		2F4EB0EC19BB003F007A186E /* running8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = running8.png; sourceTree = "<group>"; };
+		2F4EB0ED19BB003F007A186E /* running9.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = running9.png; sourceTree = "<group>"; };
 		2F71F2BF193E823E00FA41C2 /* UIApplication+ScreenSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+ScreenSize.h"; sourceTree = "<group>"; };
 		2F71F2C0193E823E00FA41C2 /* UIApplication+ScreenSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+ScreenSize.m"; sourceTree = "<group>"; };
 		2F7CEE9D19B93A900034A134 /* CameraRemoteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraRemoteViewController.h; sourceTree = "<group>"; };
@@ -492,6 +504,19 @@
 			);
 			name = tutorial;
 			path = "../../../../Dropbox/Remote Shot/icons/tutorial";
+			sourceTree = "<group>";
+		};
+		2F4EB0E119BB003F007A186E /* running */ = {
+			isa = PBXGroup;
+			children = (
+				2F4EB0E319BB003F007A186E /* running10.png */,
+				2F4EB0E419BB003F007A186E /* running11.png */,
+				2F4EB0E519BB003F007A186E /* running12.png */,
+				2F4EB0EB19BB003F007A186E /* running7.png */,
+				2F4EB0EC19BB003F007A186E /* running8.png */,
+				2F4EB0ED19BB003F007A186E /* running9.png */,
+			);
+			path = running;
 			sourceTree = "<group>";
 		};
 		2F7CEE9019B92DD90034A134 /* Click-Shot Remote */ = {
@@ -965,6 +990,7 @@
 		2FFFE115192FD89100F3370B /* camera button */ = {
 			isa = PBXGroup;
 			children = (
+				2F4EB0E119BB003F007A186E /* running */,
 				2FB2EE2A19976456000BBE61 /* innerPlayingSound.png */,
 				2FFFE116192FD89100F3370B /* cameraButtonDarkBG.png */,
 				2FFFE118192FD89100F3370B /* inner.png */,
@@ -1073,12 +1099,14 @@
 				2FFFE038192FD50300F3370B /* activityMH.png in Resources */,
 				2FFFE04D192FD50300F3370B /* play@2x.png in Resources */,
 				2FE9BF8C19A6E2FF00EC358F /* inwardCameraRoll.png in Resources */,
+				2F4EB0F119BB003F007A186E /* running12.png in Resources */,
 				2FFFE052192FD50300F3370B /* saveMH@2x.png in Resources */,
 				2FFFE126192FD89100F3370B /* innerHighlighted.png in Resources */,
 				2FFFE03D192FD50300F3370B /* EditControlSelected@2x.png in Resources */,
 				2F38038A19403E02004559C3 /* tableViewDivider.png in Resources */,
 				2FFFE127192FD89100F3370B /* outer.png in Resources */,
 				2FFFDFC0192FD3D900F3370B /* Main_iPad.storyboard in Resources */,
+				2F4EB0F719BB003F007A186E /* running7.png in Resources */,
 				2FB2EE45199778BC000BBE61 /* outer@2x.png in Resources */,
 				2FFFE046192FD50300F3370B /* mailMH.png in Resources */,
 				2F7CEEA719B946460034A134 /* switchAppModeToClickShot.png in Resources */,
@@ -1090,6 +1118,7 @@
 				2FE9BF9319A6E9E900EC358F /* inwardSettings.png in Resources */,
 				2FFFE059192FD50300F3370B /* videoIcon.png in Resources */,
 				2FE9BF8D19A6E2FF00EC358F /* inwardFlash.png in Resources */,
+				2F4EB0F819BB003F007A186E /* running8.png in Resources */,
 				2FB2EE6F1997796D000BBE61 /* exposure@2x.png in Resources */,
 				2FB2EE49199778BC000BBE61 /* redInnerHighlighted@2x.png in Resources */,
 				2FFFE128192FD89100F3370B /* rapidInner.png in Resources */,
@@ -1127,6 +1156,7 @@
 				2FB2EE46199778BC000BBE61 /* rapidInner@2x.png in Resources */,
 				2FFFE053192FD50300F3370B /* sliderPoint.png in Resources */,
 				2F38037F193EF7AF004559C3 /* check.png in Resources */,
+				2F4EB0F919BB003F007A186E /* running9.png in Resources */,
 				2F3803981942C96B004559C3 /* tutorialIcon@2x.png in Resources */,
 				2FDE4EBF195F8D96009E2E12 /* stillSwipeImage@2x.png in Resources */,
 				2FFFE048192FD50300F3370B /* messageMH.png in Resources */,
@@ -1141,6 +1171,7 @@
 				2FE9BFA119A700EC00EC358F /* inwardSounds.png in Resources */,
 				2FFFE03E192FD50300F3370B /* error.png in Resources */,
 				2FFFE043192FD50300F3370B /* ic_square@2x.png in Resources */,
+				2F4EB0EF19BB003F007A186E /* running10.png in Resources */,
 				2FE9BFA919A70CC400EC358F /* tutorial-inwardAutoFocusOn.png in Resources */,
 				2FFFE039192FD50300F3370B /* activtyMH@2x.png in Resources */,
 				2F380380193EF7AF004559C3 /* check@2x.png in Resources */,
@@ -1162,6 +1193,7 @@
 				2FE9BF9919A6F70C00EC358F /* inwardCameraMode-Video.png in Resources */,
 				2FDE4EBD195F8D96009E2E12 /* actionSwipeImage@2x.png in Resources */,
 				2FDE4EC1195F8D96009E2E12 /* videoSwipeImage@2x.png in Resources */,
+				2F4EB0F019BB003F007A186E /* running11.png in Resources */,
 				2FE9BF9E19A700EC00EC358F /* inwardAutoExposure.png in Resources */,
 				2FB2EE47199778BC000BBE61 /* rapidInnerHighlighted@2x.png in Resources */,
 				2FFFE135192FD8A400F3370B /* exposure.png in Resources */,
