@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-@class CameraViewController;
+@class CameraRemoteViewController;
 @protocol LWTutorialContainerViewDelegate < NSObject >
 
 - (BOOL)swallowTouchPoint:(CGPoint)point;
@@ -20,7 +20,7 @@
 @property (nonatomic)  UIView *border;
 
 @property (nonatomic)  NSInteger currentPage;
-@property (nonatomic)  CameraViewController *mainController;
+@property (nonatomic)  CameraRemoteViewController *mainController;
 @property (nonatomic)  CGPoint previousTouchPoint;
 
 @property (nonatomic)  UILabel *currentPageLabel;
@@ -41,9 +41,6 @@
 
 @end
 
-@interface LWTutorialChildViewControllerControlRemotelyPage : LWTutorialChildViewController
-
-@end
 
 @interface LWTutorialContainerView : UIView
 

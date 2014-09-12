@@ -146,8 +146,10 @@
 
 -(void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID {
     NSLog(@"lost peer %@", peerID);
-    [_discoveredPeers removeObject:peerID];
-    [self.tableView reloadData];
+    if (![peerID isEqual:_connectedPeer]) {
+        [_discoveredPeers removeObject:peerID];
+        [self.tableView reloadData];
+    }
 }
 
 -(void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state {
@@ -472,7 +474,7 @@
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI {
     
     NSLog(@"Discovered %@ at %@", peripheral.name, RSSI);
-    
+    if ([peripheral.name isEqualToString:@""] || !peripheral.name) return;
     if (![_discoveredPeripherals containsObject:peripheral]) {
         [self.discoveredPeripherals addObject:peripheral];
         [self.tableView reloadData];

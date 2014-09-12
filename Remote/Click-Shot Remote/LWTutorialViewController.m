@@ -7,15 +7,13 @@
 //
 
 #import "LWTutorialViewController.h"
-#import "CameraViewController.h"
+#import "CameraRemoteViewController.h"
 #import "UIImage+ImageFromColor.h"
-#import "TransferService.h"
 
 #define kCloseButtonWidth 100
 #define kCloseButtonHeight 34
 #define kSettingsViewHeight 100
-#define kNumberOfPages 8
-
+#define kNumberOfPages 6
 #define kOffscreenRect CGRectMake(self.mainController.pictureModeButton.frame.origin.x, -15, self.mainController.videoModeButton.frame.origin.x+self.mainController.videoModeButton.frame.size.width-self.mainController.pictureModeButton.frame.origin.x, 1)
 #define kSmallGroundOffset 135
 #define kLargeGroundOffset 235
@@ -110,10 +108,11 @@
     childViewController.view.backgroundColor = [UIColor clearColor];
     childViewController.index = index;
     
-    if (index == 0) {
     
-        [childViewController.skipTutorialButton setBackgroundImage:[UIImage imageWithColor:[CameraViewController getHighlightColor]] forState:UIControlStateNormal];
+    if (index == 0) {
+        [childViewController.skipTutorialButton setBackgroundImage:[UIImage imageWithColor:[CameraRemoteViewController getHighlightColor]] forState:UIControlStateNormal];
     }
+    
     
     return childViewController;
     
@@ -148,21 +147,13 @@
     BOOL touchedHole = CGRectContainsPoint(_maskRect, point);
     if (CGPointEqualToPoint(point, _previousTouchPoint) && touchedHole) {
         switch (_currentPage) {
-            case 2:
+            case 3:
                 [self turnOnWarningLabel];
                 return YES;
-                break;
-            case 3:
                 break;
             case 4:
-                [self turnOnWarningLabel];
-                return YES;
                 break;
             case 5:
-                [self turnOnWarningLabel];
-                return YES;
-                break;
-            case 7:
                 [self.mainController closeTutorial];
                 break;
             default:
@@ -203,15 +194,20 @@
     if (toViewController.index == _currentPage) return;
     switch (toViewController.index) {
         case 0: {
-            [self animateMaskRect:kOffscreenRect withSpeed:2 andCompletion:nil];
-            self.currentPageLabel.alpha = 0;
+            [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+                self.currentPageLabel.alpha = 0;
+            }completion:nil];
             break;
         }
         case 1: {
+            [self animateMaskRect:kOffscreenRect withSpeed:2 andCompletion:nil];
             [UIView animateWithDuration:0.5 animations:^{
                 self.currentPageLabel.alpha = 1;
             }];
-            if (self.currentPage == 2) { // coming back from next page
+            break;
+        }
+        case 2: {
+            if (self.currentPage == 3) { // coming back from next page
                 [self.mainController closeSettingsMenu];
                 [self moveCurrentPageLabelDown];
                 LWTutorialChildViewController *page2 = [previousViewControllers lastObject];
@@ -222,12 +218,12 @@
             
             break;
         }
-        case 2: { // camera mode wasn't pressed, swiped instead
-            if (self.currentPage == 3) {
+        case 3: { // camera mode wasn't pressed, swiped instead
+            if (self.currentPage == 4) {
                 [self animateMaskRect:self.mainController.soundsButton.frame withSpeed:1 andCompletion:nil];
             } else {
                 [self animateMaskRect:self.mainController.settingsButton.frame withSpeed:1 andCompletion:^(BOOL finished) {
-                    if (self.currentPage == 2) {
+                    if (self.currentPage == 3) {
                         [self.mainController openSettingsMenu];
                         [self moveCurrentPageLabelUp];
                         [self animateMaskRect:self.mainController.soundsButton.frame withSpeed:1 andCompletion:nil];
@@ -240,36 +236,18 @@
             }
             break;
         }
-        case 3: { // swiped after sounds
+        case 4: { // swiped after sounds
             [self.mainController openSettingsMenu];
             [self moveCurrentPageLabelUp];
             [self animateMaskRect:CGRectMake(self.mainController.focusButton.frame.origin.x, self.mainController.focusButton.frame.origin.y, self.mainController.exposureButton.frame.origin.x+self.mainController.exposureButton.frame.size.width-self.mainController.focusButton.frame.origin.x, self.mainController.focusButton.frame.size.height) withSpeed:1 andCompletion:nil];
-            break;
-        }
-        case 4: {
-            [self.mainController openSettingsMenu];
-            [self moveCurrentPageLabelUp];
-            [self animateMaskRect:self.mainController.bluetoothButton.frame withSpeed:1 andCompletion:nil];
+            [UIView animateWithDuration:0.5 animations:^{
+                self.currentPageLabel.alpha = 1;
+            }];
             break;
         }
         case 5: {
-            [self.mainController openSettingsMenu];
-            [self moveCurrentPageLabelUp];
-            [self animateMaskRect:self.mainController.remoteModeButton.frame withSpeed:1 andCompletion:nil];
-            break;
-        }
-        case 6: { // swipe to Camera Roll
-            [self animateMaskRect:self.mainController.cameraRollButton.frame withSpeed:2 andCompletion:nil];
             [self.mainController closeSettingsMenu];
             [self moveCurrentPageLabelDown];
-            if (self.currentPageLabel.alpha != 1) {
-                [UIView animateWithDuration:0.5 animations:^{
-                    self.currentPageLabel.alpha = 1;
-                }];
-            }
-            break;
-        }
-        case 7: { // swipe to Main camera button
             [self animateMaskRect:self.mainController.cameraButton.outerButtonImage.frame withSpeed:1 andCompletion:nil];
             [UIView animateWithDuration:0.5 animations:^{
                 self.currentPageLabel.alpha = 0;
@@ -322,14 +300,43 @@
 
 @end
 
-#pragma mark - Child View Pages
-
-
 @interface LWTutorialChildViewController ()
+
 
 @end
 
 @implementation LWTutorialChildViewController
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        [self initialize];
+    }
+    return self;
+}
+
+-(id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [self initialize];
+    }
+    return self;
+}
+
+-(id)init {
+    self = [super init];
+    if (self) {
+        [self initialize];
+    }
+    return self;
+}
+
+-(void)initialize {
+    // custom init
+
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -356,28 +363,6 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-@end
-
-#pragma mark - Control Remotely Page
-
-@interface LWTutorialChildViewControllerControlRemotelyPage ()
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *spaceBetweenTopAndMiddleLabel;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *spaceBetweenMiddleAndBottomLabel;
-
-@end
-
-@implementation LWTutorialChildViewControllerControlRemotelyPage
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    if (IPHONE_4) {
-        _spaceBetweenTopAndMiddleLabel.constant = 2;
-        _spaceBetweenMiddleAndBottomLabel.constant = -9;
-        [self.view layoutIfNeeded];
-    }
 }
 
 @end

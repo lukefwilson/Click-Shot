@@ -22,10 +22,6 @@
 		2F3803981942C96B004559C3 /* tutorialIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F3803971942C96B004559C3 /* tutorialIcon@2x.png */; };
 		2F38039B1942DA24004559C3 /* LWTutorialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F38039A1942DA24004559C3 /* LWTutorialViewController.m */; };
 		2F38039E1942DC7D004559C3 /* UIImage+ImageFromColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F38039D1942DC7D004559C3 /* UIImage+ImageFromColor.m */; };
-		2F4EB01119BAE05A007A186E /* UIImage+StackBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4EB01019BAE05A007A186E /* UIImage+StackBlur.m */; };
-		2F4EB01419BAE064007A186E /* BluetoothCommunicationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4EB01319BAE064007A186E /* BluetoothCommunicationViewController.m */; };
-		2F4EB01919BAE070007A186E /* CSRCameraButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4EB01619BAE070007A186E /* CSRCameraButton.m */; };
-		2F4EB01A19BAE070007A186E /* CSRMoveableImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4EB01819BAE070007A186E /* CSRMoveableImageView.m */; };
 		2F4EB0EF19BB003F007A186E /* running10.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F4EB0E319BB003F007A186E /* running10.png */; };
 		2F4EB0F019BB003F007A186E /* running11.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F4EB0E419BB003F007A186E /* running11.png */; };
 		2F4EB0F119BB003F007A186E /* running12.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F4EB0E519BB003F007A186E /* running12.png */; };
@@ -38,7 +34,19 @@
 		2F7CEEA619B946460034A134 /* switchAppMode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F7CEEA219B946460034A134 /* switchAppMode@2x.png */; };
 		2F7CEEA719B946460034A134 /* switchAppModeToClickShot.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F7CEEA319B946460034A134 /* switchAppModeToClickShot.png */; };
 		2F7CEEA819B946460034A134 /* switchAppModeToClickShot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F7CEEA419B946460034A134 /* switchAppModeToClickShot@2x.png */; };
+		2F84640819BB0B14001E78CB /* UIImage+StackBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F84640719BB0B14001E78CB /* UIImage+StackBlur.m */; };
+		2F84641119BB0B26001E78CB /* BluetoothCommunicationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F84640A19BB0B26001E78CB /* BluetoothCommunicationViewController.m */; };
+		2F84641219BB0B26001E78CB /* CSRCameraButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F84640C19BB0B26001E78CB /* CSRCameraButton.m */; };
+		2F84641319BB0B26001E78CB /* CSRMoveableImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F84640E19BB0B26001E78CB /* CSRMoveableImageView.m */; };
+		2F84641419BB0B26001E78CB /* UIImage+StackBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F84641019BB0B26001E78CB /* UIImage+StackBlur.m */; };
 		2F8EA3D01985820100219F3B /* DragAnimationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8EA3CF1985820100219F3B /* DragAnimationView.m */; };
+		2FA5F10219BF9C920025386B /* bird.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2FA5F0FE19BF9C920025386B /* bird.mp3 */; };
+		2FA5F10319BF9C920025386B /* dog.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2FA5F0FF19BF9C920025386B /* dog.mp3 */; };
+		2FA5F10419BF9C920025386B /* fart.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2FA5F10019BF9C920025386B /* fart.mp3 */; };
+		2FA5F10519BF9C920025386B /* fireAlarm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2FA5F10119BF9C920025386B /* fireAlarm.mp3 */; };
+		2FA5F10719BFA3A70025386B /* cat.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2FA5F10619BFA3A70025386B /* cat.mp3 */; };
+		2FA5F10919BFA6A70025386B /* fart2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2FA5F10819BFA6A70025386B /* fart2.mp3 */; };
+		2FA5F10B19BFD5D10025386B /* beeps.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2FA5F10A19BFD5D10025386B /* beeps.mp3 */; };
 		2FB2EE2B19976456000BBE61 /* innerPlayingSound.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE2A19976456000BBE61 /* innerPlayingSound.png */; };
 		2FB2EE41199778BC000BBE61 /* cameraButtonDarkBG@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE38199778BC000BBE61 /* cameraButtonDarkBG@2x.png */; };
 		2FB2EE42199778BC000BBE61 /* inner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FB2EE39199778BC000BBE61 /* inner@2x.png */; };
@@ -172,11 +180,6 @@
 		2FFFE0FB192FD73B00F3370B /* MoveableImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFFE0F4192FD73B00F3370B /* MoveableImageView.m */; };
 		2FFFE0FC192FD73B00F3370B /* VideoProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFFE0F6192FD73B00F3370B /* VideoProcessor.m */; };
 		2FFFE101192FD7F100F3370B /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFFE100192FD7F100F3370B /* MBProgressHUD.m */; };
-		2FFFE108192FD84100F3370B /* alienRampUp.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2FFFE103192FD84100F3370B /* alienRampUp.wav */; };
-		2FFFE109192FD84100F3370B /* birdChirp.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2FFFE104192FD84100F3370B /* birdChirp.wav */; };
-		2FFFE10A192FD84100F3370B /* bombCountdown.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2FFFE105192FD84100F3370B /* bombCountdown.wav */; };
-		2FFFE10B192FD84100F3370B /* catMeow.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2FFFE106192FD84100F3370B /* catMeow.wav */; };
-		2FFFE10C192FD84100F3370B /* dogBark.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2FFFE107192FD84100F3370B /* dogBark.wav */; };
 		2FFFE123192FD89100F3370B /* cameraButtonDarkBG.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FFFE116192FD89100F3370B /* cameraButtonDarkBG.png */; };
 		2FFFE125192FD89100F3370B /* inner.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FFFE118192FD89100F3370B /* inner.png */; };
 		2FFFE126192FD89100F3370B /* innerHighlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FFFE119192FD89100F3370B /* innerHighlighted.png */; };
@@ -221,15 +224,6 @@
 		2F38039C1942DC7D004559C3 /* UIImage+ImageFromColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageFromColor.h"; sourceTree = "<group>"; };
 		2F38039D1942DC7D004559C3 /* UIImage+ImageFromColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageFromColor.m"; sourceTree = "<group>"; };
 		2F38039F1942E108004559C3 /* Reveal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reveal.framework; path = "../../../../../Applications/Reveal.app/Contents/SharedSupport/iOS-Libraries/Reveal.framework"; sourceTree = "<group>"; };
-		2F4EB00E19BAE050007A186E /* TransferService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TransferService.h; path = "Remote/Cam Remote/TransferService.h"; sourceTree = SOURCE_ROOT; };
-		2F4EB00F19BAE05A007A186E /* UIImage+StackBlur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+StackBlur.h"; path = "Remote/Cam Remote/UIImage+StackBlur.h"; sourceTree = SOURCE_ROOT; };
-		2F4EB01019BAE05A007A186E /* UIImage+StackBlur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+StackBlur.m"; path = "Remote/Cam Remote/UIImage+StackBlur.m"; sourceTree = SOURCE_ROOT; };
-		2F4EB01219BAE064007A186E /* BluetoothCommunicationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BluetoothCommunicationViewController.h; path = "Remote/Cam Remote/BluetoothCommunicationViewController.h"; sourceTree = SOURCE_ROOT; };
-		2F4EB01319BAE064007A186E /* BluetoothCommunicationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BluetoothCommunicationViewController.m; path = "Remote/Cam Remote/BluetoothCommunicationViewController.m"; sourceTree = SOURCE_ROOT; };
-		2F4EB01519BAE070007A186E /* CSRCameraButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSRCameraButton.h; path = "Remote/Cam Remote/CSRCameraButton.h"; sourceTree = SOURCE_ROOT; };
-		2F4EB01619BAE070007A186E /* CSRCameraButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSRCameraButton.m; path = "Remote/Cam Remote/CSRCameraButton.m"; sourceTree = SOURCE_ROOT; };
-		2F4EB01719BAE070007A186E /* CSRMoveableImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSRMoveableImageView.h; path = "Remote/Cam Remote/CSRMoveableImageView.h"; sourceTree = SOURCE_ROOT; };
-		2F4EB01819BAE070007A186E /* CSRMoveableImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSRMoveableImageView.m; path = "Remote/Cam Remote/CSRMoveableImageView.m"; sourceTree = SOURCE_ROOT; };
 		2F4EB0E319BB003F007A186E /* running10.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = running10.png; sourceTree = "<group>"; };
 		2F4EB0E419BB003F007A186E /* running11.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = running11.png; sourceTree = "<group>"; };
 		2F4EB0E519BB003F007A186E /* running12.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = running12.png; sourceTree = "<group>"; };
@@ -244,8 +238,26 @@
 		2F7CEEA219B946460034A134 /* switchAppMode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "switchAppMode@2x.png"; path = "../../../../Dropbox/Remote Shot/icons/switch app mode/switchAppMode@2x.png"; sourceTree = "<group>"; };
 		2F7CEEA319B946460034A134 /* switchAppModeToClickShot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = switchAppModeToClickShot.png; path = "../../../../Dropbox/Remote Shot/icons/switch app mode/switchAppModeToClickShot.png"; sourceTree = "<group>"; };
 		2F7CEEA419B946460034A134 /* switchAppModeToClickShot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "switchAppModeToClickShot@2x.png"; path = "../../../../Dropbox/Remote Shot/icons/switch app mode/switchAppModeToClickShot@2x.png"; sourceTree = "<group>"; };
+		2F84640519BB0B07001E78CB /* TransferService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TransferService.h; path = "Remote/Click-Shot Remote/TransferService.h"; sourceTree = SOURCE_ROOT; };
+		2F84640619BB0B14001E78CB /* UIImage+StackBlur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+StackBlur.h"; path = "Remote/Click-Shot Remote/UIImage+StackBlur.h"; sourceTree = SOURCE_ROOT; };
+		2F84640719BB0B14001E78CB /* UIImage+StackBlur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+StackBlur.m"; path = "Remote/Click-Shot Remote/UIImage+StackBlur.m"; sourceTree = SOURCE_ROOT; };
+		2F84640919BB0B26001E78CB /* BluetoothCommunicationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BluetoothCommunicationViewController.h; path = "Remote/Click-Shot Remote/BluetoothCommunicationViewController.h"; sourceTree = SOURCE_ROOT; };
+		2F84640A19BB0B26001E78CB /* BluetoothCommunicationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BluetoothCommunicationViewController.m; path = "Remote/Click-Shot Remote/BluetoothCommunicationViewController.m"; sourceTree = SOURCE_ROOT; };
+		2F84640B19BB0B26001E78CB /* CSRCameraButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSRCameraButton.h; path = "Remote/Click-Shot Remote/CSRCameraButton.h"; sourceTree = SOURCE_ROOT; };
+		2F84640C19BB0B26001E78CB /* CSRCameraButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSRCameraButton.m; path = "Remote/Click-Shot Remote/CSRCameraButton.m"; sourceTree = SOURCE_ROOT; };
+		2F84640D19BB0B26001E78CB /* CSRMoveableImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSRMoveableImageView.h; path = "Remote/Click-Shot Remote/CSRMoveableImageView.h"; sourceTree = SOURCE_ROOT; };
+		2F84640E19BB0B26001E78CB /* CSRMoveableImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSRMoveableImageView.m; path = "Remote/Click-Shot Remote/CSRMoveableImageView.m"; sourceTree = SOURCE_ROOT; };
+		2F84640F19BB0B26001E78CB /* UIImage+StackBlur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+StackBlur.h"; path = "Remote/Click-Shot Remote/UIImage+StackBlur.h"; sourceTree = SOURCE_ROOT; };
+		2F84641019BB0B26001E78CB /* UIImage+StackBlur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+StackBlur.m"; path = "Remote/Click-Shot Remote/UIImage+StackBlur.m"; sourceTree = SOURCE_ROOT; };
 		2F8EA3CE1985820100219F3B /* DragAnimationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragAnimationView.h; sourceTree = "<group>"; };
 		2F8EA3CF1985820100219F3B /* DragAnimationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragAnimationView.m; sourceTree = "<group>"; };
+		2FA5F0FE19BF9C920025386B /* bird.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = bird.mp3; path = "../../../../../Dropbox/Remote Shot/sounds/bird.mp3"; sourceTree = "<group>"; };
+		2FA5F0FF19BF9C920025386B /* dog.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = dog.mp3; path = "../../../../../Dropbox/Remote Shot/sounds/dog.mp3"; sourceTree = "<group>"; };
+		2FA5F10019BF9C920025386B /* fart.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = fart.mp3; path = "../../../../../Dropbox/Remote Shot/sounds/fart.mp3"; sourceTree = "<group>"; };
+		2FA5F10119BF9C920025386B /* fireAlarm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = fireAlarm.mp3; path = "../../../../../Dropbox/Remote Shot/sounds/fireAlarm.mp3"; sourceTree = "<group>"; };
+		2FA5F10619BFA3A70025386B /* cat.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = cat.mp3; path = "../../../../../Dropbox/Remote Shot/sounds/cat.mp3"; sourceTree = "<group>"; };
+		2FA5F10819BFA6A70025386B /* fart2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = fart2.mp3; path = "../../../../../Dropbox/Remote Shot/sounds/fart2.mp3"; sourceTree = "<group>"; };
+		2FA5F10A19BFD5D10025386B /* beeps.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = beeps.mp3; path = "../../../../../Dropbox/Remote Shot/sounds/beeps.mp3"; sourceTree = "<group>"; };
 		2FB2EE2A19976456000BBE61 /* innerPlayingSound.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = innerPlayingSound.png; sourceTree = "<group>"; };
 		2FB2EE38199778BC000BBE61 /* cameraButtonDarkBG@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cameraButtonDarkBG@2x.png"; sourceTree = "<group>"; };
 		2FB2EE39199778BC000BBE61 /* inner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "inner@2x.png"; sourceTree = "<group>"; };
@@ -426,11 +438,6 @@
 		2FFFE0F6192FD73B00F3370B /* VideoProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoProcessor.m; sourceTree = "<group>"; };
 		2FFFE0FF192FD7F100F3370B /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		2FFFE100192FD7F100F3370B /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
-		2FFFE103192FD84100F3370B /* alienRampUp.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = alienRampUp.wav; sourceTree = "<group>"; };
-		2FFFE104192FD84100F3370B /* birdChirp.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = birdChirp.wav; sourceTree = "<group>"; };
-		2FFFE105192FD84100F3370B /* bombCountdown.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bombCountdown.wav; sourceTree = "<group>"; };
-		2FFFE106192FD84100F3370B /* catMeow.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = catMeow.wav; sourceTree = "<group>"; };
-		2FFFE107192FD84100F3370B /* dogBark.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = dogBark.wav; sourceTree = "<group>"; };
 		2FFFE116192FD89100F3370B /* cameraButtonDarkBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cameraButtonDarkBG.png; sourceTree = "<group>"; };
 		2FFFE118192FD89100F3370B /* inner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = inner.png; sourceTree = "<group>"; };
 		2FFFE119192FD89100F3370B /* innerHighlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = innerHighlighted.png; sourceTree = "<group>"; };
@@ -522,14 +529,16 @@
 		2F7CEE9019B92DD90034A134 /* Click-Shot Remote */ = {
 			isa = PBXGroup;
 			children = (
-				2F4EB01219BAE064007A186E /* BluetoothCommunicationViewController.h */,
-				2F4EB01319BAE064007A186E /* BluetoothCommunicationViewController.m */,
 				2F7CEE9D19B93A900034A134 /* CameraRemoteViewController.h */,
 				2F7CEE9E19B93A900034A134 /* CameraRemoteViewController.m */,
-				2F4EB01519BAE070007A186E /* CSRCameraButton.h */,
-				2F4EB01619BAE070007A186E /* CSRCameraButton.m */,
-				2F4EB01719BAE070007A186E /* CSRMoveableImageView.h */,
-				2F4EB01819BAE070007A186E /* CSRMoveableImageView.m */,
+				2F84640919BB0B26001E78CB /* BluetoothCommunicationViewController.h */,
+				2F84640A19BB0B26001E78CB /* BluetoothCommunicationViewController.m */,
+				2F84640B19BB0B26001E78CB /* CSRCameraButton.h */,
+				2F84640C19BB0B26001E78CB /* CSRCameraButton.m */,
+				2F84640D19BB0B26001E78CB /* CSRMoveableImageView.h */,
+				2F84640E19BB0B26001E78CB /* CSRMoveableImageView.m */,
+				2F84640F19BB0B26001E78CB /* UIImage+StackBlur.h */,
+				2F84641019BB0B26001E78CB /* UIImage+StackBlur.m */,
 			);
 			name = "Click-Shot Remote";
 			sourceTree = "<group>";
@@ -632,8 +641,6 @@
 				2FFFE0F2192FD73B00F3370B /* CameraViewController.m */,
 				2FE9BF8F19A6E71900EC358F /* UIImage+Overlay.h */,
 				2FE9BF9019A6E71900EC358F /* UIImage+Overlay.m */,
-				2F4EB00F19BAE05A007A186E /* UIImage+StackBlur.h */,
-				2F4EB01019BAE05A007A186E /* UIImage+StackBlur.m */,
 				2F8EA3CE1985820100219F3B /* DragAnimationView.h */,
 				2F8EA3CF1985820100219F3B /* DragAnimationView.m */,
 				2FFFE0EC192FD73B00F3370B /* CameraButton.h */,
@@ -652,7 +659,9 @@
 				2F71F2C0193E823E00FA41C2 /* UIApplication+ScreenSize.m */,
 				2F38039C1942DC7D004559C3 /* UIImage+ImageFromColor.h */,
 				2F38039D1942DC7D004559C3 /* UIImage+ImageFromColor.m */,
-				2F4EB00E19BAE050007A186E /* TransferService.h */,
+				2F84640619BB0B14001E78CB /* UIImage+StackBlur.h */,
+				2F84640719BB0B14001E78CB /* UIImage+StackBlur.m */,
+				2F84640519BB0B07001E78CB /* TransferService.h */,
 				2F7CEE9019B92DD90034A134 /* Click-Shot Remote */,
 				2F1E42F119B6BD05004421C6 /* ODRefreshControl */,
 				2FFFE0FE192FD7E500F3370B /* MBProgressHUD */,
@@ -956,11 +965,13 @@
 		2FFFE102192FD84100F3370B /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
-				2FFFE103192FD84100F3370B /* alienRampUp.wav */,
-				2FFFE104192FD84100F3370B /* birdChirp.wav */,
-				2FFFE105192FD84100F3370B /* bombCountdown.wav */,
-				2FFFE106192FD84100F3370B /* catMeow.wav */,
-				2FFFE107192FD84100F3370B /* dogBark.wav */,
+				2FA5F0FE19BF9C920025386B /* bird.mp3 */,
+				2FA5F0FF19BF9C920025386B /* dog.mp3 */,
+				2FA5F10619BFA3A70025386B /* cat.mp3 */,
+				2FA5F10019BF9C920025386B /* fart.mp3 */,
+				2FA5F10819BFA6A70025386B /* fart2.mp3 */,
+				2FA5F10119BF9C920025386B /* fireAlarm.mp3 */,
+				2FA5F10A19BFD5D10025386B /* beeps.mp3 */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -1104,6 +1115,7 @@
 				2FFFE126192FD89100F3370B /* innerHighlighted.png in Resources */,
 				2FFFE03D192FD50300F3370B /* EditControlSelected@2x.png in Resources */,
 				2F38038A19403E02004559C3 /* tableViewDivider.png in Resources */,
+				2FA5F10419BF9C920025386B /* fart.mp3 in Resources */,
 				2FFFE127192FD89100F3370B /* outer.png in Resources */,
 				2FFFDFC0192FD3D900F3370B /* Main_iPad.storyboard in Resources */,
 				2F4EB0F719BB003F007A186E /* running7.png in Resources */,
@@ -1122,13 +1134,12 @@
 				2FB2EE6F1997796D000BBE61 /* exposure@2x.png in Resources */,
 				2FB2EE49199778BC000BBE61 /* redInnerHighlighted@2x.png in Resources */,
 				2FFFE128192FD89100F3370B /* rapidInner.png in Resources */,
+				2FA5F10B19BFD5D10025386B /* beeps.mp3 in Resources */,
 				2FFFE04E192FD50300F3370B /* playButton.png in Resources */,
 				2FFFE04F192FD50300F3370B /* playButton@2x.png in Resources */,
-				2FFFE10C192FD84100F3370B /* dogBark.wav in Resources */,
 				2FFFE03A192FD50300F3370B /* EditControl.png in Resources */,
 				2FFFE12A192FD89100F3370B /* redInner.png in Resources */,
 				2FFFE058192FD50300F3370B /* unplay@2x.png in Resources */,
-				2FFFE108192FD84100F3370B /* alienRampUp.wav in Resources */,
 				2FFFE05D192FD50300F3370B /* MHGallery.bundle in Resources */,
 				2FFFE050192FD50300F3370B /* right_arrow.png in Resources */,
 				2FB2EE44199778BC000BBE61 /* innerPlayingSound@2x.png in Resources */,
@@ -1142,6 +1153,7 @@
 				2FFFE12B192FD89100F3370B /* redInnerHighlighted.png in Resources */,
 				2FFFE125192FD89100F3370B /* inner.png in Resources */,
 				2F7CEEA819B946460034A134 /* switchAppModeToClickShot@2x.png in Resources */,
+				2FA5F10219BF9C920025386B /* bird.mp3 in Resources */,
 				2FFFE139192FD8A400F3370B /* focus.png in Resources */,
 				2FB2EE42199778BC000BBE61 /* inner@2x.png in Resources */,
 				2FB2EE41199778BC000BBE61 /* cameraButtonDarkBG@2x.png in Resources */,
@@ -1158,6 +1170,7 @@
 				2F38037F193EF7AF004559C3 /* check.png in Resources */,
 				2F4EB0F919BB003F007A186E /* running9.png in Resources */,
 				2F3803981942C96B004559C3 /* tutorialIcon@2x.png in Resources */,
+				2FA5F10319BF9C920025386B /* dog.mp3 in Resources */,
 				2FDE4EBF195F8D96009E2E12 /* stillSwipeImage@2x.png in Resources */,
 				2FFFE048192FD50300F3370B /* messageMH.png in Resources */,
 				2FB2EE7319977979000BBE61 /* mergeVideos@2x.png in Resources */,
@@ -1176,20 +1189,19 @@
 				2FFFE039192FD50300F3370B /* activtyMH@2x.png in Resources */,
 				2F380380193EF7AF004559C3 /* check@2x.png in Resources */,
 				2FFFE056192FD50300F3370B /* twitterMH@2x.png in Resources */,
-				2FFFE10B192FD84100F3370B /* catMeow.wav in Resources */,
 				2FFFE049192FD50300F3370B /* messageMH@2x.png in Resources */,
 				2FE9BFA619A70CC400EC358F /* tutorial-inwardAutoExposureOff.png in Resources */,
-				2FFFE10A192FD84100F3370B /* bombCountdown.wav in Resources */,
-				2FFFE109192FD84100F3370B /* birdChirp.wav in Resources */,
 				2FFFE040192FD50300F3370B /* facebookMH.png in Resources */,
 				2FFFE13A192FD8A400F3370B /* mergeVideos.png in Resources */,
 				2FE9BF9719A6F70C00EC358F /* inwardCameraMode-Action.png in Resources */,
+				2FA5F10919BFA6A70025386B /* fart2.mp3 in Resources */,
 				2FE9BF9819A6F70C00EC358F /* inwardCameraMode-Still.png in Resources */,
 				2FFFDFC5192FD3D900F3370B /* Images.xcassets in Resources */,
 				2FFFE05A192FD50300F3370B /* videoIcon@2x.png in Resources */,
 				2FFFE054192FD50300F3370B /* sliderPoint@2x.png in Resources */,
 				2FFFDFBD192FD3D900F3370B /* Main_iPhone.storyboard in Resources */,
 				2F38038C19403F4E004559C3 /* tableViewDivider@2x.png in Resources */,
+				2FA5F10519BF9C920025386B /* fireAlarm.mp3 in Resources */,
 				2FE9BF9919A6F70C00EC358F /* inwardCameraMode-Video.png in Resources */,
 				2FDE4EBD195F8D96009E2E12 /* actionSwipeImage@2x.png in Resources */,
 				2FDE4EC1195F8D96009E2E12 /* videoSwipeImage@2x.png in Resources */,
@@ -1203,6 +1215,7 @@
 				2F1E437D19B83DFB004421C6 /* inwardAutoExposureLocked.png in Resources */,
 				2FB2EE6D19977961000BBE61 /* skipTutorial@2x.png in Resources */,
 				2FFFDFB4192FD3D900F3370B /* InfoPlist.strings in Resources */,
+				2FA5F10719BFA3A70025386B /* cat.mp3 in Resources */,
 				2FFFE045192FD50300F3370B /* left_arrow@2x.png in Resources */,
 				2FFFE123192FD89100F3370B /* cameraButtonDarkBG.png in Resources */,
 			);
@@ -1225,11 +1238,10 @@
 			files = (
 				2FFFE062192FD50300F3370B /* MHGallerySharedManager.m in Sources */,
 				2FFFE0CB192FD56300F3370B /* UIButton+WebCache.m in Sources */,
-				2F4EB01A19BAE070007A186E /* CSRMoveableImageView.m in Sources */,
-				2F4EB01419BAE064007A186E /* BluetoothCommunicationViewController.m in Sources */,
+				2F84641319BB0B26001E78CB /* CSRMoveableImageView.m in Sources */,
 				2FFFE0FC192FD73B00F3370B /* VideoProcessor.m in Sources */,
-				2F4EB01919BAE070007A186E /* CSRCameraButton.m in Sources */,
 				2FFFE0C9192FD56300F3370B /* SDWebImageManager.m in Sources */,
+				2F84641219BB0B26001E78CB /* CSRCameraButton.m in Sources */,
 				2FFFE064192FD50300F3370B /* MHOverviewController.m in Sources */,
 				2FFFE05C192FD50300F3370B /* MHGallery.m in Sources */,
 				2FFFE07D192FD53700F3370B /* SAVideoRangeSlider.m in Sources */,
@@ -1244,6 +1256,7 @@
 				2FFFE0CE192FD56300F3370B /* UIImageView+WebCache.m in Sources */,
 				2FFFE07B192FD53700F3370B /* SASliderLeft.m in Sources */,
 				2FFFE0C4192FD56300F3370B /* SDImageCache.m in Sources */,
+				2F84641419BB0B26001E78CB /* UIImage+StackBlur.m in Sources */,
 				2FFFE06A192FD50300F3370B /* MHTransitionShowOverView.m in Sources */,
 				2FFFE0CD192FD56300F3370B /* UIImage+MultiFormat.m in Sources */,
 				2FFFE0C8192FD56300F3370B /* SDWebImageDownloaderOperation.m in Sources */,
@@ -1262,14 +1275,15 @@
 				2FFFE061192FD50300F3370B /* MHPresenterImageView.m in Sources */,
 				2FFFE06C192FD50300F3370B /* UIImageView+MHGallery.m in Sources */,
 				2FFFE0C6192FD56300F3370B /* SDWebImageDecoder.m in Sources */,
+				2F84641119BB0B26001E78CB /* BluetoothCommunicationViewController.m in Sources */,
 				2F38039B1942DA24004559C3 /* LWTutorialViewController.m in Sources */,
 				2FFFE0F8192FD73B00F3370B /* CameraPreviewView.m in Sources */,
 				2FFFE063192FD50300F3370B /* MHMediaPreviewCollectionViewCell.m in Sources */,
 				2FFFE07A192FD53700F3370B /* SAResizibleBubble.m in Sources */,
 				2FFFE060192FD50300F3370B /* MHGalleryItem.m in Sources */,
 				2FFFE0FB192FD73B00F3370B /* MoveableImageView.m in Sources */,
+				2F84640819BB0B14001E78CB /* UIImage+StackBlur.m in Sources */,
 				2F38039E1942DC7D004559C3 /* UIImage+ImageFromColor.m in Sources */,
-				2F4EB01119BAE05A007A186E /* UIImage+StackBlur.m in Sources */,
 				2FFFE05F192FD50300F3370B /* MHGalleryImageViewerViewController.m in Sources */,
 				2FFFE0CA192FD56300F3370B /* SDWebImagePrefetcher.m in Sources */,
 				2F1E42F419B6BD05004421C6 /* ODRefreshControl.m in Sources */,

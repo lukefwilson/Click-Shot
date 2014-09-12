@@ -15,6 +15,7 @@
 #import "DragAnimationView.h"
 #import "UIImage+Overlay.h"
 #import "UIImage+StackBlur.h"
+#import "UIImage+ImageFromColor.h"
 #import "MHGallery.h"
 
 
@@ -206,13 +207,11 @@ static UIColor *_highlightColor;
     
     BOOL notFirstTime = [[defaults objectForKey:@"isNotFirstTime"] boolValue];
     if (!notFirstTime) {
-        [self openTutorial];
-        [defaults setObject:@YES forKey:@"isNotFirstTime"];
+        // happens before the "isNotFirstTime" is checked in the CameraViewController
         [defaults setObject:@YES forKey:@"shouldSendPreviewImages"];
         [defaults setObject:@YES forKey:@"shouldSendTakenPictures"];
         [self.bluetoothViewController.receivePicturesSwitch setOn:YES];
         [self.bluetoothViewController.shouldSendPreviewImagesSwitch setOn:YES];
-
         [defaults synchronize];
     } else {
         [self.bluetoothViewController.receivePicturesSwitch setOn:[[defaults objectForKey:@"shouldSendTakenPictures"] boolValue]];
@@ -298,6 +297,10 @@ static UIColor *_highlightColor;
     self.cameraPosition = CSStateCameraPositionBack;
     _cameraButton.isDraggable = NO;
     [self updateUIWithHighlightColor:_highlightColor];
+    [_clickShotModeButton setBackgroundImage:[UIImage imageWithColor:_highlightColor] forState:UIControlStateNormal];
+
+    // start with open settings menu b/c when switching to remote mode, the settings menu should be open
+    [self openSettingsMenu];
 }
 
 -(void)updateUIWithHighlightColor:(UIColor *)highlightColor {
@@ -534,7 +537,7 @@ static UIColor *_highlightColor;
 
 - (void)viewWillAppear:(BOOL)animated {
     self.cameraRollIsOpen = NO;
-    [self updateGalleryItems];
+//    [self updateGalleryItems];
 }
 
 -(void)moveMainViewVerticallyTo:(CGFloat)yPosition {
@@ -945,28 +948,31 @@ static UIColor *_highlightColor;
 
 - (IBAction)pressedClickShotMode:(id)sender {
     [self.bluetoothViewController stopAdvertising];
-    [UIView animateWithDuration:0.3 animations:^{
-        // slide over switching view
-    } completion:^(BOOL finished) {
-        // Close settings menu
-        self.settingsMenuIsOpen = NO;
-        self.soundsMenuIsOpen = NO;
-        self.bluetoothMenuIsOpen = NO;
-        self.settingsButtonDragView.currentAnimationStep = settingsClosedAnimStep;
-        self.previewOverlayDragView.currentAnimationStep = settingsClosedAnimStep;
-        _previewOverlayDragView.hidden = YES;
-        
-        [self.view layoutIfNeeded];
-        [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.cameraUIDistanceToBottom.constant = 0;
-            self.cameraUIDistanceToTop.constant = 0;
-            [self updateCameraPreviewPosition];
-        } completion:^(BOOL finished){
-            [self ensureClosedSettingsMenu];
-            [self.cameraViewController switchingToClickShotMode];
-            // reset sliding view and stuff
-        }];
-    }];
+//    [UIView animateWithDuration:0.3 animations:^{
+//        // slide over switching view
+//    } completion:^(BOOL finished) {
+//        // Close settings menu
+//        self.settingsMenuIsOpen = NO;
+//        self.soundsMenuIsOpen = NO;
+//        self.bluetoothMenuIsOpen = NO;
+//        self.settingsButtonDragView.currentAnimationStep = settingsClosedAnimStep;
+//        self.previewOverlayDragView.currentAnimationStep = settingsClosedAnimStep;
+//        _previewOverlayDragView.hidden = YES;
+//        
+//        [self.view layoutIfNeeded];
+//        [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+//            self.cameraUIDistanceToBottom.constant = 0;
+//            self.cameraUIDistanceToTop.constant = 0;
+//            [self updateCameraPreviewPosition];
+//        } completion:^(BOOL finished){
+//            [self ensureClosedSettingsMenu];
+//            [self.cameraViewController switchingToClickShotMode];
+//            // reset sliding view and stuff
+//        }];
+//    }];
+    
+    [self.cameraViewController switchingToClickShotMode];
+
 }
 
 -(void)switchingToRemoteMode {
@@ -1694,6 +1700,7 @@ static UIColor *_highlightColor;
         [self.soundsButton setTransform:transform];
         [self.bluetoothButton setTransform:transform];
         [self.tutorialButton setTransform:transform];
+        [self.clickShotModeButton setTransform:transform];
     } completion:nil];
     if (self.flashModeMenuIsOpen) {
         [self pressedFlashButton:self.currentFlashButton];
@@ -1904,7 +1911,7 @@ static UIColor *_highlightColor;
 -(void)finishedSavingReceivedImageToCameraRoll:(UIImage *)image {
     dispatch_async(dispatch_get_main_queue(), ^{
         _cameraRollImage.image = image;
-        [self updateGalleryItems];
+//        [self updateGalleryItems];
     });
 }
 
@@ -2537,28 +2544,31 @@ static UIColor *_highlightColor;
 }
 
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    return 6;
+    return CSNumSounds;
 }
 
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
     switch (row) {
         case 0:
-            return @"No Sound";
+            return CSSoundNoneDisplayName;
             break;
         case 1:
-            return @"Bomb Countdown";
+            return CSSound1DisplayName;
             break;
         case 2:
-            return @"Alien Ramp Up";
+            return CSSound2DisplayName;
             break;
         case 3:
-            return @"Cat Meow";
+            return CSSound3DisplayName;
             break;
         case 4:
-            return @"Bird Chirp";
+            return CSSound4DisplayName;
             break;
         case 5:
-            return @"Dog Bark";
+            return CSSound5DisplayName;
+            break;
+        case 6:
+            return CSSound6DisplayName;
             break;
         default:
             return @"No Sound";
@@ -2591,23 +2601,27 @@ static UIColor *_highlightColor;
             [self.soundPlayer stop];
             break;
         case 1: {
-            soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"bombCountdown" ofType:@"wav"]];
+            soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:CSSound1FileName ofType:@"mp3"]];
             break;
         }
         case 2: {
-            soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"alienRampUp" ofType:@"wav"]];
+            soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:CSSound2FileName ofType:@"mp3"]];
             break;
         }
         case 3: {
-            soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"catMeow" ofType:@"wav"]];
+            soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:CSSound3FileName ofType:@"mp3"]];
             break;
         }
         case 4: {
-            soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"birdChirp" ofType:@"wav"]];
+            soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:CSSound4FileName ofType:@"mp3"]];
             break;
         }
         case 5: {
-            soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"dogBark" ofType:@"wav"]];
+            soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:CSSound5FileName ofType:@"mp3"]];
+            break;
+        }
+        case 6: {
+            soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:CSSound6FileName ofType:@"mp3"]];
             break;
         }
         default:

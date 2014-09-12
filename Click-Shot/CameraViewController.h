@@ -82,6 +82,8 @@
 @property (nonatomic, weak) IBOutlet UIButton *soundsButton;
 @property (nonatomic, weak) IBOutlet UIButton *bluetoothButton;
 
+@property (nonatomic, weak) IBOutlet UIButton *remoteModeButton;
+
 @property (nonatomic, weak) IBOutlet CameraButton *cameraButton;
 
 @property (nonatomic) BOOL settingsMenuIsOpen;

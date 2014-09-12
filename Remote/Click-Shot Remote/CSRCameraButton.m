@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Luke Wilson. All rights reserved.
 //
 
-#import "CameraButton.h"
-#import "CameraViewController.h"
+#import "CSRCameraButton.h"
+#import "CameraRemoteViewController.h"
 #import <Accelerate/Accelerate.h>
 #import <QuartzCore/QuartzCore.h>
 #import "TransferService.h"
@@ -24,7 +24,7 @@
 #define kMediumFontSize 60
 #define kSmallFontSize 47
 
-@interface CameraButton ()
+@interface CSRCameraButton ()
 
 @property (nonatomic, strong) UIImage *pictureCameraButtonImage;
 @property (nonatomic, strong) UIImage *rapidCameraButtonImage;
@@ -37,7 +37,7 @@
 
 @end
 
-@implementation CameraButton
+@implementation CSRCameraButton
 
 - (void)initialize{
     [self setNeedsLayout];
@@ -63,7 +63,7 @@
         CAShapeLayer *ring = [CAShapeLayer layer];
         switch (i) {
             case 0:
-                ring.strokeColor = [CameraViewController getHighlightColor].CGColor;
+                ring.strokeColor = [CameraRemoteViewController getHighlightColor].CGColor;
                 break;
             case 1:
                 ring.strokeColor = [UIColor blackColor].CGColor;
@@ -93,7 +93,7 @@
     self.soundTimerRing.zPosition = 20;
     self.soundTimerRing.position =  [self convertPoint:self.originalCenterPosition toView:self.buttonImage];
     self.soundTimerRing.fillColor   = [UIColor clearColor].CGColor;
-    self.soundTimerRing.strokeColor = [CameraViewController getHighlightColor].CGColor;
+    self.soundTimerRing.strokeColor = [CameraRemoteViewController getHighlightColor].CGColor;
     self.soundTimerRing.strokeEnd = 0.0;
     self.soundTimerRing.bounds = CGRectMake(0, 0, self.buttonImage.frame.size.width-20, self.buttonImage.frame.size.height-20);
     self.soundTimerRing.path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, self.buttonImage.frame.size.width-20, self.buttonImage.frame.size.height-20)].CGPath;
@@ -110,8 +110,23 @@
     self.darkCameraButtonBG = [UIImage imageNamed:@"cameraButtonDarkBG"];
     self.cameraButtonPlayingSound = [UIImage imageNamed:@"innerPlayingSound"];
     self.isHighlighted = NO;
-    
+
     self.buttonImage.alpha = 0.8;
+    NSMutableArray *actionAnimationImages = [NSMutableArray array];
+    for (int i = 7; i <= 12; i++) {
+        [actionAnimationImages addObject:[UIImage imageNamed:[@"running" stringByAppendingString:[NSString stringWithFormat:@"%i.png", i]]]];
+    }
+    self.buttonImage.animationImages = actionAnimationImages;
+    self.buttonImage.animationDuration = [actionAnimationImages count] * 0.2;
+}
+
+-(void)startActionAnimation:(BOOL)start {
+    if (start) {
+        [self updateCameraButtonWithText:@""]; // so when it stops it goes back to normal
+        [_buttonImage startAnimating];
+    } else {
+        [_buttonImage stopAnimating];
+    }
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder{
@@ -127,8 +142,6 @@
     }
     return self;
 }
-
-
 
 - (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event {
     if (self.enabled) {
@@ -210,6 +223,8 @@
                 duration = [self timerDurationForDistance:distance];
                 self.timerDuration = (int)duration;
                 self.cameraTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(countdown:) userInfo:nil repeats:YES];
+                self.isAnimatingButton = YES;
+
                 if (self.cameraController.cameraMode != CSStateCameraModeStill) {
                     [self.cameraController pressedCameraButton];
                 }
@@ -247,7 +262,7 @@
                             if (self.cameraController.cameraMode != CSStateCameraModeStill) {
                                 ring.strokeColor = [UIColor whiteColor].CGColor;
                             } else {
-                                ring.strokeColor = [CameraViewController getHighlightColor].CGColor;
+                                ring.strokeColor = [CameraRemoteViewController getHighlightColor].CGColor;
                             }
                             
                             break;
@@ -268,7 +283,6 @@
                     }
                     
                 }
-                self.isAnimatingButton = YES;
                 
                 [self.cameraController enableProperCameraModeButtonsForCurrentCameraMode:NO];
                 
@@ -332,6 +346,7 @@
     [self.cameraController enableProperCameraModeButtonsForCurrentCameraMode:NO];
     self.cameraController.cameraRollButton.enabled = NO;
     [CATransaction begin];
+//    CAShapeLayer *ring = [self.rings objectAtIndex:0];
     
     [CATransaction setCompletionBlock:^{
         _soundTimerRing.opacity = 0;
@@ -446,8 +461,6 @@
             case CSStateCameraModeActionShot: {
                 if (self.isAnimatingButton) {
                     self.buttonImage.image = [self maskImage:self.videoCameraButtonImage withMaskText:_cameraButtonString offsetFromCenter:CGPointZero fontSize:kSmallFontSize];
-                } else if (self.cameraController.videoProcessor.actionShooting) {
-                    self.buttonImage.image = [self maskImage:self.videoCameraButtonImage withMaskText:_cameraButtonString offsetFromCenter:CGPointZero fontSize:kMediumFontSize];
                 } else {
                     if (self.isHighlighted) {
                         self.buttonImage.image = [self maskImage:self.pictureCameraButtonImageHighlighted withMaskText:_cameraButtonString offsetFromCenter:CGPointZero fontSize:kMediumFontSize];
@@ -455,7 +468,7 @@
                         if (self.isDragging) {
                             self.buttonImage.image = [self maskImage:self.pictureCameraButtonImage withMaskText:_cameraButtonString offsetFromCenter:CGPointZero fontSize:kSmallFontSize];
                         } else {
-                            self.buttonImage.image = [self maskImage:self.pictureCameraButtonImage withMaskText:_cameraButtonString offsetFromCenter:CGPointZero fontSize:kMediumFontSize];
+                            self.buttonImage.image = [self maskImage:self.rapidCameraButtonImage withMaskText:_cameraButtonString offsetFromCenter:CGPointZero fontSize:kMediumFontSize];
                         }
                     }
                 }
@@ -558,7 +571,7 @@
 	[maskText drawAtPoint:CGPointMake((imageRect.size.width-textSize.width)/2+offset.x, (imageRect.size.height-textSize.height)/2+offset.y) withAttributes:attr];
     
     //add small number for action shooting + animation
-    if (self.cameraController.videoProcessor.actionShooting && self.isAnimatingButton && self.cameraController.actionShotSequenceNumber > 0) {
+    if (self.cameraController.cameraIsActionShooting && self.isAnimatingButton && self.cameraController.actionShotSequenceNumber > 0) {
         attr = @{NSParagraphStyleAttributeName: paragraphStyle,
                  NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Thin" size:24],
                  NSForegroundColorAttributeName: [UIColor blackColor]};
